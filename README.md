@@ -48,6 +48,8 @@ dependencies.
 
 ```bash
 python -m eas_validator examples/minimal-run.json
+python -m eas_validator examples/minimal-run.json \
+  --scenario compliance/scenarios/SCN-001-focused-edit.json
 python -m unittest discover -s tests -v
 ```
 

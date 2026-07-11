@@ -26,6 +26,8 @@ Run:
 ```bash
 PYTHONPATH=src python -m unittest discover -s tests -v
 PYTHONPATH=src python -m eas_validator examples/minimal-run.json
+PYTHONPATH=src python -m eas_validator examples/minimal-run.json \
+  --scenario compliance/scenarios/SCN-001-focused-edit.json
 ```
 
 When a requirement changes, update its specification, schema/validator mapping,

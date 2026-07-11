@@ -29,6 +29,7 @@
 - [x] Implement a dependency-free structural validator.
 - [x] Add initial conformance fixtures and tests.
 - [ ] Add behavioral scenario tests and implementation adapters.
+- [x] Define an executable behavioral scenario manifest and reference assessor.
 - [ ] Establish an inter-implementation test suite.
 
 ## Phase 5 — Reference implementation

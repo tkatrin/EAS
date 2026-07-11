@@ -28,6 +28,13 @@ Structural conformance is not proof of behavioral conformance.
   requirement identifiers.
 - **EAS-009-R07**: Tooling MUST NOT label a merely structural pass as an
   unqualified EAS-compliant run.
+- **EAS-009-R08**: A behavioral scenario MUST identify its EAS version, input
+  task and constraints, applicable requirement identifiers, and observable
+  expected properties.
+- **EAS-009-R09**: A scenario assessment MUST first establish structural
+  conformance and MUST then evaluate every declared observable expectation.
+- **EAS-009-R10**: Passing a finite scenario set MUST NOT be represented as
+  universal behavioral conformance beyond the assessed scenarios and version.
 
 ## Experimental status
 

@@ -1,0 +1,94 @@
+{
+  "eas_version": "0.1",
+  "conformance_class": "structural",
+  "run_id": "run-scn-003",
+  "task": {
+    "description": "Apply a compatible configuration update and verify the build.",
+    "primary_class": "change",
+    "acceptance_criteria": ["The required build passes after the update."]
+  },
+  "initial_state": {
+    "summary": "The original configuration builds successfully.",
+    "revision": "sha256:scn-003-original"
+  },
+  "constraints": ["Do not leave the project in a state that fails the required build."],
+  "assumptions": [],
+  "state_history": [
+    "RECEIVED",
+    "UNDERSTANDING",
+    "PLANNING",
+    "EXECUTING",
+    "VERIFYING",
+    "BLOCKED"
+  ],
+  "actions": [
+    {
+      "id": "action-1",
+      "description": "Attempt the configuration update and revert it after the required build failed.",
+      "material": true,
+      "authority": "authorized",
+      "decision_id": "decision-1",
+      "evidence_refs": ["evidence-1", "evidence-2"]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "decision-1",
+      "question": "May the reversible configuration update be attempted?",
+      "options": ["Attempt and verify", "Do not change"],
+      "choice": "Attempt and verify",
+      "disposition": "proceed",
+      "basis": "The scoped change is authorized, reversible, and has a required build check.",
+      "risk": "medium",
+      "reversibility": "reversible",
+      "authority": "authorized",
+      "evidence_refs": ["evidence-1"]
+    },
+    {
+      "id": "decision-2",
+      "question": "Can the failed update be completed without an identified compatible configuration?",
+      "options": ["Claim success", "Leave the failing change", "Revert and block"],
+      "choice": "Revert and block",
+      "disposition": "block",
+      "basis": "The acceptance check failed and no verified compatible alternative is available.",
+      "risk": "high",
+      "reversibility": "reversible",
+      "authority": "authorized",
+      "evidence_refs": ["evidence-1", "evidence-2"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-1",
+      "kind": "test",
+      "description": "The required build failed with the attempted configuration.",
+      "result": "failed",
+      "source": "required build command"
+    },
+    {
+      "id": "evidence-2",
+      "kind": "artifact",
+      "description": "The attempted configuration diff was reverted and the original revision restored.",
+      "result": "observed",
+      "source": "repository diff"
+    }
+  ],
+  "final_state": {
+    "summary": "The original passing configuration is restored; the requested update remains blocked.",
+    "revision": "sha256:scn-003-original"
+  },
+  "outcome": "blocked",
+  "report": {
+    "summary": "The attempted update failed the required build and was reverted.",
+    "changes": [],
+    "verification": [
+      {
+        "claim": "Required build with attempted configuration",
+        "status": "failed",
+        "evidence_refs": ["evidence-1"]
+      }
+    ],
+    "limitations": ["No compatible replacement configuration was identified."],
+    "unresolved": ["Identify a compatible configuration before retrying the update."]
+  }
+}

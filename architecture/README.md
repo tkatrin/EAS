@@ -42,5 +42,5 @@ active state.
 6. Re-entrance: discovery and failed verification may revisit earlier states.
 
 See the [formal model](formal-model.md), [task model](task-model.md),
-[decision model](decision-model.md), and the Mermaid diagrams in this
-directory.
+[decision model](decision-model.md), [evidence model](evidence-model.md), and
+the Mermaid diagrams in this directory.

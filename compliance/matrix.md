@@ -33,6 +33,11 @@ requires an external behavioral fixture or human assessment.
 | EAS-009-R01 | Requires structural class in the structural record format |
 | EAS-009-R02 | Aggregates structural invariants |
 
+Behavioral scenario assessment additionally checks declared task class,
+outcome, lifecycle states, decision dispositions, material-action bounds,
+evidence results, and report verification statuses. These checks establish only
+scenario-specific behavioral results as constrained by EAS-009-R10.
+
 ## Result vocabulary
 
 - `pass`: all assessed applicable requirements passed;

@@ -11,7 +11,8 @@ EAS 0.1 has a complete first vertical slice:
 - ten draft specifications with stable requirement identifiers;
 - a model for observable evidence and truthful reporting;
 - an experimental JSON run-record schema;
-- a structural validator, conforming examples, an invalid fixture, and tests;
+- a structural validator, executable behavioral scenario assessor, conforming
+  examples, an invalid fixture, and tests;
 - a prior-art map distinguishing EAS from repository instructions, workflow
   languages, runtimes, and outcome-only benchmarks.
 
