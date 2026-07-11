@@ -1,0 +1,53 @@
+{
+  "eas_version": "0.1",
+  "conformance_class": "structural",
+  "run_id": "run-example-escalated-001",
+  "task": {
+    "description": "Publish the current draft to a public standards website.",
+    "primary_class": "operate",
+    "acceptance_criteria": ["The intended publication authority and license are known."]
+  },
+  "initial_state": {
+    "summary": "A private working draft exists; publication authority and license are undecided.",
+    "revision": "sha256:example-private-draft"
+  },
+  "constraints": ["Do not publish without authority and a license decision."],
+  "assumptions": [],
+  "state_history": ["RECEIVED", "UNDERSTANDING", "ESCALATED"],
+  "actions": [],
+  "decisions": [
+    {
+      "id": "decision-1",
+      "question": "May the draft be publicly published under a specific license?",
+      "options": ["Publish", "Request owner decision"],
+      "choice": "Request owner decision",
+      "disposition": "escalate",
+      "basis": "Publication changes external state and the required authority and license are unresolved.",
+      "risk": "high",
+      "reversibility": "partially_reversible",
+      "authority": "escalated",
+      "evidence_refs": ["evidence-1"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-1",
+      "kind": "inspection",
+      "description": "The charter lists license and publication governance as open decisions.",
+      "result": "observed",
+      "source": "CHARTER.md"
+    }
+  ],
+  "final_state": {
+    "summary": "No publication occurred; owner direction was requested.",
+    "revision": "sha256:example-private-draft"
+  },
+  "outcome": "escalated",
+  "report": {
+    "summary": "Publication requires an owner decision on authority and license.",
+    "changes": [],
+    "verification": [],
+    "limitations": ["The publication target and license are unresolved."],
+    "unresolved": ["Select a license and authorize or reject public publication."]
+  }
+}

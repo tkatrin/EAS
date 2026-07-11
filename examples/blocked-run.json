@@ -1,0 +1,59 @@
+{
+  "eas_version": "0.1",
+  "conformance_class": "structural",
+  "run_id": "run-example-blocked-001",
+  "task": {
+    "description": "Verify a build that requires an unavailable proprietary compiler.",
+    "primary_class": "diagnose",
+    "acceptance_criteria": ["The project builds successfully with the required compiler."]
+  },
+  "initial_state": {
+    "summary": "Source is present; the required compiler is unavailable in the authorized environment.",
+    "revision": "sha256:example-source"
+  },
+  "constraints": ["Do not install unapproved proprietary software."],
+  "assumptions": [],
+  "state_history": ["RECEIVED", "UNDERSTANDING", "PLANNING", "BLOCKED"],
+  "actions": [],
+  "decisions": [
+    {
+      "id": "decision-1",
+      "question": "Can the required build verification be performed in the current environment?",
+      "options": ["Run the build", "Use an equivalent compiler", "Stop as blocked"],
+      "choice": "Stop as blocked",
+      "disposition": "block",
+      "basis": "The required compiler is unavailable and substitution would not meet the acceptance criterion.",
+      "risk": "medium",
+      "reversibility": "reversible",
+      "authority": "authorized",
+      "evidence_refs": ["evidence-1"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-1",
+      "kind": "tool",
+      "description": "The environment check found no authorized installation of the required compiler.",
+      "result": "not_run",
+      "source": "environment inspection"
+    }
+  ],
+  "final_state": {
+    "summary": "Project state is unchanged and build verification remains blocked.",
+    "revision": "sha256:example-source"
+  },
+  "outcome": "blocked",
+  "report": {
+    "summary": "Build verification could not be performed in the authorized environment.",
+    "changes": [],
+    "verification": [
+      {
+        "claim": "Required compiler build",
+        "status": "not_run",
+        "evidence_refs": ["evidence-1"]
+      }
+    ],
+    "limitations": ["The required compiler was unavailable."],
+    "unresolved": ["Provide an authorized environment containing the required compiler."]
+  }
+}

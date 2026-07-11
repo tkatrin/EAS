@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eas-validator"
+version = "0.1.0.dev0"
+description = "Experimental validator for Engineering Agent Standard run records"
+requires-python = ">=3.10"
+dependencies = []
+license = { file = "LICENSES/Apache-2.0.txt" }
+
+[project.scripts]
+eas-validate = "eas_validator.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

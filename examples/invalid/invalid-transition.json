@@ -1,0 +1,32 @@
+{
+  "eas_version": "0.1",
+  "conformance_class": "structural",
+  "run_id": "run-example-invalid-001",
+  "task": {
+    "description": "Demonstrate rejection of a lifecycle jump.",
+    "primary_class": "advise",
+    "acceptance_criteria": []
+  },
+  "initial_state": {
+    "summary": "No work has begun.",
+    "revision": "sha256:invalid-before"
+  },
+  "constraints": [],
+  "assumptions": [],
+  "state_history": ["RECEIVED", "EXECUTING", "COMPLETED"],
+  "actions": [],
+  "decisions": [],
+  "evidence": [],
+  "final_state": {
+    "summary": "This fixture intentionally contains an invalid lifecycle.",
+    "revision": "sha256:invalid-after"
+  },
+  "outcome": "completed",
+  "report": {
+    "summary": "Intentionally invalid fixture.",
+    "changes": [],
+    "verification": [],
+    "limitations": [],
+    "unresolved": []
+  }
+}

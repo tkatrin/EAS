@@ -1,0 +1,82 @@
+{
+  "eas_version": "0.1",
+  "conformance_class": "structural",
+  "run_id": "run-example-001",
+  "task": {
+    "description": "Correct a typo in the project introduction.",
+    "primary_class": "change",
+    "acceptance_criteria": [
+      "The introduction contains the corrected spelling.",
+      "No unrelated content changes."
+    ]
+  },
+  "initial_state": {
+    "summary": "README contains one known spelling error.",
+    "revision": "sha256:example-before"
+  },
+  "constraints": [
+    "Change only the identified word."
+  ],
+  "assumptions": [],
+  "state_history": [
+    "RECEIVED",
+    "UNDERSTANDING",
+    "PLANNING",
+    "EXECUTING",
+    "VERIFYING",
+    "REVIEWING",
+    "REPORTING",
+    "COMPLETED"
+  ],
+  "actions": [
+    {
+      "id": "action-1",
+      "description": "Replace the misspelled word in README.",
+      "material": true,
+      "authority": "authorized",
+      "decision_id": "decision-1",
+      "evidence_refs": ["evidence-1"]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "decision-1",
+      "question": "Should the change be limited to the identified typo?",
+      "options": ["Make the focused correction", "Broaden the edit"],
+      "choice": "Make the focused correction",
+      "disposition": "proceed",
+      "basis": "The task and constraint authorize only the focused correction.",
+      "risk": "low",
+      "reversibility": "reversible",
+      "authority": "authorized",
+      "evidence_refs": ["evidence-1"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-1",
+      "kind": "inspection",
+      "description": "Reviewed the resulting diff; only the target word changed.",
+      "result": "passed",
+      "source": "local diff"
+    }
+  ],
+  "final_state": {
+    "summary": "README spelling is corrected with no unrelated changes.",
+    "revision": "sha256:example-after"
+  },
+  "outcome": "completed",
+  "report": {
+    "summary": "Corrected the requested typo.",
+    "changes": ["Replaced the misspelled word in README."],
+    "verification": [
+      {
+        "claim": "Only the requested word changed.",
+        "status": "passed",
+        "evidence_refs": ["evidence-1"]
+      }
+    ],
+    "limitations": [],
+    "unresolved": []
+  }
+}

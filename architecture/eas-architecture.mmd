@@ -1,0 +1,22 @@
+flowchart TD
+    T["Engineering Task"] --> U["Understanding"]
+    P0["Initial Project State"] --> U
+    C["Context and Constraints"] --> U
+    U --> D{"Decision and Autonomy Gate"}
+    D -->|"authorized"| L["Lifecycle Control"]
+    D -->|"needs direction"| E1["Escalated"]
+    D -->|"cannot proceed"| B["Blocked"]
+    L --> PL["Plan"]
+    PL --> EX["Execute / No-change"]
+    EX --> V["Verify"]
+    V --> Q{"Quality Review"}
+    Q -->|"insufficient"| U
+    Q -->|"replan"| PL
+    Q -->|"adequate"| R["Truthful Report"]
+    R --> O["New Project State + Evidence"]
+
+    EV["Evidence"] -. supports .-> U
+    EV -. supports .-> D
+    EV -. supports .-> V
+    EV -. supports .-> Q
+    EV -. supports .-> R
