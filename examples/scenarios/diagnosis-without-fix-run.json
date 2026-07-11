@@ -1,0 +1,69 @@
+{
+  "eas_version": "0.1",
+  "conformance_class": "structural",
+  "run_id": "run-scn-007",
+  "task": {
+    "description": "Diagnose why the documented build command fails; do not implement a fix.",
+    "primary_class": "diagnose",
+    "acceptance_criteria": ["The failure has a supported explanation and the project remains unchanged."]
+  },
+  "initial_state": {
+    "summary": "The documented build command fails reproducibly.",
+    "revision": "sha256:scn-007-unchanged"
+  },
+  "constraints": ["Do not modify project files."],
+  "assumptions": [],
+  "state_history": [
+    "RECEIVED", "UNDERSTANDING", "PLANNING", "VERIFYING",
+    "REVIEWING", "REPORTING", "COMPLETED"
+  ],
+  "actions": [],
+  "decisions": [
+    {
+      "id": "decision-1",
+      "question": "Can read-only reproduction and configuration inspection establish the cause?",
+      "options": ["Inspect and reproduce", "Modify the project", "Ask without inspecting"],
+      "choice": "Inspect and reproduce",
+      "disposition": "inspect",
+      "basis": "The requested diagnosis can be investigated safely without modifying project state.",
+      "risk": "low",
+      "reversibility": "reversible",
+      "authority": "authorized",
+      "evidence_refs": ["evidence-1", "evidence-2"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-1",
+      "kind": "test",
+      "description": "The documented build command fails because the configured tool version rejects one option.",
+      "result": "failed",
+      "source": "documented build command"
+    },
+    {
+      "id": "evidence-2",
+      "kind": "analysis",
+      "description": "Running the same command without the unsupported option succeeds, supporting the version-mismatch explanation.",
+      "result": "passed",
+      "source": "read-only diagnostic experiment"
+    }
+  ],
+  "final_state": {
+    "summary": "The build failure is diagnosed; project files are unchanged.",
+    "revision": "sha256:scn-007-unchanged"
+  },
+  "outcome": "completed",
+  "report": {
+    "summary": "The documented command uses an option unsupported by the configured tool version.",
+    "changes": [],
+    "verification": [
+      {
+        "claim": "The version mismatch explains the reproduced failure.",
+        "status": "passed",
+        "evidence_refs": ["evidence-1", "evidence-2"]
+      }
+    ],
+    "limitations": ["No fix was implemented or evaluated because the task requested diagnosis only."],
+    "unresolved": []
+  }
+}

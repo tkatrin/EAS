@@ -30,6 +30,7 @@
 - [x] Add initial conformance fixtures and tests.
 - [ ] Add behavioral scenario tests and implementation adapters.
 - [x] Define an executable behavioral scenario manifest and reference assessor.
+- [x] Cover all six primary task classes with executable reference scenarios.
 - [ ] Establish an inter-implementation test suite.
 
 ## Phase 5 — Reference implementation

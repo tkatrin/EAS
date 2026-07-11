@@ -32,7 +32,11 @@ or a single required implementation path.
 - `required_dispositions` and `forbidden_dispositions`;
 - `max_material_actions`;
 - `required_evidence_results`;
+- `required_evidence_kinds`;
 - `required_verification_statuses`.
+- `project_state_change`: whether initial and final project revisions must
+  differ, must remain equal, or may do either;
+- `required_report_sections_nonempty`.
 
 Expectations are intentionally small in EAS 0.1. New assertion types should be
 added only when they are portable across agent runtimes and cannot be expressed

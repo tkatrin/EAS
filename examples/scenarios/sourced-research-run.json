@@ -1,0 +1,90 @@
+{
+  "eas_version": "0.1",
+  "conformance_class": "structural",
+  "run_id": "run-scn-011",
+  "task": {
+    "description": "Compare existing engineering-agent workflow standards and record a sourced synthesis.",
+    "primary_class": "research",
+    "acceptance_criteria": ["The synthesis uses primary sources and distinguishes preprints from adopted standards."]
+  },
+  "initial_state": {
+    "summary": "No project research synthesis exists.",
+    "revision": "sha256:scn-011-before"
+  },
+  "constraints": ["Use primary sources and distinguish preprints from adopted standards."],
+  "assumptions": [],
+  "state_history": [
+    "RECEIVED", "UNDERSTANDING", "PLANNING", "EXECUTING",
+    "VERIFYING", "REVIEWING", "REPORTING", "COMPLETED"
+  ],
+  "actions": [
+    {
+      "id": "action-1",
+      "description": "Create a project research synthesis from the inspected sources.",
+      "material": true,
+      "authority": "authorized",
+      "decision_id": "decision-2",
+      "evidence_refs": ["evidence-1", "evidence-2"]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "decision-1",
+      "question": "Which evidence can establish the neighboring-project landscape?",
+      "options": ["Inspect primary sources", "Use unsourced summaries"],
+      "choice": "Inspect primary sources",
+      "disposition": "inspect",
+      "basis": "The task explicitly requires primary sources and publication-status distinctions.",
+      "risk": "medium",
+      "reversibility": "reversible",
+      "authority": "authorized",
+      "evidence_refs": ["evidence-1"]
+    },
+    {
+      "id": "decision-2",
+      "question": "Is the inspected evidence sufficient to record a bounded synthesis?",
+      "options": ["Write the synthesis", "Claim universal novelty", "Block"],
+      "choice": "Write the synthesis",
+      "disposition": "proceed",
+      "basis": "The sources support a bounded comparison while remaining uncertainty is explicitly preserved.",
+      "risk": "low",
+      "reversibility": "reversible",
+      "authority": "authorized",
+      "evidence_refs": ["evidence-1", "evidence-2"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-1",
+      "kind": "artifact",
+      "description": "Primary project pages and papers are recorded with URLs and publication status.",
+      "result": "observed",
+      "source": "source register"
+    },
+    {
+      "id": "evidence-2",
+      "kind": "analysis",
+      "description": "The synthesis maps repository guidance, workflow languages, runtimes, and evaluation frameworks to distinct concerns.",
+      "result": "passed",
+      "source": "cross-source comparison"
+    }
+  ],
+  "final_state": {
+    "summary": "A sourced, bounded research synthesis is part of project knowledge.",
+    "revision": "sha256:scn-011-after"
+  },
+  "outcome": "completed",
+  "report": {
+    "summary": "The landscape is mapped without claiming that EAS components are individually novel.",
+    "changes": ["Added a sourced research synthesis to project knowledge."],
+    "verification": [
+      {
+        "claim": "The synthesis distinguishes primary standards from recent preprints.",
+        "status": "passed",
+        "evidence_refs": ["evidence-1", "evidence-2"]
+      }
+    ],
+    "limitations": ["Recent preprints may change and the review is not a legal novelty opinion."],
+    "unresolved": []
+  }
+}

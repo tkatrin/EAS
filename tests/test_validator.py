@@ -71,6 +71,21 @@ class ValidatorTests(unittest.TestCase):
 
         self.assertTrue(any(issue.requirement == "EAS-006-R03" for issue in issues))
 
+    def test_passed_claim_may_also_reference_observations(self) -> None:
+        record = example_record()
+        record["evidence"].append(
+            {
+                "id": "evidence-2",
+                "kind": "inspection",
+                "description": "Observed the target artifact before the passing check.",
+                "result": "observed",
+                "source": "artifact inspection",
+            }
+        )
+        record["report"]["verification"][0]["evidence_refs"].append("evidence-2")
+
+        self.assertEqual(validate_record(record), [])
+
     def test_duplicate_ids_fail(self) -> None:
         record = example_record()
         record["evidence"].append(copy.deepcopy(record["evidence"][0]))

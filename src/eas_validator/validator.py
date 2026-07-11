@@ -352,7 +352,11 @@ def validate_record(record: Any) -> list[ValidationIssue]:
                             _issue("EAS-008-R02", f"$.report.verification[{index}].evidence_refs[{ref_index}]", f"unresolved evidence id {ref!r}")
                         )
                 if claim.get("status") == "passed":
-                    if not refs or any(evidence_by_id.get(ref, {}).get("result") != "passed" for ref in refs):
+                    has_passed_evidence = any(
+                        evidence_by_id.get(ref, {}).get("result") == "passed"
+                        for ref in refs
+                    )
+                    if not has_passed_evidence:
                         issues.append(
                             _issue("EAS-006-R03", f"$.report.verification[{index}]", "passed claim requires passed evidence")
                         )

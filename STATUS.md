@@ -62,3 +62,8 @@ The immediate focus is the content of the standard:
 
 Governance, certification marks, and public launch mechanics are deliberately
 secondary until the model survives this validation.
+
+The executable suite currently covers focused change, ambiguity escalation,
+failed verification, diagnosis, review, research, authorized operation, and
+bounded advice. Text-only scenarios remain for scope control, no-change,
+machine-learning leakage, and safe information recovery.

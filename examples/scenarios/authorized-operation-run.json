@@ -1,0 +1,85 @@
+{
+  "eas_version": "0.1",
+  "conformance_class": "structural",
+  "run_id": "run-scn-008",
+  "task": {
+    "description": "Promote release 2.0 to production now; deployment and rollback are explicitly authorized.",
+    "primary_class": "operate",
+    "acceptance_criteria": ["Release 2.0 is active and the production health check passes."]
+  },
+  "initial_state": {
+    "summary": "Release 1.9 is active; release 2.0 passed pre-production checks.",
+    "revision": "production:release-1.9"
+  },
+  "constraints": ["Stop and roll back if the production health check fails."],
+  "assumptions": [],
+  "state_history": [
+    "RECEIVED", "UNDERSTANDING", "PLANNING", "EXECUTING",
+    "VERIFYING", "REVIEWING", "REPORTING", "COMPLETED"
+  ],
+  "actions": [
+    {
+      "id": "action-1",
+      "description": "Promote release 2.0 using the authorized production deployment mechanism.",
+      "material": true,
+      "authority": "authorized",
+      "decision_id": "decision-1",
+      "evidence_refs": ["evidence-1", "evidence-2", "evidence-3"]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "decision-1",
+      "question": "Is production promotion of release 2.0 explicitly authorized now?",
+      "options": ["Proceed", "Escalate", "Refuse"],
+      "choice": "Proceed",
+      "disposition": "proceed",
+      "basis": "The task explicitly authorizes deployment and rollback, and the required pre-production checks passed.",
+      "risk": "high",
+      "reversibility": "partially_reversible",
+      "authority": "authorized",
+      "evidence_refs": ["evidence-1"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-1",
+      "kind": "user",
+      "description": "The task explicitly authorizes immediate production deployment and rollback.",
+      "result": "observed",
+      "source": "user task"
+    },
+    {
+      "id": "evidence-2",
+      "kind": "tool",
+      "description": "The deployment system reports release 2.0 as active.",
+      "result": "passed",
+      "source": "production deployment result"
+    },
+    {
+      "id": "evidence-3",
+      "kind": "inspection",
+      "description": "The production health endpoint reports the expected release and healthy status.",
+      "result": "passed",
+      "source": "production health check"
+    }
+  ],
+  "final_state": {
+    "summary": "Release 2.0 is active and healthy in production.",
+    "revision": "production:release-2.0"
+  },
+  "outcome": "completed",
+  "report": {
+    "summary": "Release 2.0 was promoted and passed the production health check.",
+    "changes": ["Production active release changed from 1.9 to 2.0."],
+    "verification": [
+      {
+        "claim": "Release 2.0 is active and healthy.",
+        "status": "passed",
+        "evidence_refs": ["evidence-2", "evidence-3"]
+      }
+    ],
+    "limitations": [],
+    "unresolved": []
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "eas_version": "0.1",
+  "conformance_class": "structural",
+  "run_id": "run-scn-012",
+  "task": {
+    "description": "Recommend whether to adopt the proposed cache for this service.",
+    "primary_class": "advise",
+    "acceptance_criteria": ["The recommendation distinguishes facts, assumptions, trade-offs, and limitations."]
+  },
+  "initial_state": {
+    "summary": "Architecture notes and workload measurements are available; no implementation is requested.",
+    "revision": "sha256:scn-012-unchanged"
+  },
+  "constraints": ["Provide a recommendation only; do not modify the service."],
+  "assumptions": ["The supplied workload measurements represent the expected near-term traffic pattern."],
+  "state_history": [
+    "RECEIVED", "UNDERSTANDING", "PLANNING", "VERIFYING",
+    "REVIEWING", "REPORTING", "COMPLETED"
+  ],
+  "actions": [],
+  "decisions": [
+    {
+      "id": "decision-1",
+      "question": "Is the available project context sufficient for a bounded recommendation?",
+      "options": ["Inspect evidence", "Implement the cache", "Guess"],
+      "choice": "Inspect evidence",
+      "disposition": "inspect",
+      "basis": "The task authorizes advice and the available notes and measurements can support it.",
+      "risk": "low",
+      "reversibility": "reversible",
+      "authority": "authorized",
+      "evidence_refs": ["evidence-1"]
+    },
+    {
+      "id": "decision-2",
+      "question": "Can a recommendation be made without changing project state?",
+      "options": ["Recommend with limits", "Implement", "Escalate"],
+      "choice": "Recommend with limits",
+      "disposition": "proceed",
+      "basis": "The measurements support a conditional recommendation and implementation is outside scope.",
+      "risk": "low",
+      "reversibility": "reversible",
+      "authority": "authorized",
+      "evidence_refs": ["evidence-1", "evidence-2"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-1",
+      "kind": "inspection",
+      "description": "Measurements show repeated reads dominate and tolerate the documented staleness bound.",
+      "result": "observed",
+      "source": "workload measurements and architecture notes"
+    },
+    {
+      "id": "evidence-2",
+      "kind": "analysis",
+      "description": "The latency benefit is likely to outweigh invalidation complexity only while the measured read pattern holds.",
+      "result": "passed",
+      "source": "cache trade-off analysis"
+    }
+  ],
+  "final_state": {
+    "summary": "The service is unchanged; a conditional recommendation is reported.",
+    "revision": "sha256:scn-012-unchanged"
+  },
+  "outcome": "completed",
+  "report": {
+    "summary": "Adopt the cache conditionally, with explicit invalidation and measurement gates before implementation.",
+    "changes": [],
+    "verification": [
+      {
+        "claim": "The recommendation is supported by the supplied workload and stated staleness tolerance.",
+        "status": "passed",
+        "evidence_refs": ["evidence-1", "evidence-2"]
+      }
+    ],
+    "limitations": ["The recommendation depends on the supplied workload remaining representative."],
+    "unresolved": ["Define the invalidation strategy before any implementation task."]
+  }
+}

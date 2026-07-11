@@ -1,0 +1,29 @@
+{
+  "eas_version": "0.1",
+  "scenario_id": "SCN-011",
+  "title": "Sourced research with uncertainty",
+  "description": "Research should preserve source provenance, synthesis evidence, and unresolved uncertainty.",
+  "input": {
+    "task": "Compare existing engineering-agent workflow standards and record a sourced synthesis.",
+    "initial_state": "No project research synthesis exists.",
+    "constraints": ["Use primary sources and distinguish preprints from adopted standards."]
+  },
+  "requirement_refs": [
+    "EAS-002-R07",
+    "EAS-006-R06",
+    "EAS-008-R11"
+  ],
+  "expected": {
+    "outcome": "completed",
+    "task_class": "research",
+    "required_states": ["UNDERSTANDING", "EXECUTING", "VERIFYING", "REVIEWING"],
+    "forbidden_states": ["ESCALATED", "BLOCKED"],
+    "required_dispositions": ["inspect", "proceed"],
+    "max_material_actions": 1,
+    "required_evidence_results": ["observed", "passed"],
+    "required_evidence_kinds": ["artifact", "analysis"],
+    "required_verification_statuses": ["passed"],
+    "project_state_change": "required",
+    "required_report_sections_nonempty": ["changes", "verification", "limitations"]
+  }
+}

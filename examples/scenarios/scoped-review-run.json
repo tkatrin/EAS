@@ -1,0 +1,69 @@
+{
+  "eas_version": "0.1",
+  "conformance_class": "structural",
+  "run_id": "run-scn-010",
+  "task": {
+    "description": "Review the proposed authentication diff for correctness and security risks.",
+    "primary_class": "review",
+    "acceptance_criteria": ["Findings are specific, supported, and limited to the proposed diff."]
+  },
+  "initial_state": {
+    "summary": "An unapplied authentication diff is available for review.",
+    "revision": "sha256:scn-010-unapplied"
+  },
+  "constraints": ["Review only; do not modify the proposal or repository."],
+  "assumptions": [],
+  "state_history": [
+    "RECEIVED", "UNDERSTANDING", "PLANNING", "VERIFYING",
+    "REVIEWING", "REPORTING", "COMPLETED"
+  ],
+  "actions": [],
+  "decisions": [
+    {
+      "id": "decision-1",
+      "question": "Can the requested review be completed through read-only inspection?",
+      "options": ["Inspect the diff", "Modify the proposal"],
+      "choice": "Inspect the diff",
+      "disposition": "inspect",
+      "basis": "The review scope is available and no modification is authorized or needed.",
+      "risk": "low",
+      "reversibility": "reversible",
+      "authority": "authorized",
+      "evidence_refs": ["evidence-1"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-1",
+      "kind": "inspection",
+      "description": "The diff stores a bearer token in a process-wide mutable variable at auth.py:42.",
+      "result": "observed",
+      "source": "proposed authentication diff"
+    },
+    {
+      "id": "evidence-2",
+      "kind": "analysis",
+      "description": "The shared mutable token permits cross-request credential reuse and violates the stated isolation criterion.",
+      "result": "passed",
+      "source": "security review criteria"
+    }
+  ],
+  "final_state": {
+    "summary": "The proposed diff and repository remain unchanged; one supported security finding is reported.",
+    "revision": "sha256:scn-010-unapplied"
+  },
+  "outcome": "completed",
+  "report": {
+    "summary": "The proposal has one high-severity cross-request credential isolation issue.",
+    "changes": [],
+    "verification": [
+      {
+        "claim": "The finding is linked to the diff and review criterion.",
+        "status": "passed",
+        "evidence_refs": ["evidence-1", "evidence-2"]
+      }
+    ],
+    "limitations": ["Assessment is limited to the supplied diff and does not cover undeclared runtime controls."],
+    "unresolved": []
+  }
+}

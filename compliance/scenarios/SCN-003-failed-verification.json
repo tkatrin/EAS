@@ -22,6 +22,9 @@
     "required_dispositions": ["proceed", "block"],
     "max_material_actions": 1,
     "required_evidence_results": ["failed", "observed"],
-    "required_verification_statuses": ["failed"]
+    "required_evidence_kinds": ["test", "artifact"],
+    "required_verification_statuses": ["failed"],
+    "project_state_change": "forbidden",
+    "required_report_sections_nonempty": ["verification", "limitations", "unresolved"]
   }
 }

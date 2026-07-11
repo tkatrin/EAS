@@ -137,6 +137,15 @@ def assess_scenario(scenario: Any, record: Any) -> list[ValidationIssue]:
         if result not in evidence_results:
             issues.append(_issue("$.evidence", f"required result {result!r} is absent"))
 
+    evidence_kinds = {
+        item.get("kind")
+        for item in record.get("evidence", [])
+        if isinstance(item, dict)
+    }
+    for kind in expected.get("required_evidence_kinds", []):
+        if kind not in evidence_kinds:
+            issues.append(_issue("$.evidence", f"required kind {kind!r} is absent"))
+
     verification = record.get("report", {}).get("verification", [])
     verification_statuses = {
         item.get("status") for item in verification if isinstance(item, dict)
@@ -146,5 +155,25 @@ def assess_scenario(scenario: Any, record: Any) -> list[ValidationIssue]:
             issues.append(
                 _issue("$.report.verification", f"required status {status!r} is absent")
             )
+
+    change_expectation = expected.get("project_state_change", "either")
+    initial_revision = record.get("initial_state", {}).get("revision")
+    final_revision = record.get("final_state", {}).get("revision")
+    state_changed = initial_revision != final_revision
+    if change_expectation == "required" and not state_changed:
+        issues.append(_issue("$.final_state.revision", "project state change is required"))
+    elif change_expectation == "forbidden" and state_changed:
+        issues.append(_issue("$.final_state.revision", "project state change is forbidden"))
+
+    report = record.get("report", {})
+    for section in expected.get("required_report_sections_nonempty", []):
+        value = report.get(section)
+        is_nonempty = (
+            isinstance(value, list) and bool(value)
+        ) or (
+            isinstance(value, str) and bool(value.strip())
+        )
+        if not is_nonempty:
+            issues.append(_issue(f"$.report.{section}", "section must be non-empty"))
 
     return issues

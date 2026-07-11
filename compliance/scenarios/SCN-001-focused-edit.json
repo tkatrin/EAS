@@ -23,6 +23,9 @@
     "forbidden_dispositions": ["escalate", "refuse"],
     "max_material_actions": 1,
     "required_evidence_results": ["passed"],
-    "required_verification_statuses": ["passed"]
+    "required_evidence_kinds": ["inspection"],
+    "required_verification_statuses": ["passed"],
+    "project_state_change": "required",
+    "required_report_sections_nonempty": ["changes", "verification"]
   }
 }

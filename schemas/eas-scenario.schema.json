@@ -51,9 +51,20 @@
           "type": "array",
           "items": { "enum": ["passed", "failed", "observed", "not_run", "inconclusive"] }
         },
+        "required_evidence_kinds": {
+          "type": "array",
+          "items": { "enum": ["inspection", "test", "analysis", "user", "tool", "artifact"] }
+        },
         "required_verification_statuses": {
           "type": "array",
           "items": { "enum": ["passed", "failed", "not_run", "inconclusive"] }
+        },
+        "project_state_change": {
+          "enum": ["required", "forbidden", "either"]
+        },
+        "required_report_sections_nonempty": {
+          "type": "array",
+          "items": { "enum": ["changes", "verification", "limitations", "unresolved"] }
         }
       }
     }
