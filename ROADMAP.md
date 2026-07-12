@@ -1,50 +1,91 @@
 # Roadmap
 
-## Phase 1 — Architecture
+## Phase 1 — Architecture and applicability
 
 - [x] Define scope and non-goals.
-- [x] Identify core entities and concerns.
-- [x] Define the high-level control flow.
-- [ ] Obtain design review and resolve architecture questions.
-
-## Phase 2 — Formal model
-
-- [x] Define inputs, outputs, states, transitions, decisions, and evidence.
-- [x] State core invariants.
+- [x] Define core entities, concerns, lifecycle, and invariants.
+- [x] Define six task classes and primary/secondary classification rules.
+- [x] Define requirement applicability across base, class, action/state, and
+  risk/event triggers.
+- [x] Operationalize materiality, authority evidence, and reversibility.
+- [x] Separate terminal run outcome from task-result satisfaction.
+- [x] Separate versioned run, assessment, and report artifacts.
+- [ ] Obtain external design review and resolve recorded architecture
+  questions.
 - [ ] Model nested tasks, concurrency, and delegation.
-- [ ] Validate the model against real agent trajectories.
-- [x] Define task classes and class-specific lifecycle obligations.
-- [x] Define the first formal decision/autonomy matrix.
 
-## Phase 3 — Specifications
+## Phase 2 — Normative specifications
 
-- [x] Create the initial EAS-000 through EAS-009 set.
-- [x] Assign requirement identifiers.
-- [ ] Perform editorial and normative-language review.
-- [ ] Add security, privacy, ML, and data-science profiles.
+- [x] Publish the EAS-000 through EAS-010 core working-draft set.
+- [x] Add EAS-011 as the ML/data-science profile.
+- [x] Assign stable identifiers to all normative requirements.
+- [x] Add automated checks for identifiers, BCP 14 clauses, and selected vague
+  terms.
+- [x] Record a separate read-only 0.1 editorial review.
+- [ ] Resolve review findings that require normative policy decisions.
+- [ ] Add security and privacy profiles.
 
-## Phase 4 — Compliance
+## Phase 3 — Machine-readable records and traceability
 
-- [x] Define an experimental run-record schema.
-- [x] Implement a dependency-free structural validator.
-- [x] Add initial conformance fixtures and tests.
-- [ ] Add behavioral scenario tests and implementation adapters.
-- [x] Define an executable behavioral scenario manifest and reference assessor.
-- [x] Cover all six primary task classes with executable reference scenarios.
-- [ ] Establish an inter-implementation test suite.
+- [x] Define versioned schemas for run and behavioral scenario records.
+- [x] Define a separate versioned assessment-record schema.
+- [x] Define an external artifact-bundle schema and integrity checks.
+- [x] Define behavior-corpus and neutral trace-event schemas.
+- [x] Create requirement and validator-rule registries.
+- [x] Generate a human-readable coverage report from the registries.
+- [x] Enforce registry consistency and a coverage non-regression baseline in
+  CI.
+- [ ] Publish a schema compatibility and migration policy beyond 0.1.0.
 
-## Phase 5 — Reference implementation
+## Phase 4 — Reference assessment toolchain
 
-- [x] Provide a minimal record validator.
-- [ ] Build a trajectory-to-EAS adapter API.
-- [ ] Add a human-readable conformance report.
-- [ ] Evaluate at least two independent agent runtimes.
+- [x] Implement dependency-free schema and structural validators.
+- [x] Implement executable behavioral scenario assessment.
+- [x] Expose distinct `validate`, `assess`, and `report` commands.
+- [x] Emit immutable-source assessment records with per-requirement results.
+- [x] Separate the assessed subject from the schema/structural/behavioral
+  assessment level.
+- [x] Render terminal, JSON, and Markdown assessment reports.
+- [x] Distinguish `pass`, `fail`, `indeterminate`, and `not_applicable`.
+- [x] Check external artifact path confinement, byte length, and digest without
+  claiming semantic authenticity.
+- [ ] Add cryptographic provenance or independent artifact-observation support.
 
-## Deferred until governance decisions
+## Phase 5 — Adapters and behavior corpus
 
-- certification marks;
+- [x] Define a trajectory-to-EAS adapter protocol.
+- [x] Define a vendor-neutral JSONL trace format.
+- [x] Implement neutral-JSONL and scripted-event reference adapters.
+- [x] Preserve unmapped events, explicit assumptions, and indeterminate fields.
+- [x] Run a repository-fixture interoperability pilot across both adapters.
+- [x] Create a 26-case core corpus across scope, ambiguity, verification,
+  authority, applicability, research, and advice failures.
+- [x] Create a 7-case ML/data-science failure corpus.
+- [x] Cover all six primary task classes with nine executable scenario
+  manifests, including one combined-class scenario.
+- [ ] Promote high-value definition-only cases to executable manifests.
+- [ ] Establish an inter-implementation suite using adapters maintained outside
+  the reference implementation.
+
+## Phase 6 — Empirical validation
+
+- [x] Define a reproducible validation-study protocol.
+- [x] Record the fixture-based adapter pilot separately from real-world
+  evidence.
+- [ ] Collect consented trajectories from at least two independent agent
+  runtimes.
+- [ ] Run repeated and adversarial cases to characterize nondeterminism.
+- [ ] Measure adapter agreement, assessor agreement, indeterminate rates,
+  false-pass risks, and requirement ambiguity.
+- [ ] Revise the specification and coverage baseline from observed failures and
+  publish negative results.
+
+## Deferred until governance and evidence support them
+
+- certification marks or certification claims;
 - a public registry of conforming implementations;
-- release commitments beyond the 0.1 working draft.
+- standards-body or industry-consensus claims;
+- release commitments beyond the EAS 0.1 working draft.
 
 ## Governance decisions completed
 

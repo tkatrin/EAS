@@ -24,11 +24,30 @@ or vendor-specific integration.
 Run:
 
 ```bash
-PYTHONPATH=src python -m unittest discover -s tests -v
-PYTHONPATH=src python -m eas_validator examples/minimal-run.json
-PYTHONPATH=src python -m eas_validator examples/minimal-run.json \
-  --scenario compliance/scenarios/SCN-001-focused-edit.json
+PYTHONPATH=src python3 -m unittest discover -s tests -v
+PYTHONPATH=src python3 -m eas_validator validate examples/minimal-run.json
+PYTHONPATH=src python3 -m eas_validator assess examples/minimal-run.json \
+  --scenario compliance/scenarios/SCN-001-focused-edit.json \
+  --artifacts examples/artifacts/SCN-001
+PYTHONPATH=src python3 -m eas_validator.coverage \
+  --check reports/requirement-coverage.md \
+  --baseline registry/coverage-baseline.json
+PYTHONPATH=src python3 -m eas_validator.pilot \
+  --check reports/adapter-pilot.json
 ```
 
 When a requirement changes, update its specification, schema/validator mapping,
 examples, and tests together.
+
+## Repository-owner authorization
+
+The repository owner has explicitly authorized agents to commit finished,
+tested logical blocks, push their working branches to `tkatrin/EAS`, and
+fast-forward those blocks into `main` without requesting the same permission
+again. Before doing so, inspect the final diff, run the relevant checks, and
+keep each commit logically focused.
+
+This standing authorization does not permit force-pushing, rewriting published
+history, discarding user changes, deleting data, using destructive commands,
+or resolving a divergent `main` with a non-fast-forward merge. Stop and ask the
+owner if publication would require any of those actions.
