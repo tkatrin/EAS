@@ -13,8 +13,10 @@
     "EAS-006-R05",
     "EAS-008-R11"
   ],
+  "required_artifacts": ["review_scope", "finding_location", "review_criteria"],
   "expected": {
     "outcome": "completed",
+    "task_result": "satisfied",
     "task_class": "review",
     "required_states": ["UNDERSTANDING", "VERIFYING", "REVIEWING", "REPORTING"],
     "forbidden_states": ["EXECUTING", "ESCALATED", "BLOCKED"],

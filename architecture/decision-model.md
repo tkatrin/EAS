@@ -27,8 +27,9 @@ new information changes authority, risk, reversibility, or uncertainty.
 
 ## 3. Evaluation order
 
-The following order is normative because later factors cannot override an
-earlier prohibition or missing authority:
+The following order is an informative operationalization of EAS-005. The
+numbered EAS requirements remain the normative source; later factors cannot
+override an earlier prohibition or missing authority:
 
 1. **Constraint check** — Is the action prohibited by an applicable rule?
 2. **Authority check** — Is the action within the granted scope and permissions?
@@ -52,9 +53,10 @@ The first matching row determines the disposition.
 | Material goal or acceptance criterion is ambiguous | `escalate` | Ask before committing to an interpretation |
 | Missing information can be obtained safely in scope | `inspect` | Gather the information before asking the user |
 | Assumption is low-impact, reversible, and testable | `proceed` | Record the assumption and verify the result |
-| Action is high-impact or irreversible and confirmation is not explicit | `escalate` | Obtain confirmation immediately before action |
-| Verification cannot observe a material claimed outcome | `block` or `escalate` | Do not claim success |
-| Action is authorized and uncertainty is adequately bounded | `proceed` | Perform the action and collect required evidence |
+| `impact_level` is `high` or `critical`, or reversibility is `none`, and consequence authorization is not explicit | `escalate` | Obtain confirmation immediately before action |
+| A stakeholder with authority can supply a required missing observation | `escalate` | Request the smallest observation or decision needed |
+| A required observation is technically unavailable | `block` | Preserve the limitation and do not claim success |
+| Action is authorized and no preceding row applies | `proceed` | Perform the action and collect required evidence |
 
 `refuse` means the requested action is incompatible with an applicable
 constraint. `block` means the action could be valid but cannot currently be
@@ -63,17 +65,11 @@ decision.
 
 ## 5. Materiality
 
-An action is material if it can change any of the following:
-
-- project artifacts or acceptance outcomes;
-- external or production state;
-- access, permissions, secrets, privacy, or security posture;
-- financial or computational cost beyond an accepted bound;
-- data integrity or model evaluation validity;
-- commitments visible to another person or organization.
-
-Read-only inspection can still be material when it accesses sensitive data,
-incurs significant cost, or crosses an authority boundary.
+The single operational materiality predicate, including its six dimensions,
+resource-bound semantics, decision classification fields, structured
+reversibility, and authority-evidence rules, is defined in
+`materiality-model.md`. This document does not introduce a second materiality
+test.
 
 ## 6. Decision evidence
 

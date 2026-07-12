@@ -1,0 +1,531 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eas.example/schemas/eas-neutral-trace-event-0.1.0.schema.json",
+  "title": "EAS 0.1 Neutral JSONL Trace Event",
+  "description": "Schema for one line of the version 0.1.0 neutral JSONL trajectory format. A JSONL trace is an ordered sequence of independently valid event objects.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["trace_schema_version", "event_id", "type", "payload"],
+  "properties": {
+    "trace_schema_version": { "const": "0.1.0" },
+    "event_id": { "$ref": "#/$defs/nonEmptyString" },
+    "type": {
+      "oneOf": [
+        {
+          "enum": [
+            "trace_start",
+            "user_message",
+            "agent_message",
+            "lifecycle_state",
+            "decision",
+            "tool_call",
+            "tool_result",
+            "file_change",
+            "evidence",
+            "project_state",
+            "verification_claim",
+            "report",
+            "run_outcome",
+            "assumption"
+          ]
+        },
+        { "type": "string", "pattern": "^x-[a-z0-9][a-z0-9._-]*$" }
+      ]
+    },
+    "observed_at": { "type": "string", "format": "date-time" },
+    "source": { "$ref": "#/$defs/source" },
+    "payload": { "type": "object" },
+    "extensions": { "$ref": "#/$defs/extensions" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "type": { "const": "trace_start" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/traceStartPayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "user_message" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/userMessagePayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "agent_message" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/agentMessagePayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "lifecycle_state" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/lifecycleStatePayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "decision" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/decisionPayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "tool_call" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/toolCallPayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "tool_result" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/toolResultPayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "file_change" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/fileChangePayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "evidence" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/evidencePayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "project_state" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/projectStatePayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "verification_claim" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/verificationClaimPayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "report" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/reportPayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "run_outcome" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/runOutcomePayload" } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "assumption" } }, "required": ["type"] },
+      "then": { "properties": { "payload": { "$ref": "#/$defs/assumptionPayload" } } }
+    }
+  ],
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "stringArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "extensions": {
+      "type": "object",
+      "description": "Implementation-specific data keyed by a namespaced identifier. Reference adapters preserve but do not interpret this object.",
+      "propertyNames": { "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$" },
+      "additionalProperties": true
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "session_id": { "$ref": "#/$defs/nonEmptyString" },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description"],
+      "properties": {
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "primary_class": {
+          "enum": ["change", "diagnose", "review", "research", "operate", "advise"]
+        },
+        "secondary_classes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["change", "diagnose", "review", "research", "operate", "advise"]
+          }
+        },
+        "candidate_classes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["change", "diagnose", "review", "research", "operate", "advise"]
+          }
+        },
+        "classification_basis": { "$ref": "#/$defs/nonEmptyString" },
+        "acceptance_criteria": { "$ref": "#/$defs/stringArray" },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      }
+    },
+    "projectState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "revision"],
+      "properties": {
+        "summary": { "$ref": "#/$defs/nonEmptyString" },
+        "revision": { "$ref": "#/$defs/nonEmptyString" },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "revision": { "$ref": "#/$defs/nonEmptyString" },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      }
+    },
+    "observability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["complete_for"],
+      "properties": {
+        "complete_for": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "task",
+              "initial_state",
+              "constraints",
+              "lifecycle",
+              "actions",
+              "decisions",
+              "evidence",
+              "final_state",
+              "outcome",
+              "task_result",
+              "report"
+            ]
+          }
+        }
+      }
+    },
+    "traceStartPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_id"],
+      "properties": {
+        "run_id": { "$ref": "#/$defs/nonEmptyString" },
+        "predecessor_run_id": { "$ref": "#/$defs/nonEmptyString" },
+        "task": { "$ref": "#/$defs/task" },
+        "initial_state": { "$ref": "#/$defs/projectState" },
+        "constraints": { "$ref": "#/$defs/stringArray" },
+        "assumptions": { "$ref": "#/$defs/stringArray" },
+        "implementation": { "$ref": "#/$defs/implementation" },
+        "environment": { "$ref": "#/$defs/environment" },
+        "started_at": { "type": "string", "format": "date-time" },
+        "completed_at": { "type": "string", "format": "date-time" },
+        "record_created_at": { "type": "string", "format": "date-time" },
+        "observability": { "$ref": "#/$defs/observability" }
+      }
+    },
+    "userMessagePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text"],
+      "properties": {
+        "message_id": { "$ref": "#/$defs/nonEmptyString" },
+        "text": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "agentMessagePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channel", "text"],
+      "properties": {
+        "message_id": { "$ref": "#/$defs/nonEmptyString" },
+        "channel": { "enum": ["commentary", "final", "other"] },
+        "text": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "lifecycleStatePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state"],
+      "properties": {
+        "state": {
+          "enum": [
+            "RECEIVED", "UNDERSTANDING", "PLANNING", "EXECUTING",
+            "VERIFYING", "REVIEWING", "REPORTING", "ESCALATED",
+            "BLOCKED", "COMPLETED"
+          ]
+        }
+      }
+    },
+    "reversibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "limitations"],
+      "properties": {
+        "level": { "enum": ["full", "partial", "none"] },
+        "mechanism": { "$ref": "#/$defs/nonEmptyString" },
+        "limitations": { "$ref": "#/$defs/stringArray" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "level": { "enum": ["full", "partial"] } },
+            "required": ["level"]
+          },
+          "then": { "required": ["mechanism"] }
+        }
+      ]
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "question": { "$ref": "#/$defs/nonEmptyString" },
+        "options": { "$ref": "#/$defs/stringArray" },
+        "choice": { "$ref": "#/$defs/nonEmptyString" },
+        "disposition": { "enum": ["inspect", "proceed", "escalate", "block", "refuse"] },
+        "basis": { "$ref": "#/$defs/nonEmptyString" },
+        "risk": { "enum": ["low", "medium", "high", "critical"] },
+        "impact_level": { "enum": ["low", "medium", "high", "critical"] },
+        "reversibility": { "$ref": "#/$defs/reversibility" },
+        "authority": { "enum": ["authorized", "escalated", "prohibited"] },
+        "authority_evidence_refs": { "$ref": "#/$defs/stringArray" },
+        "evidence_refs": { "$ref": "#/$defs/stringArray" },
+        "impact_scope": { "enum": ["local", "project", "external"] },
+        "external_visibility": { "enum": ["none", "internal", "public"] },
+        "destructiveness": { "enum": ["none", "modifying", "destructive"] },
+        "data_sensitivity": { "enum": ["none", "internal", "confidential", "restricted"] },
+        "rollback_available": { "type": "boolean" },
+        "rollback_verified": { "type": "boolean" },
+        "rollback_evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "authorization_source": { "$ref": "#/$defs/nonEmptyString" },
+        "authorization_scope": { "$ref": "#/$defs/authorizationScope" },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "rollback_verified": { "const": true } },
+            "required": ["rollback_verified"]
+          },
+          "then": { "required": ["rollback_evidence_refs"] }
+        },
+        {
+          "if": {
+            "properties": {
+              "reversibility": {
+                "properties": { "level": { "enum": ["full", "partial"] } },
+                "required": ["level"]
+              }
+            },
+            "required": ["reversibility", "rollback_available"]
+          },
+          "then": {
+            "properties": { "rollback_available": { "const": true } }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "reversibility": {
+                "properties": { "level": { "const": "none" } },
+                "required": ["level"]
+              }
+            },
+            "required": ["reversibility", "rollback_available"]
+          },
+          "then": {
+            "properties": { "rollback_available": { "const": false } }
+          }
+        },
+        {
+          "if": {
+            "properties": { "rollback_verified": { "const": true } },
+            "required": ["rollback_verified"]
+          },
+          "then": {
+            "required": ["rollback_available"],
+            "properties": { "rollback_available": { "const": true } }
+          }
+        }
+      ]
+    },
+    "decisionPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision"],
+      "properties": { "decision": { "$ref": "#/$defs/decision" } }
+    },
+    "authorizationScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grantor", "grantee", "action_kind", "target", "environment",
+        "conditions", "valid_at"
+      ],
+      "properties": {
+        "grantor": { "$ref": "#/$defs/nonEmptyString" },
+        "grantee": { "$ref": "#/$defs/nonEmptyString" },
+        "action_kind": { "$ref": "#/$defs/nonEmptyString" },
+        "target": { "$ref": "#/$defs/nonEmptyString" },
+        "environment": { "$ref": "#/$defs/nonEmptyString" },
+        "conditions": { "$ref": "#/$defs/stringArray" },
+        "valid_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "materiality": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "changes_project_state": { "type": "boolean" },
+        "creates_external_effect": { "type": "boolean" },
+        "consumes_significant_resources": { "type": "boolean" },
+        "expands_authority": { "type": "boolean" },
+        "changes_security_or_privacy_posture": { "type": "boolean" },
+        "difficult_to_reverse": { "type": "boolean" }
+      }
+    },
+    "toolCallPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tool", "operation"],
+      "properties": {
+        "call_id": { "$ref": "#/$defs/nonEmptyString" },
+        "tool": { "$ref": "#/$defs/nonEmptyString" },
+        "operation": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "action_id": { "$ref": "#/$defs/nonEmptyString" },
+        "material": { "type": "boolean" },
+        "materiality": { "$ref": "#/$defs/materiality" },
+        "authority": { "enum": ["authorized", "escalated", "prohibited"] },
+        "authority_evidence_refs": { "$ref": "#/$defs/stringArray" },
+        "decision_id": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence_refs": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "toolResultPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["call_id", "status"],
+      "properties": {
+        "call_id": { "$ref": "#/$defs/nonEmptyString" },
+        "status": { "enum": ["success", "error", "cancelled", "unknown"] },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "output_summary": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence_id": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence_kind": { "enum": ["inspection", "test", "analysis", "user", "tool", "artifact"] },
+        "evidence_result": { "enum": ["passed", "failed", "observed", "not_run", "inconclusive"] },
+        "source": { "$ref": "#/$defs/nonEmptyString" },
+        "recorded_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "fileChangePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "change"],
+      "properties": {
+        "path": { "$ref": "#/$defs/nonEmptyString" },
+        "change": { "enum": ["created", "modified", "deleted", "renamed"] },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "action_id": { "$ref": "#/$defs/nonEmptyString" },
+        "authority": { "enum": ["authorized", "escalated", "prohibited"] },
+        "authority_evidence_refs": { "$ref": "#/$defs/stringArray" },
+        "decision_id": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence_id": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence_refs": { "$ref": "#/$defs/stringArray" },
+        "before_revision": { "$ref": "#/$defs/nonEmptyString" },
+        "after_revision": { "$ref": "#/$defs/nonEmptyString" },
+        "materiality": { "$ref": "#/$defs/materiality" },
+        "recorded_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "description", "result", "source"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": { "enum": ["inspection", "test", "analysis", "user", "tool", "artifact"] },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "result": { "enum": ["passed", "failed", "observed", "not_run", "inconclusive"] },
+        "source": { "$ref": "#/$defs/nonEmptyString" },
+        "origin": { "enum": ["agent", "user", "tool", "environment", "assessor"] },
+        "capture": { "enum": ["direct", "self_reported", "imported"] },
+        "observed_at": { "type": "string", "format": "date-time" },
+        "recorded_at": { "type": "string", "format": "date-time" },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      }
+    },
+    "evidencePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence"],
+      "properties": { "evidence": { "$ref": "#/$defs/evidence" } }
+    },
+    "projectStatePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase", "state"],
+      "properties": {
+        "phase": { "enum": ["initial", "final"] },
+        "state": { "$ref": "#/$defs/projectState" }
+      }
+    },
+    "verificationClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim", "status", "evidence_refs"],
+      "properties": {
+        "claim": { "$ref": "#/$defs/nonEmptyString" },
+        "status": { "enum": ["passed", "failed", "not_run", "inconclusive"] },
+        "evidence_refs": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "verificationClaimPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim"],
+      "properties": { "claim": { "$ref": "#/$defs/verificationClaim" } }
+    },
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "changes", "verification", "limitations", "unresolved"],
+      "properties": {
+        "summary": { "$ref": "#/$defs/nonEmptyString" },
+        "changes": { "$ref": "#/$defs/stringArray" },
+        "verification": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/verificationClaim" }
+        },
+        "limitations": { "$ref": "#/$defs/stringArray" },
+        "unresolved": { "$ref": "#/$defs/stringArray" },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      }
+    },
+    "reportPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report"],
+      "properties": { "report": { "$ref": "#/$defs/report" } }
+    },
+    "runOutcomePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outcome", "task_result"],
+      "properties": {
+        "outcome": { "enum": ["completed", "escalated", "blocked"] },
+        "task_result": {
+          "enum": ["satisfied", "partially_satisfied", "not_satisfied", "indeterminate"]
+        }
+      }
+    },
+    "assumptionPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement"],
+      "properties": { "statement": { "$ref": "#/$defs/nonEmptyString" } }
+    }
+  }
+}

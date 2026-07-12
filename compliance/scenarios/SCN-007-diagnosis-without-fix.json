@@ -14,8 +14,10 @@
     "EAS-002-R09",
     "EAS-008-R10"
   ],
+  "required_artifacts": ["diagnostic_log", "unchanged_diff"],
   "expected": {
     "outcome": "completed",
+    "task_result": "satisfied",
     "task_class": "diagnose",
     "required_states": ["UNDERSTANDING", "VERIFYING", "REVIEWING", "REPORTING"],
     "forbidden_states": ["EXECUTING", "ESCALATED", "BLOCKED"],

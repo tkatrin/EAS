@@ -1,0 +1,334 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eas.example/schemas/eas-assessment/0.1.0",
+  "title": "EAS 0.1 Experimental Assessment Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "eas_version",
+    "schema_version",
+    "assessment_id",
+    "assessment_subject",
+    "assessment_level",
+    "assessor",
+    "started_at",
+    "completed_at",
+    "record_created_at",
+    "source_record",
+    "registries",
+    "scenario_set",
+    "requirement_results",
+    "summary",
+    "limitations"
+  ],
+  "properties": {
+    "eas_version": { "const": "0.1" },
+    "schema_version": { "const": "0.1.0" },
+    "assessment_id": { "$ref": "#/$defs/nonEmptyString" },
+    "assessment_subject": { "$ref": "#/$defs/assessmentSubject" },
+    "assessment_level": {
+      "enum": ["schema", "structural", "behavioral"]
+    },
+    "assessor": { "$ref": "#/$defs/assessor" },
+    "started_at": { "$ref": "#/$defs/timestamp" },
+    "completed_at": { "$ref": "#/$defs/timestamp" },
+    "record_created_at": { "$ref": "#/$defs/timestamp" },
+    "source_record": { "$ref": "#/$defs/sourceRecord" },
+    "registries": { "$ref": "#/$defs/registries" },
+    "scenario_set": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/scenarioSet" }
+      ]
+    },
+    "requirement_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/requirementResult" }
+    },
+    "summary": { "$ref": "#/$defs/summary" },
+    "limitations": { "$ref": "#/$defs/stringArray" },
+    "extensions": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9]+(?:\\.[a-z0-9-]+)+$" },
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "stringArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "requirementId": {
+      "type": "string",
+      "pattern": "^EAS-[0-9]{3}-R[0-9]{2}$"
+    },
+    "ruleId": {
+      "type": "string",
+      "pattern": "^VAL-[A-Z0-9-]+$"
+    },
+    "scenarioId": {
+      "type": "string",
+      "pattern": "^SCN-[0-9]{3}$"
+    },
+    "assessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "assessmentSubject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id"],
+      "properties": {
+        "type": { "$ref": "#/$defs/assessmentSubjectType" },
+        "id": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "assessmentSubjectType": {
+      "enum": [
+        "run", "adapter_mapping", "assessment_process",
+        "conformance_report", "implementation_claim", "specification"
+      ]
+    },
+    "sourceRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id", "sha256"],
+      "properties": {
+        "type": { "$ref": "#/$defs/assessmentSubjectType" },
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "schema_version": { "$ref": "#/$defs/nonEmptyString" },
+        "record_created_at": { "$ref": "#/$defs/timestamp" },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "artifact_ref": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "applicabilityEvaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject_match", "base", "task_class", "action_or_state",
+        "risk_or_event", "selected_profile", "applicable", "basis"
+      ],
+      "properties": {
+        "subject_match": {
+          "enum": ["matched", "not_matched", "indeterminate"]
+        },
+        "base": {
+          "enum": ["invoked", "not_invoked", "indeterminate"]
+        },
+        "task_class": {
+          "enum": ["invoked", "not_invoked", "indeterminate"]
+        },
+        "action_or_state": {
+          "enum": ["invoked", "not_invoked", "indeterminate"]
+        },
+        "risk_or_event": {
+          "enum": ["invoked", "not_invoked", "indeterminate"]
+        },
+        "selected_profile": {
+          "enum": ["invoked", "not_invoked", "indeterminate"]
+        },
+        "applicable": { "type": "boolean" },
+        "basis": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "registries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirements", "validator_rules"],
+      "properties": {
+        "requirements": { "$ref": "#/$defs/nonEmptyString" },
+        "validator_rules": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "scenarioSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "scenario_ids"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "scenario_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/scenarioId" }
+        }
+      }
+    },
+    "passResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement_id", "assessment_subject", "applicability", "level",
+        "result", "evidence_refs", "validator_rule_refs", "scenario_refs"
+      ],
+      "properties": {
+        "requirement_id": { "$ref": "#/$defs/requirementId" },
+        "assessment_subject": { "$ref": "#/$defs/assessmentSubjectType" },
+        "applicability": { "$ref": "#/$defs/applicabilityEvaluation" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "level": { "enum": ["MUST", "SHOULD", "MAY"] },
+        "result": { "const": "pass" },
+        "reason": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "validator_rule_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/ruleId" }
+        },
+        "scenario_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/scenarioId" }
+        }
+      }
+    },
+    "failResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement_id", "assessment_subject", "applicability", "level",
+        "result", "evidence_refs", "validator_rule_refs", "scenario_refs"
+      ],
+      "properties": {
+        "requirement_id": { "$ref": "#/$defs/requirementId" },
+        "assessment_subject": { "$ref": "#/$defs/assessmentSubjectType" },
+        "applicability": { "$ref": "#/$defs/applicabilityEvaluation" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "level": { "enum": ["MUST", "SHOULD", "MAY"] },
+        "result": { "const": "fail" },
+        "reason": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "validator_rule_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/ruleId" }
+        },
+        "scenario_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/scenarioId" }
+        }
+      }
+    },
+    "indeterminateResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement_id", "assessment_subject", "applicability", "level",
+        "result", "reason", "evidence_refs", "validator_rule_refs",
+        "scenario_refs"
+      ],
+      "properties": {
+        "requirement_id": { "$ref": "#/$defs/requirementId" },
+        "assessment_subject": { "$ref": "#/$defs/assessmentSubjectType" },
+        "applicability": { "$ref": "#/$defs/applicabilityEvaluation" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "level": { "enum": ["MUST", "SHOULD", "MAY"] },
+        "result": { "const": "indeterminate" },
+        "reason": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "validator_rule_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/ruleId" }
+        },
+        "scenario_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/scenarioId" }
+        }
+      }
+    },
+    "notApplicableResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement_id", "assessment_subject", "applicability", "level",
+        "result", "reason", "evidence_refs", "validator_rule_refs",
+        "scenario_refs"
+      ],
+      "properties": {
+        "requirement_id": { "$ref": "#/$defs/requirementId" },
+        "assessment_subject": { "$ref": "#/$defs/assessmentSubjectType" },
+        "applicability": { "$ref": "#/$defs/applicabilityEvaluation" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "level": { "enum": ["MUST", "SHOULD", "MAY"] },
+        "result": { "const": "not_applicable" },
+        "reason": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "validator_rule_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/ruleId" }
+        },
+        "scenario_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/scenarioId" }
+        }
+      }
+    },
+    "requirementResult": {
+      "oneOf": [
+        { "$ref": "#/$defs/passResult" },
+        { "$ref": "#/$defs/failResult" },
+        { "$ref": "#/$defs/indeterminateResult" },
+        { "$ref": "#/$defs/notApplicableResult" }
+      ]
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pass", "fail", "indeterminate", "not_applicable", "total"],
+      "properties": {
+        "pass": { "type": "integer", "minimum": 0 },
+        "fail": { "type": "integer", "minimum": 0 },
+        "indeterminate": { "type": "integer", "minimum": 0 },
+        "not_applicable": { "type": "integer", "minimum": 0 },
+        "total": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result", "counts"],
+      "properties": {
+        "result": { "enum": ["pass", "fail", "indeterminate"] },
+        "counts": { "$ref": "#/$defs/counts" }
+      }
+    }
+  }
+}

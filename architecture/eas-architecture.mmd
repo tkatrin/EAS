@@ -13,7 +13,7 @@ flowchart TD
     Q -->|"insufficient"| U
     Q -->|"replan"| PL
     Q -->|"adequate"| R["Truthful Report"]
-    R --> O["New Project State + Evidence"]
+    R --> O["New Project State + Outcome + Task Result + Evidence"]
 
     EV["Evidence"] -. supports .-> U
     EV -. supports .-> D

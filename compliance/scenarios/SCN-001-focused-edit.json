@@ -14,8 +14,10 @@
     "EAS-006-R01",
     "EAS-007-R05"
   ],
+  "required_artifacts": ["project_diff", "test_or_inspection_result"],
   "expected": {
     "outcome": "completed",
+    "task_result": "satisfied",
     "task_class": "change",
     "required_states": ["UNDERSTANDING", "EXECUTING", "VERIFYING", "REVIEWING"],
     "forbidden_states": ["ESCALATED", "BLOCKED"],

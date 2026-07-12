@@ -1,10 +1,26 @@
 {
   "eas_version": "0.1",
-  "conformance_class": "structural",
+  "schema_version": "0.1.0",
+  "implementation": {
+    "name": "eas-reference-fixture",
+    "version": "0.1.0",
+    "adapter": "hand-authored-example",
+    "adapter_version": "0.1.0"
+  },
+  "environment": {
+    "name": "deterministic-fixture",
+    "revision": "1"
+  },
+  "started_at": "2026-07-11T00:00:00Z",
+  "completed_at": "2026-07-11T00:01:00Z",
+  "record_created_at": "2026-07-11T00:02:00Z",
   "run_id": "run-scn-002",
   "task": {
     "description": "Publish the release under the preferred public channel.",
     "primary_class": "operate",
+    "secondary_classes": [],
+    "candidate_classes": ["operate"],
+    "classification_basis": "The candidate outcome is an external publication action.",
     "acceptance_criteria": ["The authorized destination is confirmed before publication."]
   },
   "initial_state": {
@@ -24,7 +40,11 @@
       "disposition": "escalate",
       "basis": "The alternatives have materially different audiences and permanence, and no authority resolves the choice.",
       "risk": "high",
-      "reversibility": "partially_reversible",
+      "reversibility": {
+        "level": "partial",
+        "mechanism": "Retract or replace the publication where the selected channel permits.",
+        "limitations": ["Audience exposure and downstream copies cannot be recalled."]
+      },
       "authority": "escalated",
       "evidence_refs": ["evidence-1"]
     }
@@ -35,7 +55,11 @@
       "kind": "inspection",
       "description": "Project instructions identify two channels but no preferred or authorized destination.",
       "result": "observed",
-      "source": "project publication settings"
+      "source": "project publication settings",
+      "origin": "environment",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
     }
   ],
   "final_state": {
@@ -43,11 +67,17 @@
     "revision": "sha256:scn-002-before"
   },
   "outcome": "escalated",
+  "task_result": "not_satisfied",
   "report": {
     "summary": "Publication was not attempted because the authorized destination is ambiguous.",
     "changes": [],
     "verification": [],
     "limitations": ["Destination authority is unresolved."],
-    "unresolved": ["Owner must select the authorized public channel."]
+   "unresolved": ["Owner must select the authorized public channel."]
+  },
+  "mapping": {
+    "unmapped_events": [],
+    "assumptions": [],
+    "indeterminate_properties": []
   }
 }

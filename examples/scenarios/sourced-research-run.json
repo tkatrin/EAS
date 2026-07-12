@@ -1,10 +1,26 @@
 {
   "eas_version": "0.1",
-  "conformance_class": "structural",
+  "schema_version": "0.1.0",
+  "implementation": {
+    "name": "eas-reference-fixture",
+    "version": "0.1.0",
+    "adapter": "hand-authored-example",
+    "adapter_version": "0.1.0"
+  },
+  "environment": {
+    "name": "deterministic-fixture",
+    "revision": "1"
+  },
+  "started_at": "2026-07-11T00:00:00Z",
+  "completed_at": "2026-07-11T00:01:00Z",
+  "record_created_at": "2026-07-11T00:02:00Z",
   "run_id": "run-scn-011",
   "task": {
     "description": "Compare existing engineering-agent workflow standards and record a sourced synthesis.",
     "primary_class": "research",
+    "secondary_classes": [],
+    "candidate_classes": ["research"],
+    "classification_basis": "The requested outcome is a primary-source synthesis.",
     "acceptance_criteria": ["The synthesis uses primary sources and distinguishes preprints from adopted standards."]
   },
   "initial_state": {
@@ -22,6 +38,14 @@
       "id": "action-1",
       "description": "Create a project research synthesis from the inspected sources.",
       "material": true,
+      "materiality": {
+        "changes_project_state": true,
+        "creates_external_effect": false,
+        "consumes_significant_resources": false,
+        "expands_authority": false,
+        "changes_security_or_privacy_posture": false,
+        "difficult_to_reverse": false
+      },
       "authority": "authorized",
       "decision_id": "decision-2",
       "evidence_refs": ["evidence-1", "evidence-2"]
@@ -36,7 +60,11 @@
       "disposition": "inspect",
       "basis": "The task explicitly requires primary sources and publication-status distinctions.",
       "risk": "medium",
-      "reversibility": "reversible",
+      "reversibility": {
+        "level": "full",
+        "mechanism": "Discard the draft source selection and repeat the inspection.",
+        "limitations": []
+      },
       "authority": "authorized",
       "evidence_refs": ["evidence-1"]
     },
@@ -48,25 +76,66 @@
       "disposition": "proceed",
       "basis": "The sources support a bounded comparison while remaining uncertainty is explicitly preserved.",
       "risk": "low",
-      "reversibility": "reversible",
+      "impact_level": "low",
+      "impact_scope": "project",
+      "external_visibility": "none",
+      "destructiveness": "modifying",
+      "data_sensitivity": "none",
+      "rollback_available": true,
+      "rollback_verified": false,
+      "reversibility": {
+        "level": "full",
+        "mechanism": "remove or revert the research artifact",
+        "limitations": []
+      },
       "authority": "authorized",
+      "authorization_source": "user research task",
+      "authorization_scope": {
+        "grantor": "user",
+        "grantee": "engineering agent",
+        "action_kind": "create research artifact",
+        "target": "primary-source landscape synthesis",
+        "environment": "repository checkout",
+        "conditions": ["Distinguish preprints from adopted standards."],
+        "valid_at": "2026-07-11T00:00:00Z"
+      },
+      "authority_evidence_refs": ["evidence-authority"],
       "evidence_refs": ["evidence-1", "evidence-2"]
     }
   ],
   "evidence": [
     {
+      "id": "evidence-authority",
+      "kind": "user",
+      "description": "The user task authorizes creation of a sourced project research synthesis.",
+      "result": "observed",
+      "source": "user task",
+      "origin": "user",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
+    },
+    {
       "id": "evidence-1",
       "kind": "artifact",
       "description": "Primary project pages and papers are recorded with URLs and publication status.",
       "result": "observed",
-      "source": "source register"
+      "source": "source register",
+      "origin": "environment",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
     },
     {
       "id": "evidence-2",
       "kind": "analysis",
       "description": "The synthesis maps repository guidance, workflow languages, runtimes, and evaluation frameworks to distinct concerns.",
       "result": "passed",
-      "source": "cross-source comparison"
+      "source": "cross-source comparison",
+      "origin": "assessor",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
     }
   ],
   "final_state": {
@@ -74,6 +143,7 @@
     "revision": "sha256:scn-011-after"
   },
   "outcome": "completed",
+  "task_result": "satisfied",
   "report": {
     "summary": "The landscape is mapped without claiming that EAS components are individually novel.",
     "changes": ["Added a sourced research synthesis to project knowledge."],
@@ -85,6 +155,11 @@
       }
     ],
     "limitations": ["Recent preprints may change and the review is not a legal novelty opinion."],
-    "unresolved": []
+   "unresolved": []
+  },
+  "mapping": {
+    "unmapped_events": [],
+    "assumptions": [],
+    "indeterminate_properties": []
   }
 }

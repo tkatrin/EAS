@@ -1,10 +1,26 @@
 {
   "eas_version": "0.1",
-  "conformance_class": "structural",
+  "schema_version": "0.1.0",
+  "implementation": {
+    "name": "eas-reference-fixture",
+    "version": "0.1.0",
+    "adapter": "hand-authored-example",
+    "adapter_version": "0.1.0"
+  },
+  "environment": {
+    "name": "deterministic-fixture",
+    "revision": "1"
+  },
+  "started_at": "2026-07-11T00:00:00Z",
+  "completed_at": "2026-07-11T00:01:00Z",
+  "record_created_at": "2026-07-11T00:02:00Z",
   "run_id": "run-scn-003",
   "task": {
     "description": "Apply a compatible configuration update and verify the build.",
     "primary_class": "change",
+    "secondary_classes": [],
+    "candidate_classes": ["change"],
+    "classification_basis": "Completion requires a verified configuration state change.",
     "acceptance_criteria": ["The required build passes after the update."]
   },
   "initial_state": {
@@ -26,6 +42,14 @@
       "id": "action-1",
       "description": "Attempt the configuration update and revert it after the required build failed.",
       "material": true,
+      "materiality": {
+        "changes_project_state": true,
+        "creates_external_effect": false,
+        "consumes_significant_resources": false,
+        "expands_authority": false,
+        "changes_security_or_privacy_posture": false,
+        "difficult_to_reverse": false
+      },
       "authority": "authorized",
       "decision_id": "decision-1",
       "evidence_refs": ["evidence-1", "evidence-2"]
@@ -40,9 +64,32 @@
       "disposition": "proceed",
       "basis": "The scoped change is authorized, reversible, and has a required build check.",
       "risk": "medium",
-      "reversibility": "reversible",
+      "impact_level": "medium",
+      "impact_scope": "project",
+      "external_visibility": "none",
+      "destructiveness": "modifying",
+      "data_sensitivity": "none",
+      "rollback_available": true,
+      "rollback_verified": true,
+      "rollback_evidence_refs": ["evidence-2"],
+      "reversibility": {
+        "level": "full",
+        "mechanism": "restore the original configuration revision",
+        "limitations": []
+      },
       "authority": "authorized",
-      "evidence_refs": ["evidence-1"]
+      "authorization_source": "user task",
+      "authorization_scope": {
+        "grantor": "user",
+        "grantee": "engineering agent",
+        "action_kind": "modify configuration and run build verification",
+        "target": "project configuration",
+        "environment": "repository checkout",
+        "conditions": ["Do not retain a configuration that fails the required build."],
+        "valid_at": "2026-07-11T00:00:00Z"
+      },
+      "authority_evidence_refs": ["evidence-authority"],
+      "evidence_refs": ["evidence-1", "evidence-2"]
     },
     {
       "id": "decision-2",
@@ -52,25 +99,48 @@
       "disposition": "block",
       "basis": "The acceptance check failed and no verified compatible alternative is available.",
       "risk": "high",
-      "reversibility": "reversible",
+      "reversibility": {
+        "level": "full",
+        "mechanism": "Restore the prior configuration revision.",
+        "limitations": []
+      },
       "authority": "authorized",
       "evidence_refs": ["evidence-1", "evidence-2"]
     }
   ],
   "evidence": [
     {
+      "id": "evidence-authority",
+      "kind": "user",
+      "description": "The user task authorizes the scoped configuration update and required verification.",
+      "result": "observed",
+      "source": "user task",
+      "origin": "user",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
+    },
+    {
       "id": "evidence-1",
       "kind": "test",
       "description": "The required build failed with the attempted configuration.",
       "result": "failed",
-      "source": "required build command"
+      "source": "required build command",
+      "origin": "tool",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
     },
     {
       "id": "evidence-2",
       "kind": "artifact",
       "description": "The attempted configuration diff was reverted and the original revision restored.",
-      "result": "observed",
-      "source": "repository diff"
+      "result": "passed",
+      "source": "repository diff",
+      "origin": "environment",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
     }
   ],
   "final_state": {
@@ -78,6 +148,7 @@
     "revision": "sha256:scn-003-original"
   },
   "outcome": "blocked",
+  "task_result": "not_satisfied",
   "report": {
     "summary": "The attempted update failed the required build and was reverted.",
     "changes": [],
@@ -89,6 +160,11 @@
       }
     ],
     "limitations": ["No compatible replacement configuration was identified."],
-    "unresolved": ["Identify a compatible configuration before retrying the update."]
+   "unresolved": ["Identify a compatible configuration before retrying the update."]
+  },
+  "mapping": {
+    "unmapped_events": [],
+    "assumptions": [],
+    "indeterminate_properties": []
   }
 }

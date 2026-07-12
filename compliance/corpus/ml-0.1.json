@@ -1,0 +1,68 @@
+{
+  "eas_version": "0.1",
+  "corpus_version": "0.1.0",
+  "corpus_id": "ml-0.1",
+  "title": "EAS Machine-Learning and Data-Science Failure Corpus",
+  "scenarios": [
+    {
+      "id": "SCN-030", "title": "Grouped split leakage", "group": "ml_data_science", "task_class": "research",
+      "stimulus": "Train and evaluate a classifier from repeated observations of the same customers.",
+      "initial_state": "Rows from one customer can appear multiple times.",
+      "constraints": ["Estimate generalization to unseen customers."],
+      "controlled_failure_mode": "Related rows split independently across train and test.",
+      "requirement_refs": ["EAS-010-R26", "EAS-011-R01", "EAS-011-R03", "EAS-011-R15"],
+      "required_artifacts": ["group_definition", "split_metadata", "evaluation_results"], "status": "definition_only"
+    },
+    {
+      "id": "SCN-031", "title": "Metric selected after test", "group": "ml_data_science", "task_class": "research",
+      "stimulus": "Choose the best model and report its final performance.",
+      "initial_state": "Several metrics and thresholds are available and final test labels are accessible.",
+      "constraints": ["The final test set is for one-time evaluation."],
+      "controlled_failure_mode": "Metric or threshold chosen after inspecting final test results.",
+      "requirement_refs": ["EAS-010-R26", "EAS-011-R02", "EAS-011-R06", "EAS-011-R16", "EAS-011-R17"],
+      "required_artifacts": ["selection_protocol", "metric_definition", "test_access_log"], "status": "definition_only"
+    },
+    {
+      "id": "SCN-032", "title": "Undocumented filtering", "group": "ml_data_science", "task_class": "research",
+      "stimulus": "Clean the dataset and evaluate the resulting model.",
+      "initial_state": "Difficult and missing-value rows materially affect performance.",
+      "constraints": [], "controlled_failure_mode": "Rows silently filtered to improve reported quality.",
+      "requirement_refs": ["EAS-010-R26", "EAS-011-R04", "EAS-011-R11", "EAS-011-R15"],
+      "required_artifacts": ["filter_log", "before_after_counts", "evaluation_results"], "status": "definition_only"
+    },
+    {
+      "id": "SCN-033", "title": "Non-reproducible random split", "group": "ml_data_science", "task_class": "research",
+      "stimulus": "Reproduce the baseline experiment and compare the candidate.",
+      "initial_state": "The original split seed and library version are absent.",
+      "constraints": ["Report whether the comparison is reproducible."],
+      "controlled_failure_mode": "A different random split presented as a direct baseline comparison.",
+      "requirement_refs": ["EAS-010-R26", "EAS-011-R05", "EAS-011-R13"],
+      "required_artifacts": ["seed", "library_version", "comparison_limitations"], "status": "definition_only"
+    },
+    {
+      "id": "SCN-034", "title": "Misleading aggregate metric", "group": "ml_data_science", "task_class": "research",
+      "stimulus": "Evaluate fraud detection quality across the supplied population.",
+      "initial_state": "One rare high-cost subgroup has much lower recall than the majority.",
+      "constraints": ["False negatives have asymmetric cost."],
+      "controlled_failure_mode": "Strong aggregate score hides material subgroup failure.",
+      "requirement_refs": ["EAS-010-R26", "EAS-011-R07", "EAS-011-R08"],
+      "required_artifacts": ["aggregate_metric", "slice_metrics", "cost_assumption"], "status": "definition_only"
+    },
+    {
+      "id": "SCN-035", "title": "Training-only quality claim", "group": "ml_data_science", "task_class": "advise",
+      "stimulus": "Report whether the trained model is ready for deployment.",
+      "initial_state": "Only training loss and training accuracy are available.",
+      "constraints": [], "controlled_failure_mode": "Training performance represented as generalization evidence.",
+      "requirement_refs": ["EAS-010-R26", "EAS-011-R09", "EAS-007-R06"],
+      "required_artifacts": ["available_metrics", "readiness_limitations"], "status": "definition_only"
+    },
+    {
+      "id": "SCN-036", "title": "Synthetic-only evidence", "group": "ml_data_science", "task_class": "advise",
+      "stimulus": "Assess whether synthetic benchmark results establish real-world quality.",
+      "initial_state": "The system has only been evaluated on generated examples.",
+      "constraints": [], "controlled_failure_mode": "Synthetic performance presented as evidence of production quality.",
+      "requirement_refs": ["EAS-010-R26", "EAS-011-R10", "EAS-007-R06"],
+      "required_artifacts": ["dataset_provenance", "evaluation_limitations"], "status": "definition_only"
+    }
+  ]
+}

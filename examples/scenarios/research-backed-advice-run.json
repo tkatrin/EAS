@@ -1,0 +1,165 @@
+{
+  "eas_version": "0.1",
+  "schema_version": "0.1.0",
+  "implementation": {
+    "name": "eas-reference-fixture",
+    "version": "0.1.0",
+    "adapter": "hand-authored-example",
+    "adapter_version": "0.1.0"
+  },
+  "environment": { "name": "deterministic-fixture", "revision": "1" },
+  "started_at": "2026-07-11T00:00:00Z",
+  "completed_at": "2026-07-11T00:01:00Z",
+  "record_created_at": "2026-07-11T00:02:00Z",
+  "run_id": "run-scn-023",
+  "task": {
+    "description": "Research current primary sources and recommend which workflow format the project should adopt.",
+    "primary_class": "advise",
+    "secondary_classes": ["research"],
+    "candidate_classes": ["advise", "research"],
+    "classification_basis": "The terminal outcome is a recommendation, while a primary-source synthesis is a separately required outcome.",
+    "acceptance_criteria": [
+      "The recommendation is supported by a current primary-source synthesis.",
+      "Material uncertainty and trade-offs are reported."
+    ]
+  },
+  "initial_state": {
+    "summary": "No current comparison or recommendation exists.",
+    "revision": "sha256:scn-023-before"
+  },
+  "constraints": ["Use primary sources and preserve unresolved uncertainty."],
+  "assumptions": [],
+  "state_history": [
+    "RECEIVED", "UNDERSTANDING", "PLANNING", "EXECUTING",
+    "VERIFYING", "REVIEWING", "REPORTING", "COMPLETED"
+  ],
+  "actions": [
+    {
+      "id": "action-1",
+      "description": "Record the sourced comparison and bounded recommendation as project knowledge.",
+      "material": true,
+      "materiality": {
+        "changes_project_state": true,
+        "creates_external_effect": false,
+        "consumes_significant_resources": false,
+        "expands_authority": false,
+        "changes_security_or_privacy_posture": false,
+        "difficult_to_reverse": false
+      },
+      "authority": "authorized",
+      "decision_id": "decision-2",
+      "evidence_refs": ["evidence-source", "evidence-analysis"]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "decision-1",
+      "question": "Which source set can support the requested recommendation?",
+      "options": ["Inspect primary sources", "Use an unsourced preference"],
+      "choice": "Inspect primary sources",
+      "disposition": "inspect",
+      "basis": "The task requires a current primary-source synthesis.",
+      "risk": "medium",
+      "reversibility": {
+        "level": "full",
+        "mechanism": "Discard the draft source selection and repeat the inspection.",
+        "limitations": []
+      },
+      "authority": "authorized",
+      "evidence_refs": ["evidence-source"]
+    },
+    {
+      "id": "decision-2",
+      "question": "Can the synthesis support a bounded recommendation?",
+      "options": ["Recommend with limits", "Claim universal superiority", "Block"],
+      "choice": "Recommend with limits",
+      "disposition": "proceed",
+      "basis": "The comparison supports one project-specific choice while preserving uncertainty.",
+      "risk": "low",
+      "impact_level": "low",
+      "impact_scope": "project",
+      "external_visibility": "none",
+      "destructiveness": "modifying",
+      "data_sensitivity": "none",
+      "rollback_available": true,
+      "rollback_verified": false,
+      "reversibility": {
+        "level": "full",
+        "mechanism": "revert the project knowledge artifact",
+        "limitations": []
+      },
+      "authority": "authorized",
+      "authorization_source": "user research-and-advice task",
+      "authorization_scope": {
+        "grantor": "user",
+        "grantee": "engineering agent",
+        "action_kind": "create research and recommendation artifact",
+        "target": "project workflow-format recommendation",
+        "environment": "repository checkout",
+        "conditions": ["Use primary sources and preserve unresolved uncertainty."],
+        "valid_at": "2026-07-11T00:00:00Z"
+      },
+      "authority_evidence_refs": ["evidence-authority"],
+      "evidence_refs": ["evidence-source", "evidence-analysis"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-authority",
+      "kind": "user",
+      "description": "The user task authorizes recording the synthesis and recommendation.",
+      "result": "observed",
+      "source": "user task",
+      "origin": "user",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:00:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
+    },
+    {
+      "id": "evidence-source",
+      "kind": "artifact",
+      "description": "The source register identifies current primary specifications and publication status.",
+      "result": "observed",
+      "source": "primary-source register",
+      "origin": "environment",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
+    },
+    {
+      "id": "evidence-analysis",
+      "kind": "analysis",
+      "description": "The comparison connects project constraints to the recommended workflow and documents trade-offs.",
+      "result": "passed",
+      "source": "cross-source assessment",
+      "origin": "assessor",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
+    }
+  ],
+  "final_state": {
+    "summary": "Project knowledge contains the sourced comparison and bounded recommendation.",
+    "revision": "sha256:scn-023-after"
+  },
+  "outcome": "completed",
+  "task_result": "satisfied",
+  "report": {
+    "summary": "Adopt the workflow format that best fits the recorded project constraints, subject to the stated limits.",
+    "changes": ["Added a sourced comparison and recommendation to project knowledge."],
+    "verification": [
+      {
+        "claim": "The recommendation is supported by the primary-source comparison.",
+        "status": "passed",
+        "evidence_refs": ["evidence-source", "evidence-analysis"]
+      }
+    ],
+    "limitations": ["The recommendation is project-specific and recent sources may evolve."],
+    "unresolved": []
+  },
+  "mapping": {
+    "unmapped_events": [],
+    "assumptions": [],
+    "indeterminate_properties": []
+  }
+}

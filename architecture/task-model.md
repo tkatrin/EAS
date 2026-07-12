@@ -10,6 +10,9 @@ different lifecycle paths based on the requested state transformation.
 Task class is descriptive. It does not authorize work and does not replace the
 task's actual acceptance criteria.
 
+EAS-010 is the normative source for class boundaries and applicability. This
+document provides the conceptual model used by that specification.
+
 ## 2. Task classes
 
 | Class | Intended transformation | Typical terminal evidence |
@@ -25,6 +28,21 @@ A run may have one primary class and multiple secondary classes. For example, a
 `diagnose` run may lead to a successor `change` run. Combining classes must not
 silently broaden authority.
 
+The primary class is the class of the requested task outcome. A secondary
+class is recorded only when its class-defining outcome is separately requested
+or materially claimed. Reading sources, reviewing one's own change, or running
+a diagnostic check as a supporting activity does not automatically add a
+secondary class.
+
+The storage format does not determine the class. A research synthesis saved as
+a Markdown file remains primarily `research` when the synthesis is the
+requested outcome; the file write independently invokes state-change duties.
+
+When several classes could be outcome-bearing, the run records the candidate
+classes and the observable basis for its selected primary class. Assessors also
+infer classes from actual actions, effects, and material report claims, so an
+incorrect label cannot remove obligations.
+
 ## 3. Common task dimensions
 
 Each task model includes the following independent dimensions:
@@ -33,7 +51,8 @@ Each task model includes the following independent dimensions:
 - **requested outcome**: the observable result sought by the user;
 - **acceptance criteria**: the conditions used to assess success;
 - **impact**: `low`, `medium`, `high`, or `critical`;
-- **reversibility**: `reversible`, `partially_reversible`, or `irreversible`;
+- **reversibility**: `full`, `partial`, or `none`, using the levels in the
+  materiality model;
 - **uncertainty**: known gaps in goal, input, constraints, or context;
 - **authority boundary**: actions allowed without additional approval;
 - **evidence obligation**: evidence needed to support the final claims.
@@ -57,7 +76,13 @@ task needs their outcomes.
 | `operate` | Perform an external-state action | Confirm authority immediately before action and observe result |
 | `advise` | Analyze and formulate a recommendation | Separate facts, inference, preference, and uncertainty |
 
-## 5. Success and no-change
+## 5. Run outcome, task result, and no-change
+
+`completed`, `escalated`, and `blocked` describe how the run terminated.
+`satisfied`, `partially_satisfied`, `not_satisfied`, and `indeterminate`
+describe whether its requested outcome was delivered. These axes are recorded
+separately so a run can complete its investigation and report truthfully even
+when the requested engineering outcome is not satisfied.
 
 Success does not always require a changed repository. A diagnosis, review,
 research result, or justified no-change decision can be a successful state

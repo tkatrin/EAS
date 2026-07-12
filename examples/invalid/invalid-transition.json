@@ -1,10 +1,26 @@
 {
   "eas_version": "0.1",
-  "conformance_class": "structural",
+  "schema_version": "0.1.0",
+  "implementation": {
+    "name": "eas-reference-fixture",
+    "version": "0.1.0",
+    "adapter": "hand-authored-example",
+    "adapter_version": "0.1.0"
+  },
+  "environment": {
+    "name": "deterministic-fixture",
+    "revision": "1"
+  },
+  "started_at": "2026-07-11T00:00:00Z",
+  "completed_at": "2026-07-11T00:01:00Z",
+  "record_created_at": "2026-07-11T00:02:00Z",
   "run_id": "run-example-invalid-001",
   "task": {
     "description": "Demonstrate rejection of a lifecycle jump.",
     "primary_class": "advise",
+    "secondary_classes": [],
+    "candidate_classes": ["advise"],
+    "classification_basis": "The fixture reports guidance about lifecycle validity without changing project state.",
     "acceptance_criteria": []
   },
   "initial_state": {
@@ -22,11 +38,17 @@
     "revision": "sha256:invalid-after"
   },
   "outcome": "completed",
+  "task_result": "satisfied",
   "report": {
     "summary": "Intentionally invalid fixture.",
     "changes": [],
     "verification": [],
     "limitations": [],
-    "unresolved": []
+   "unresolved": []
+  },
+  "mapping": {
+    "unmapped_events": [],
+    "assumptions": [],
+    "indeterminate_properties": []
   }
 }

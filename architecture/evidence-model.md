@@ -11,15 +11,21 @@ observable facts needed to support or limit its material claims.
 
 ## 2. Evidence dimensions
 
-Every evidence item has:
+Every evidence item has these machine-record fields or relationships:
 
-- **provenance** — where the observation came from;
+- **source** and **origin** — where the observation came from;
+- **capture** — whether it was direct, imported, or self-reported;
 - **kind** — inspection, test, analysis, user statement, tool result, or
   artifact;
 - **result** — passed, failed, observed, not run, or inconclusive;
-- **scope** — which claim, action, state, or acceptance criterion it addresses;
-- **freshness** — whether it was observed in this run or supplied earlier;
-- **reproducibility** — how another assessor can repeat or inspect it when safe.
+- **observed time** and **recorded time** — when the underlying fact was
+  observed and when the evidence record was created;
+- **references** — the claims, actions, decisions, or artifacts that the item
+  supports or is supported by.
+
+Reproduction instructions and freshness beyond the two timestamps may be
+preserved in the description, artifact reference, or a namespaced extension.
+They are not implied when the source does not expose them.
 
 Evidence strength is claim-relative. A passing unit test may strongly support a
 local behavior claim but provide no evidence for production safety or user
@@ -30,10 +36,10 @@ intent.
 | Task class | Required evidence coverage |
 |---|---|
 | `change` | Initial and final relevant state, intended diff/artifact, acceptance checks, unintended-change review |
-| `diagnose` | Observations or reproduction, hypothesis tests, relevant alternatives, remaining uncertainty |
+| `diagnose` | Observations or reproduction, evaluated candidate explanations and their results, a supported explanation when established, remaining uncertainty |
 | `review` | Inspected scope, criteria used, findings linked to evidence, coverage limitations |
 | `research` | Source provenance, selection method, synthesis basis, conflicts and unresolved uncertainty |
-| `operate` | Authority, pre-action state, observed external effect, post-action status, rollback evidence when applicable |
+| `operate` | Authority, pre-action state, whether action was attempted, observed/no-effect/indeterminate effect status, post-action status, rollback evidence when applicable |
 | `advise` | Material facts, assumptions, alternatives or trade-offs, inference boundary, limitations |
 
 When a run has multiple task classes, its evidence set satisfies the union of

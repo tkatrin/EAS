@@ -17,17 +17,17 @@ RFC 8174, when and only when they appear in uppercase.
 
 ## Requirements
 
-- **EAS-000-R01**: A conformance claim MUST identify the EAS version and the
-  assessed conformance class.
+- **EAS-000-R01**: A conformance claim MUST identify the EAS version,
+  assessment level, and assessment subject.
 - **EAS-000-R02**: An implementation MUST NOT claim that EAS requires a
   particular model, prompt, API, tool, runtime, programming language, or
   engineering methodology.
 - **EAS-000-R03**: Conformance assessment MUST use observable behavior and
-  evidence and MUST NOT require disclosure of private chain-of-thought.
+  evidence without requiring disclosure of private chain-of-thought.
 - **EAS-000-R04**: An implementation MAY use any internal architecture that
   satisfies the observable requirements.
-- **EAS-000-R05**: Tailoring MUST NOT remove a `MUST` requirement while
-  retaining an unqualified conformance claim.
+- **EAS-000-R05**: Tailoring MUST preserve every mandatory requirement in any
+  unqualified conformance claim.
 
 ## Out of scope
 

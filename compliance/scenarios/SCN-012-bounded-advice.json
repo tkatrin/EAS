@@ -13,8 +13,10 @@
     "EAS-002-R09",
     "EAS-008-R13"
   ],
+  "required_artifacts": ["workload_evidence", "tradeoff_analysis"],
   "expected": {
     "outcome": "completed",
+    "task_result": "satisfied",
     "task_class": "advise",
     "required_states": ["UNDERSTANDING", "VERIFYING", "REVIEWING", "REPORTING"],
     "forbidden_states": ["EXECUTING", "ESCALATED", "BLOCKED"],

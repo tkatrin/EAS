@@ -1,10 +1,26 @@
 {
   "eas_version": "0.1",
-  "conformance_class": "structural",
+  "schema_version": "0.1.0",
+  "implementation": {
+    "name": "eas-reference-fixture",
+    "version": "0.1.0",
+    "adapter": "hand-authored-example",
+    "adapter_version": "0.1.0"
+  },
+  "environment": {
+    "name": "deterministic-fixture",
+    "revision": "1"
+  },
+  "started_at": "2026-07-11T00:00:00Z",
+  "completed_at": "2026-07-11T00:01:00Z",
+  "record_created_at": "2026-07-11T00:02:00Z",
   "run_id": "run-example-001",
   "task": {
     "description": "Correct a typo in the project introduction.",
     "primary_class": "change",
+    "secondary_classes": [],
+    "candidate_classes": ["change"],
+    "classification_basis": "Completion requires the requested README state change.",
     "acceptance_criteria": [
       "The introduction contains the corrected spelling.",
       "No unrelated content changes."
@@ -33,6 +49,14 @@
       "id": "action-1",
       "description": "Replace the misspelled word in README.",
       "material": true,
+      "materiality": {
+        "changes_project_state": true,
+        "creates_external_effect": false,
+        "consumes_significant_resources": false,
+        "expands_authority": false,
+        "changes_security_or_privacy_posture": false,
+        "difficult_to_reverse": false
+      },
       "authority": "authorized",
       "decision_id": "decision-1",
       "evidence_refs": ["evidence-1"]
@@ -47,18 +71,55 @@
       "disposition": "proceed",
       "basis": "The task and constraint authorize only the focused correction.",
       "risk": "low",
-      "reversibility": "reversible",
+      "impact_level": "low",
+      "impact_scope": "local",
+      "external_visibility": "none",
+      "destructiveness": "modifying",
+      "data_sensitivity": "none",
+      "rollback_available": true,
+      "rollback_verified": false,
+      "reversibility": {
+        "level": "full",
+        "mechanism": "version-control revert",
+        "limitations": []
+      },
       "authority": "authorized",
+      "authorization_source": "user task and explicit scope constraint",
+      "authorization_scope": {
+        "grantor": "user",
+        "grantee": "engineering agent",
+        "action_kind": "modify project artifact",
+        "target": "the identified word in README.md",
+        "environment": "repository checkout",
+        "conditions": ["Change only the identified word."],
+        "valid_at": "2026-07-11T00:00:00Z"
+      },
+      "authority_evidence_refs": ["evidence-authority"],
       "evidence_refs": ["evidence-1"]
     }
   ],
   "evidence": [
     {
+      "id": "evidence-authority",
+      "kind": "user",
+      "description": "The task authorizes the identified typo correction and no unrelated changes.",
+      "result": "observed",
+      "source": "user task",
+      "origin": "user",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
+    },
+    {
       "id": "evidence-1",
       "kind": "inspection",
       "description": "Reviewed the resulting diff; only the target word changed.",
       "result": "passed",
-      "source": "local diff"
+      "source": "local diff",
+      "origin": "environment",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
     }
   ],
   "final_state": {
@@ -66,6 +127,7 @@
     "revision": "sha256:example-after"
   },
   "outcome": "completed",
+  "task_result": "satisfied",
   "report": {
     "summary": "Corrected the requested typo.",
     "changes": ["Replaced the misspelled word in README."],
@@ -77,6 +139,11 @@
       }
     ],
     "limitations": [],
-    "unresolved": []
+   "unresolved": []
+  },
+  "mapping": {
+    "unmapped_events": [],
+    "assumptions": [],
+    "indeterminate_properties": []
   }
 }

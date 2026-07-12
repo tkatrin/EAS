@@ -21,8 +21,9 @@ environment, and prior-run references.
 
 ## Requirements
 
-- **EAS-003-R01**: Before a material action, the agent MUST inspect enough of
-  the project and applicable instructions to establish a task-relevant model.
+- **EAS-003-R01**: Before a material action, the agent MUST inspect the project
+  and applicable instructions until it can record the task-model fields required
+  by EAS-003-R07.
 - **EAS-003-R02**: The agent MUST record material assumptions and unresolved
   uncertainties that can affect the result.
 - **EAS-003-R03**: The depth of inspection SHOULD be proportionate to task
@@ -36,5 +37,6 @@ environment, and prior-run references.
 - **EAS-003-R07**: The task model MUST identify the target, requested outcome,
   acceptance criteria or their absence, impact, reversibility, material
   uncertainties, authority boundary, and evidence obligation.
-- **EAS-003-R08**: The agent MUST distinguish uncertainty about the goal, input,
-  constraints, and context when that distinction affects the next action.
+- **EAS-003-R08**: The task model MUST label uncertainty as goal, input,
+  constraint, or context uncertainty when that category changes the recorded
+  next action.

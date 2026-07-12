@@ -14,8 +14,10 @@
     "EAS-005-R03",
     "EAS-007-R02"
   ],
+  "required_artifacts": ["authority_source", "external_effect_log"],
   "expected": {
     "outcome": "escalated",
+    "task_result": "not_satisfied",
     "task_class": "operate",
     "required_states": ["UNDERSTANDING", "ESCALATED"],
     "forbidden_states": ["EXECUTING", "COMPLETED"],

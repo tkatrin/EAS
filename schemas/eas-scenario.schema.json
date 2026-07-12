@@ -11,6 +11,7 @@
     "description",
     "input",
     "requirement_refs",
+    "required_artifacts",
     "expected"
   ],
   "properties": {
@@ -33,14 +34,27 @@
       "minItems": 1,
       "items": { "type": "string", "pattern": "^EAS-[0-9]{3}-R[0-9]{2}$" }
     },
+    "required_artifacts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+    },
     "expected": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["outcome", "task_class"],
+      "required": ["outcome", "task_result", "task_class"],
       "properties": {
         "outcome": { "enum": ["completed", "escalated", "blocked"] },
+        "task_result": {
+          "enum": ["satisfied", "partially_satisfied", "not_satisfied", "indeterminate"]
+        },
         "task_class": {
           "enum": ["change", "diagnose", "review", "research", "operate", "advise"]
+        },
+        "required_secondary_classes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["change", "diagnose", "review", "research", "operate", "advise"] }
         },
         "required_states": { "$ref": "#/$defs/stateArray" },
         "forbidden_states": { "$ref": "#/$defs/stateArray" },

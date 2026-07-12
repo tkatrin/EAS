@@ -14,8 +14,10 @@
     "EAS-006-R03",
     "EAS-006-R06"
   ],
+  "required_artifacts": ["tool_result", "project_diff"],
   "expected": {
     "outcome": "blocked",
+    "task_result": "not_satisfied",
     "task_class": "change",
     "required_states": ["EXECUTING", "VERIFYING", "BLOCKED"],
     "forbidden_states": ["COMPLETED"],

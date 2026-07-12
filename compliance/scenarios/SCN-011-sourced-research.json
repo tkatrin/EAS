@@ -13,8 +13,10 @@
     "EAS-006-R06",
     "EAS-008-R11"
   ],
+  "required_artifacts": ["source_register", "synthesis"],
   "expected": {
     "outcome": "completed",
+    "task_result": "satisfied",
     "task_class": "research",
     "required_states": ["UNDERSTANDING", "EXECUTING", "VERIFYING", "REVIEWING"],
     "forbidden_states": ["ESCALATED", "BLOCKED"],

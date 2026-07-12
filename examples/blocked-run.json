@@ -1,10 +1,26 @@
 {
   "eas_version": "0.1",
-  "conformance_class": "structural",
+  "schema_version": "0.1.0",
+  "implementation": {
+    "name": "eas-reference-fixture",
+    "version": "0.1.0",
+    "adapter": "hand-authored-example",
+    "adapter_version": "0.1.0"
+  },
+  "environment": {
+    "name": "deterministic-fixture",
+    "revision": "1"
+  },
+  "started_at": "2026-07-11T00:00:00Z",
+  "completed_at": "2026-07-11T00:01:00Z",
+  "record_created_at": "2026-07-11T00:02:00Z",
   "run_id": "run-example-blocked-001",
   "task": {
     "description": "Verify a build that requires an unavailable proprietary compiler.",
     "primary_class": "diagnose",
+    "secondary_classes": [],
+    "candidate_classes": ["diagnose"],
+    "classification_basis": "The requested outcome is an explanation of why verification cannot run.",
     "acceptance_criteria": ["The project builds successfully with the required compiler."]
   },
   "initial_state": {
@@ -24,7 +40,11 @@
       "disposition": "block",
       "basis": "The required compiler is unavailable and substitution would not meet the acceptance criterion.",
       "risk": "medium",
-      "reversibility": "reversible",
+      "reversibility": {
+        "level": "full",
+        "mechanism": "Stop before any project-state change.",
+        "limitations": []
+      },
       "authority": "authorized",
       "evidence_refs": ["evidence-1"]
     }
@@ -35,7 +55,11 @@
       "kind": "tool",
       "description": "The environment check found no authorized installation of the required compiler.",
       "result": "not_run",
-      "source": "environment inspection"
+      "source": "environment inspection",
+      "origin": "environment",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
     }
   ],
   "final_state": {
@@ -43,6 +67,7 @@
     "revision": "sha256:example-source"
   },
   "outcome": "blocked",
+  "task_result": "not_satisfied",
   "report": {
     "summary": "Build verification could not be performed in the authorized environment.",
     "changes": [],
@@ -54,6 +79,11 @@
       }
     ],
     "limitations": ["The required compiler was unavailable."],
-    "unresolved": ["Provide an authorized environment containing the required compiler."]
+   "unresolved": ["Provide an authorized environment containing the required compiler."]
+  },
+  "mapping": {
+    "unmapped_events": [],
+    "assumptions": [],
+    "indeterminate_properties": []
   }
 }

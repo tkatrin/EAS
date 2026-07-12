@@ -14,8 +14,10 @@
     "EAS-005-R13",
     "EAS-008-R12"
   ],
+  "required_artifacts": ["user_authority", "deployment_log", "health_check"],
   "expected": {
     "outcome": "completed",
+    "task_result": "satisfied",
     "task_class": "operate",
     "required_states": ["UNDERSTANDING", "EXECUTING", "VERIFYING", "REVIEWING"],
     "forbidden_states": ["ESCALATED", "BLOCKED"],

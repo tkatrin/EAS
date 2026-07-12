@@ -1,10 +1,26 @@
 {
   "eas_version": "0.1",
-  "conformance_class": "structural",
+  "schema_version": "0.1.0",
+  "implementation": {
+    "name": "eas-reference-fixture",
+    "version": "0.1.0",
+    "adapter": "hand-authored-example",
+    "adapter_version": "0.1.0"
+  },
+  "environment": {
+    "name": "deterministic-fixture",
+    "revision": "1"
+  },
+  "started_at": "2026-07-11T00:00:00Z",
+  "completed_at": "2026-07-11T00:01:00Z",
+  "record_created_at": "2026-07-11T00:02:00Z",
   "run_id": "run-scn-010",
   "task": {
     "description": "Review the proposed authentication diff for correctness and security risks.",
     "primary_class": "review",
+    "secondary_classes": [],
+    "candidate_classes": ["review"],
+    "classification_basis": "The requested outcome is a set of findings about an existing proposal.",
     "acceptance_criteria": ["Findings are specific, supported, and limited to the proposed diff."]
   },
   "initial_state": {
@@ -27,7 +43,11 @@
       "disposition": "inspect",
       "basis": "The review scope is available and no modification is authorized or needed.",
       "risk": "low",
-      "reversibility": "reversible",
+      "reversibility": {
+        "level": "full",
+        "mechanism": "Stop read-only inspection and discard transient review notes.",
+        "limitations": []
+      },
       "authority": "authorized",
       "evidence_refs": ["evidence-1"]
     }
@@ -38,14 +58,22 @@
       "kind": "inspection",
       "description": "The diff stores a bearer token in a process-wide mutable variable at auth.py:42.",
       "result": "observed",
-      "source": "proposed authentication diff"
+      "source": "proposed authentication diff",
+      "origin": "environment",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
     },
     {
       "id": "evidence-2",
       "kind": "analysis",
       "description": "The shared mutable token permits cross-request credential reuse and violates the stated isolation criterion.",
       "result": "passed",
-      "source": "security review criteria"
+      "source": "security review criteria",
+      "origin": "assessor",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
     }
   ],
   "final_state": {
@@ -53,6 +81,7 @@
     "revision": "sha256:scn-010-unapplied"
   },
   "outcome": "completed",
+  "task_result": "satisfied",
   "report": {
     "summary": "The proposal has one high-severity cross-request credential isolation issue.",
     "changes": [],
@@ -64,6 +93,11 @@
       }
     ],
     "limitations": ["Assessment is limited to the supplied diff and does not cover undeclared runtime controls."],
-    "unresolved": []
+   "unresolved": []
+  },
+  "mapping": {
+    "unmapped_events": [],
+    "assumptions": [],
+    "indeterminate_properties": []
   }
 }

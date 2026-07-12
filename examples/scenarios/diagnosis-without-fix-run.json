@@ -1,10 +1,26 @@
 {
   "eas_version": "0.1",
-  "conformance_class": "structural",
+  "schema_version": "0.1.0",
+  "implementation": {
+    "name": "eas-reference-fixture",
+    "version": "0.1.0",
+    "adapter": "hand-authored-example",
+    "adapter_version": "0.1.0"
+  },
+  "environment": {
+    "name": "deterministic-fixture",
+    "revision": "1"
+  },
+  "started_at": "2026-07-11T00:00:00Z",
+  "completed_at": "2026-07-11T00:01:00Z",
+  "record_created_at": "2026-07-11T00:02:00Z",
   "run_id": "run-scn-007",
   "task": {
     "description": "Diagnose why the documented build command fails; do not implement a fix.",
     "primary_class": "diagnose",
+    "secondary_classes": [],
+    "candidate_classes": ["diagnose"],
+    "classification_basis": "The requested terminal outcome is a supported explanation without a fix.",
     "acceptance_criteria": ["The failure has a supported explanation and the project remains unchanged."]
   },
   "initial_state": {
@@ -27,7 +43,11 @@
       "disposition": "inspect",
       "basis": "The requested diagnosis can be investigated safely without modifying project state.",
       "risk": "low",
-      "reversibility": "reversible",
+      "reversibility": {
+        "level": "full",
+        "mechanism": "Stop read-only inspection and discard transient diagnostic state.",
+        "limitations": []
+      },
       "authority": "authorized",
       "evidence_refs": ["evidence-1", "evidence-2"]
     }
@@ -38,14 +58,22 @@
       "kind": "test",
       "description": "The documented build command fails because the configured tool version rejects one option.",
       "result": "failed",
-      "source": "documented build command"
+      "source": "documented build command",
+      "origin": "tool",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
     },
     {
       "id": "evidence-2",
       "kind": "analysis",
       "description": "Running the same command without the unsupported option succeeds, supporting the version-mismatch explanation.",
       "result": "passed",
-      "source": "read-only diagnostic experiment"
+      "source": "read-only diagnostic experiment",
+      "origin": "assessor",
+      "capture": "direct",
+      "observed_at": "2026-07-11T00:01:00Z",
+      "recorded_at": "2026-07-11T00:02:00Z"
     }
   ],
   "final_state": {
@@ -53,6 +81,7 @@
     "revision": "sha256:scn-007-unchanged"
   },
   "outcome": "completed",
+  "task_result": "satisfied",
   "report": {
     "summary": "The documented command uses an option unsupported by the configured tool version.",
     "changes": [],
@@ -64,6 +93,11 @@
       }
     ],
     "limitations": ["No fix was implemented or evaluated because the task requested diagnosis only."],
-    "unresolved": []
+   "unresolved": []
+  },
+  "mapping": {
+    "unmapped_events": [],
+    "assumptions": [],
+    "indeterminate_properties": []
   }
 }
