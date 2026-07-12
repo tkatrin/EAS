@@ -1,0 +1,13 @@
+{
+  "baseline_version": "0.1.0",
+  "registry_version": "0.1.0",
+  "minimum": {
+    "with_validator_rules": 56,
+    "structurally_machine_checkable": 39,
+    "behaviorally_assessable": 20,
+    "covered_by_scenarios": 61
+  },
+  "maximum": {
+    "currently_unobservable": 93
+  }
+}

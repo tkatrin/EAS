@@ -44,6 +44,22 @@ class ValidatorTests(unittest.TestCase):
 
         self.assertTrue(any(issue.requirement == "EAS-004-R06" for issue in issues))
 
+    def test_task_result_is_distinct_from_terminal_outcome(self) -> None:
+        record = example_record()
+        record["state_history"][-1] = "BLOCKED"
+        record["outcome"] = "blocked"
+        record["task_result"] = "satisfied"
+
+        issues = validate_record(record)
+
+        self.assertTrue(
+            any(
+                issue.requirement == "EAS-002-R10"
+                and issue.path == "$.task_result"
+                for issue in issues
+            )
+        )
+
     def test_evidence_references_must_resolve(self) -> None:
         record = example_record()
         record["actions"][0]["evidence_refs"] = ["missing"]
@@ -65,7 +81,9 @@ class ValidatorTests(unittest.TestCase):
 
     def test_passed_claim_requires_passed_evidence(self) -> None:
         record = example_record()
-        record["evidence"][0]["result"] = "failed"
+        next(
+            item for item in record["evidence"] if item["id"] == "evidence-1"
+        )["result"] = "failed"
 
         issues = validate_record(record)
 
@@ -80,6 +98,10 @@ class ValidatorTests(unittest.TestCase):
                 "description": "Observed the target artifact before the passing check.",
                 "result": "observed",
                 "source": "artifact inspection",
+                "origin": "environment",
+                "capture": "direct",
+                "observed_at": "2026-07-11T00:01:00Z",
+                "recorded_at": "2026-07-11T00:02:00Z",
             }
         )
         record["report"]["verification"][0]["evidence_refs"].append("evidence-2")

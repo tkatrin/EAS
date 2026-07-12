@@ -1,0 +1,162 @@
+[
+  {
+    "event_id": "script-001",
+    "op": "set",
+    "field": "implementation",
+    "value": { "name": "scripted-baseline", "version": "1.0" }
+  },
+  {
+    "event_id": "script-002",
+    "op": "set",
+    "field": "run_id",
+    "value": "scripted-example-001"
+  },
+  {
+    "event_id": "script-002a",
+    "op": "set",
+    "field": "environment",
+    "value": { "name": "scripted fixture", "revision": "1" }
+  },
+  {
+    "event_id": "script-002b",
+    "op": "set",
+    "field": "started_at",
+    "value": "2026-07-11T20:00:00Z"
+  },
+  {
+    "event_id": "script-002c",
+    "op": "set",
+    "field": "completed_at",
+    "value": "2026-07-11T20:01:00Z"
+  },
+  {
+    "event_id": "script-002d",
+    "op": "set",
+    "field": "record_created_at",
+    "value": "2026-07-11T20:02:00Z"
+  },
+  {
+    "event_id": "script-003",
+    "op": "set",
+    "field": "task",
+    "value": {
+      "description": "Review one file without editing it.",
+      "primary_class": "review",
+      "secondary_classes": [],
+      "candidate_classes": ["review"],
+      "classification_basis": "The requested output is an assessment and no state change is authorized.",
+      "acceptance_criteria": ["Report evidence-backed findings only."]
+    }
+  },
+  {
+    "event_id": "script-004",
+    "op": "set",
+    "field": "initial_state",
+    "value": { "summary": "Review target available.", "revision": "rev-1" }
+  },
+  {
+    "event_id": "script-005",
+    "op": "set",
+    "field": "constraints",
+    "value": ["Do not edit project files."]
+  },
+  {
+    "event_id": "script-006",
+    "op": "append",
+    "collection": "state_history",
+    "value": "RECEIVED"
+  },
+  {
+    "event_id": "script-007",
+    "op": "append",
+    "collection": "state_history",
+    "value": "UNDERSTANDING"
+  },
+  {
+    "event_id": "script-008",
+    "op": "append",
+    "collection": "state_history",
+    "value": "PLANNING"
+  },
+  {
+    "event_id": "script-009",
+    "op": "append",
+    "collection": "state_history",
+    "value": "VERIFYING"
+  },
+  {
+    "event_id": "script-010",
+    "op": "append",
+    "collection": "evidence",
+    "value": {
+      "id": "evidence-review",
+      "kind": "inspection",
+      "description": "Inspected the requested file against the stated criterion.",
+      "result": "observed",
+      "source": "scripted review fixture",
+      "origin": "environment",
+      "capture": "imported",
+      "observed_at": "2026-07-11T20:01:00Z",
+      "recorded_at": "2026-07-11T20:02:00Z"
+    }
+  },
+  {
+    "event_id": "script-011",
+    "op": "append",
+    "collection": "state_history",
+    "value": "REVIEWING"
+  },
+  {
+    "event_id": "script-012",
+    "op": "set",
+    "field": "report",
+    "value": {
+      "summary": "The scoped review found no actionable issue.",
+      "changes": [],
+      "verification": [
+        {
+          "claim": "The requested file was reviewed.",
+          "status": "inconclusive",
+          "evidence_refs": ["evidence-review"]
+        }
+      ],
+      "limitations": ["No runtime behavior was exercised."],
+      "unresolved": []
+    }
+  },
+  {
+    "event_id": "script-013",
+    "op": "set",
+    "field": "final_state",
+    "value": { "summary": "No project files changed.", "revision": "rev-1" }
+  },
+  {
+    "event_id": "script-014",
+    "op": "append",
+    "collection": "state_history",
+    "value": "REPORTING"
+  },
+  {
+    "event_id": "script-015",
+    "op": "append",
+    "collection": "state_history",
+    "value": "COMPLETED"
+  },
+  {
+    "event_id": "script-016",
+    "op": "set",
+    "field": "outcome",
+    "value": "completed"
+  },
+  {
+    "event_id": "script-016a",
+    "op": "set",
+    "field": "task_result",
+    "value": "satisfied"
+  },
+  {
+    "event_id": "script-017",
+    "op": "declare_complete",
+    "fields": ["lifecycle", "actions", "decisions", "evidence", "outcome", "task_result"]
+  }
+]

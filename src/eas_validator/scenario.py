@@ -32,6 +32,7 @@ def _validate_scenario(scenario: Any) -> list[ValidationIssue]:
         "description",
         "input",
         "requirement_refs",
+        "required_artifacts",
         "expected",
     }
     for name in sorted(required - scenario.keys()):
@@ -43,6 +44,8 @@ def _validate_scenario(scenario: Any) -> list[ValidationIssue]:
         issues.append(_issue("$scenario.eas_version", "must equal '0.1'"))
     if not isinstance(scenario.get("requirement_refs"), list) or not scenario["requirement_refs"]:
         issues.append(_issue("$scenario.requirement_refs", "must be a non-empty array"))
+    if not isinstance(scenario.get("required_artifacts"), list):
+        issues.append(_issue("$scenario.required_artifacts", "must be an array"))
 
     expected = scenario.get("expected")
     if not isinstance(expected, dict):
@@ -50,6 +53,15 @@ def _validate_scenario(scenario: Any) -> list[ValidationIssue]:
         return issues
     if expected.get("outcome") not in OUTCOMES:
         issues.append(_issue("$scenario.expected.outcome", "must be a recognized outcome"))
+    if expected.get("task_result") not in {
+        "satisfied",
+        "partially_satisfied",
+        "not_satisfied",
+        "indeterminate",
+    }:
+        issues.append(
+            _issue("$scenario.expected.task_result", "must be a recognized task result")
+        )
     if expected.get("task_class") not in TASK_CLASSES:
         issues.append(_issue("$scenario.expected.task_class", "must be a recognized task class"))
     return issues
@@ -81,6 +93,14 @@ def assess_scenario(scenario: Any, record: Any) -> list[ValidationIssue]:
             )
         )
 
+    if record.get("task_result") != expected["task_result"]:
+        issues.append(
+            _issue(
+                "$.task_result",
+                f"expected {expected['task_result']!r}, got {record.get('task_result')!r}",
+            )
+        )
+
     task = record.get("task", {})
     if task.get("primary_class") != expected["task_class"]:
         issues.append(
@@ -89,6 +109,16 @@ def assess_scenario(scenario: Any, record: Any) -> list[ValidationIssue]:
                 f"expected {expected['task_class']!r}, got {task.get('primary_class')!r}",
             )
         )
+
+    secondary_classes = _string_set(task.get("secondary_classes"))
+    for task_class in expected.get("required_secondary_classes", []):
+        if task_class not in secondary_classes:
+            issues.append(
+                _issue(
+                    "$.task.secondary_classes",
+                    f"required secondary class {task_class!r} is absent",
+                )
+            )
 
     states = _string_set(record.get("state_history"))
     for state in expected.get("required_states", []):

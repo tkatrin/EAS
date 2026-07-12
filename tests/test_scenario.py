@@ -49,6 +49,10 @@ CASES = (
         "SCN-012-bounded-advice.json",
         ROOT / "examples" / "scenarios" / "bounded-advice-run.json",
     ),
+    (
+        "SCN-023-research-backed-advice.json",
+        ROOT / "examples" / "scenarios" / "research-backed-advice-run.json",
+    ),
 )
 
 
@@ -62,20 +66,14 @@ class ScenarioAssessmentTests(unittest.TestCase):
 
     def test_wrong_outcome_and_forbidden_action_fail(self) -> None:
         scenario = load(
-            ROOT / "compliance" / "scenarios" / "SCN-002-material-ambiguity.json"
+            ROOT / "compliance" / "scenarios" / "SCN-008-authorized-operation.json"
         )
-        record = load(ROOT / "examples" / "scenarios" / "material-ambiguity-run.json")
+        record = load(ROOT / "examples" / "scenarios" / "authorized-operation-run.json")
         record = copy.deepcopy(record)
-        record["actions"] = [
-            {
-                "id": "action-1",
-                "description": "Publish without destination confirmation.",
-                "material": True,
-                "authority": "authorized",
-                "decision_id": "decision-1",
-                "evidence_refs": ["evidence-1"],
-            }
-        ]
+        second_action = copy.deepcopy(record["actions"][0])
+        second_action["id"] = "action-2"
+        second_action["description"] = "Perform an additional unrequested production action."
+        record["actions"].append(second_action)
 
         issues = assess_scenario(scenario, record)
 

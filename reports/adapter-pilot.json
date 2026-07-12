@@ -1,0 +1,94 @@
+{
+  "adapter_count": 2,
+  "comparison": {
+    "agreeing_projection_field_count": 16,
+    "exact_semantic_projection_agreement": true,
+    "neutral_projection_sha256": "7f14d0d08fed4170e2b961b8fd095d86bec187ff666199688c71e169bc24081b",
+    "projection_fields": [
+      "task",
+      "environment",
+      "started_at",
+      "completed_at",
+      "record_created_at",
+      "initial_state",
+      "constraints",
+      "state_history",
+      "actions",
+      "decisions",
+      "evidence",
+      "assumptions",
+      "report",
+      "final_state",
+      "outcome",
+      "task_result"
+    ],
+    "scenario_result_agreement": true,
+    "scripted_projection_sha256": "7f14d0d08fed4170e2b961b8fd095d86bec187ff666199688c71e169bc24081b",
+    "structural_result_agreement": true,
+    "total_projection_field_count": 16
+  },
+  "eas_version": "0.1",
+  "fixture_type": "controlled_synthetic",
+  "implementations": [
+    {
+      "adapter": "neutral-jsonl",
+      "explicit_assumption_count": 1,
+      "indeterminate_property_count": 0,
+      "lossless_event_rate": 0.9,
+      "mapped_record_counts": {
+        "actions": 2,
+        "decisions": 1,
+        "evidence": 4,
+        "lifecycle_states": 8
+      },
+      "partially_mapped_event_count": 1,
+      "represented_event_rate": 0.95,
+      "scenario_issue_count": 0,
+      "schema_issue_count": 0,
+      "source_event_count": 20,
+      "source_format": "versioned neutral JSONL events",
+      "structural_issue_count": 0,
+      "unmapped_event_count": 2,
+      "unmapped_source_event_ids": [
+        "evt-007",
+        "evt-018"
+      ],
+      "wholly_unmapped_event_count": 1
+    },
+    {
+      "adapter": "scripted-events",
+      "explicit_assumption_count": 1,
+      "indeterminate_property_count": 0,
+      "lossless_event_rate": 1.0,
+      "mapped_record_counts": {
+        "actions": 2,
+        "decisions": 1,
+        "evidence": 4,
+        "lifecycle_states": 8
+      },
+      "partially_mapped_event_count": 0,
+      "represented_event_rate": 1.0,
+      "scenario_issue_count": 0,
+      "schema_issue_count": 0,
+      "source_event_count": 30,
+      "source_format": "explicit set/append operation list",
+      "structural_issue_count": 0,
+      "unmapped_event_count": 0,
+      "unmapped_source_event_ids": [],
+      "wholly_unmapped_event_count": 0
+    }
+  ],
+  "limitations": [
+    "Both trajectories are controlled fixtures, not observations from independent agent runtimes.",
+    "Both adapters are maintained in the same reference codebase, so implementation independence is not established.",
+    "The pilot uses one task and cannot estimate inter-rater agreement, false-positive rates, or real-world adapter coverage.",
+    "Scenario projection does not include the external artifact bundle used by the full CLI behavioral assessment."
+  ],
+  "pilot_id": "adapter-interoperability-0.1",
+  "real_agent_trajectory_count": 0,
+  "scenario_ids": [
+    "SCN-001"
+  ],
+  "source_format_count": 2,
+  "task_count": 1
+}

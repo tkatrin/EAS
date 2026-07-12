@@ -1,0 +1,3 @@
+inspection: exactly one requested line changed
+result: passed
+limitation: controlled fixture; no external repository was inspected

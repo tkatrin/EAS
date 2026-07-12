@@ -1,0 +1,29 @@
+{
+  "bundle_version": "0.1.0",
+  "run_id": "run-example-001",
+  "created_at": "2026-07-11T00:03:00Z",
+  "artifacts": [
+    {
+      "id": "artifact-project-diff",
+      "kind": "project_diff",
+      "description": "Controlled one-line project difference for SCN-001.",
+      "path": "project.diff",
+      "sha256": "0d6eecb3013eb47ca8b0cc8d9e10182a979c5d593abb68a82029f905ee528719",
+      "byte_length": 116,
+      "capture": "direct",
+      "source": "SCN-001 controlled fixture",
+      "evidence_refs": ["evidence-1"]
+    },
+    {
+      "id": "artifact-inspection-result",
+      "kind": "test_or_inspection_result",
+      "description": "Controlled inspection result for the requested edit.",
+      "path": "verification.txt",
+      "sha256": "65968f6f84bf953261d119eb0d68747d67be1645e18ea722fbc6b651bbf70e26",
+      "byte_length": 131,
+      "capture": "direct",
+      "source": "SCN-001 controlled fixture",
+      "evidence_refs": ["evidence-1"]
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "assessment_id": "assessment-example-SCN-001",
+  "assessment_level": "behavioral",
+  "assessment_subject": {
+    "id": "run-example-001",
+    "type": "run"
+  },
+  "assessor": {
+    "name": "eas-reference-assessor",
+    "version": "0.1.0.dev0"
+  },
+  "completed_at": "2026-07-12T16:40:29Z",
+  "eas_version": "0.1",
+  "limitations": [
+    "Artifact integrity checks establish presence and digest only; they do not establish semantic authenticity.",
+    "Passing the declared scenario set does not establish universal behavioral conformance beyond that set and EAS version."
+  ],
+  "record_created_at": "2026-07-12T16:40:29Z",
+  "registries": {
+    "requirements": "0.1.0",
+    "validator_rules": "0.1.0"
+  },
+  "requirement_results": [
+    {
+      "applicability": {
+        "action_or_state": "not_invoked",
+        "applicable": true,
+        "base": "invoked",
+        "basis": "Scenario SCN-001 declares the requirement in scope and the registry applicability tags were evaluated across all dimensions.",
+        "risk_or_event": "not_invoked",
+        "selected_profile": "not_invoked",
+        "subject_match": "matched",
+        "task_class": "not_invoked"
+      },
+      "assessment_subject": "run",
+      "evidence_refs": [],
+      "level": "MUST",
+      "reason": "Declared observable scenario and artifact expectations passed.",
+      "requirement_id": "EAS-002-R04",
+      "result": "pass",
+      "scenario_refs": [
+        "SCN-001"
+      ],
+      "title": "Preservation of unrelated project state",
+      "validator_rule_refs": []
+    },
+    {
+      "applicability": {
+        "action_or_state": "invoked",
+        "applicable": true,
+        "base": "not_invoked",
+        "basis": "Scenario SCN-001 declares the requirement in scope and the registry applicability tags were evaluated across all dimensions.",
+        "risk_or_event": "not_invoked",
+        "selected_profile": "not_invoked",
+        "subject_match": "matched",
+        "task_class": "not_invoked"
+      },
+      "assessment_subject": "run",
+      "evidence_refs": [],
+      "level": "MUST",
+      "reason": "Declared observable scenario and artifact expectations passed.",
+      "requirement_id": "EAS-003-R01",
+      "result": "pass",
+      "scenario_refs": [
+        "SCN-001"
+      ],
+      "title": "Task-relevant inspection before material action",
+      "validator_rule_refs": [
+        "VAL-SCENARIO-EXPECTATIONS"
+      ]
+    },
+    {
+      "applicability": {
+        "action_or_state": "invoked",
+        "applicable": true,
+        "base": "not_invoked",
+        "basis": "Scenario SCN-001 declares the requirement in scope and the registry applicability tags were evaluated across all dimensions.",
+        "risk_or_event": "not_invoked",
+        "selected_profile": "not_invoked",
+        "subject_match": "matched",
+        "task_class": "not_invoked"
+      },
+      "assessment_subject": "run",
+      "evidence_refs": [],
+      "level": "MUST",
+      "reason": "Declared observable scenario and artifact expectations passed.",
+      "requirement_id": "EAS-006-R01",
+      "result": "pass",
+      "scenario_refs": [
+        "SCN-001"
+      ],
+      "title": "Verification covers acceptance criteria and material risk",
+      "validator_rule_refs": [
+        "VAL-SCENARIO-EXPECTATIONS"
+      ]
+    },
+    {
+      "applicability": {
+        "action_or_state": "not_invoked",
+        "applicable": true,
+        "base": "invoked",
+        "basis": "Scenario SCN-001 declares the requirement in scope and the registry applicability tags were evaluated across all dimensions.",
+        "risk_or_event": "not_invoked",
+        "selected_profile": "not_invoked",
+        "subject_match": "matched",
+        "task_class": "not_invoked"
+      },
+      "assessment_subject": "run",
+      "evidence_refs": [],
+      "level": "MUST",
+      "reason": "Declared observable scenario and artifact expectations passed.",
+      "requirement_id": "EAS-007-R05",
+      "result": "pass",
+      "scenario_refs": [
+        "SCN-001"
+      ],
+      "title": "Complete final report",
+      "validator_rule_refs": [
+        "VAL-RUN-REQUIRED-FIELDS",
+        "VAL-VERIFICATION-SHAPE",
+        "VAL-SCENARIO-EXPECTATIONS"
+      ]
+    }
+  ],
+  "scenario_set": {
+    "id": "core-0.1",
+    "scenario_ids": [
+      "SCN-001"
+    ],
+    "version": "0.1.0"
+  },
+  "schema_version": "0.1.0",
+  "source_record": {
+    "artifact_ref": "examples/minimal-run.json",
+    "id": "run-example-001",
+    "record_created_at": "2026-07-11T00:02:00Z",
+    "schema_version": "0.1.0",
+    "sha256": "9131a253941a0a58367bf64f2ce76d3279636c39f5f81a1b161d0db253cc363d",
+    "type": "run"
+  },
+  "started_at": "2026-07-12T16:40:29Z",
+  "summary": {
+    "counts": {
+      "fail": 0,
+      "indeterminate": 0,
+      "not_applicable": 0,
+      "pass": 4,
+      "total": 4
+    },
+    "result": "pass"
+  }
+}
