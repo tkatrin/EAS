@@ -30,9 +30,9 @@
   preflight.
 - [x] Complete the two-run observation preflight on a second independently
   developed runtime.
-- [ ] Complete the 16-run series for the second runtime.
-- [ ] Collect consented trajectories from at least two independent runtimes.
-- [ ] Run at least two repetitions per runtime and scenario.
+- [x] Complete the 16-run series for the second runtime.
+- [x] Collect consented trajectories from at least two independent runtimes.
+- [x] Run at least two repetitions per runtime and scenario.
 - [ ] Obtain independent blinded ratings from two assessors.
 - [ ] Report adapter loss, indeterminate rate, assessor agreement, scenario
   failures, and false structural passes.

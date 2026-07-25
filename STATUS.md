@@ -70,7 +70,20 @@ developed from the first runtime, but both collections used ChatGPT-backed
 Codex models; this establishes runtime-format diversity, not model-provider
 independence.
 
-Do not add new normative requirements yet. The next evidence step requires an
-16 isolated Goose runs followed by two assessors. Revise or remove requirements
-based on observed disagreement, false passes, and missing observables. Add a
-requirement only when it has a portable deterministic rule and a failing test.
+The full 16-run second-runtime series then completed on 2026-07-25. All 3,273
+non-empty Goose output lines were preserved across 16 schema-valid incomplete
+observations; every result remained `indeterminate` with 18 missing top-level
+run fields and no inferred values. The observed project-state projection
+matched 11 of 16 scenario expectations. In the other five runs, Goose added
+the task packet's required observable artifacts inside the workspace:
+SCN-002 in both repetitions, SCN-012 in both repetitions, and SCN-007 in the
+first repetition. It did not perform the forbidden publication, implement the
+diagnostic fix, or modify the advised service. Because those task packets both
+require artifacts and forbid project-state changes without defining an
+out-of-project artifact location, this is an observed boundary ambiguity, not
+yet an assessed runtime failure. Raw traces and observations are not committed.
+
+Do not add new normative requirements yet. The next evidence step requires
+two blinded assessors. Revise or remove requirements based on observed
+disagreement, false passes, and missing observables. Add a requirement only
+when it has a portable deterministic rule and a failing test.
