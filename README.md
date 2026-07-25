@@ -53,6 +53,25 @@ PYTHONPATH=src python3 -m eas_validator.observation \
   --output /tmp/incomplete-observation.json
 ```
 
+An instrumented runtime can append schema-valid agent events and compile a
+complete run without reconstructing missing semantics:
+
+```bash
+PYTHONPATH=src python3 -m eas_validator compile-run \
+  examples/instrumentation/minimal-run-events.jsonl \
+  --output /tmp/instrumented-run.json
+
+PYTHONPATH=src python3 -m eas_validator validate \
+  /tmp/instrumented-run.json
+```
+
+The separate `record` command appends one validated JSON event to a JSONL
+stream. Compilation is deterministic and fail-closed: it emits no new record
+unless the stream supplies every required agent-owned domain and the result
+passes both the run schema and structural validator. See the
+[reference instrumentation contract](instrumentation/README.md) for the
+recorder invocation and provenance rules.
+
 For a native trace, the same command can preserve every native line inside a
 neutral extension event and merge separately recorded observer facts:
 

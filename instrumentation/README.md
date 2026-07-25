@@ -62,27 +62,65 @@ results, file changes, artifact digests, exit codes, timestamps, and project
 state. An adapter may preserve and link both layers but cannot convert one into
 the other.
 
+## Reference commands
+
+The dependency-free reference implementation provides two commands:
+
+```bash
+PYTHONPATH=src python3 -m eas_validator record event.json \
+  --stream run-events.jsonl
+
+PYTHONPATH=src python3 -m eas_validator compile-run run-events.jsonl \
+  --output run.json
+```
+
+`record` accepts one event JSON object from a file, or from standard input when
+the input path is `-`. It validates the object against the event schema and
+appends one compact canonical JSON line. Invalid events are not appended. The
+parent directory must already exist, and an existing non-empty stream must end
+with a newline.
+
+The recorder assumes one writer per stream. It does not provide cross-process
+locking, event transport, or runtime lifecycle hooks. Those are runtime
+integration concerns, not parts of the reference file format.
+
+`compile-run` writes the complete run only after every event, stream invariant,
+core run-schema rule, and structural rule passes. When compilation fails, an
+existing output file is left unchanged.
+
 ## Deterministic compilation rules
 
-The planned `eas compile-run` reference command will:
+The `eas compile-run` reference command:
 
 1. preserve physical event order;
 2. require one run ID and unique event IDs;
 3. require non-decreasing `recorded_at` timestamps;
 4. require exactly one start, task model, finalized report, and finish event;
 5. preserve every state, decision, action, and evidence event in append order;
-6. reject duplicate entity IDs and unresolved references;
+6. reject duplicate entity IDs and unresolved run-record references;
 7. reject missing or conflicting run fields;
 8. validate the result against the run schema and structural validator; and
 9. emit no run record when any required agent-owned domain is absent.
 
-It will not repair or reinterpret payload content. In particular, it will not
+The first event must be `run_started`, the last must be `run_finished`, and the
+task model must precede the finalized report. The compiler rejects a semantic
+start or completion time later than its containing event's `recorded_at`, and
+rejects completion before start.
+
+`native_event_refs` and `observer_evidence_refs` refer to separately preserved
+sources, so the compiler cannot resolve them inside the agent event stream. It
+retains them as provenance. References between run entities, such as
+`decision_id` and `evidence_refs`, must resolve inside the compiled run.
+
+The compiler does not repair or reinterpret payload content. In particular, it
+does not
 choose `task_result`, infer authority from tool access, turn a successful exit
 code into verification evidence, or use assessor judgment to fill a gap.
 
-The planned `eas record` command will append one independently schema-valid
-event. These command names describe the next reference-tool block; they are not
-implemented by this contract commit.
+`record_created_at` is the `recorded_at` value of the sole `run_finished`
+event. That is the first append time at which the stream can represent a
+complete run. Using this recorded source value keeps repeated compilation
+byte-deterministic and avoids inventing a later wall-clock timestamp.
 
 ## Field provenance
 
@@ -96,6 +134,7 @@ values retain the instrumentation and observer references:
     "org.eas.instrumentation-provenance": {
       "/task_result": {
         "source_event_refs": ["evt-041"],
+        "native_event_refs": ["native-report-007"],
         "observer_evidence_refs": ["obs-019"]
       }
     }
@@ -105,6 +144,9 @@ values retain the instrumentation and observer references:
 
 The core field remains `"task_result": "satisfied"`. The extension records
 where that value came from; it does not change or validate the value.
+
+A complete runnable stream is provided at
+[`examples/instrumentation/minimal-run-events.jsonl`](../examples/instrumentation/minimal-run-events.jsonl).
 
 ## Time semantics
 
