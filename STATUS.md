@@ -42,8 +42,11 @@ adapter pilot contains zero real-agent trajectories.
 
 ## Immediate focus
 
-Do not add new normative requirements yet. First execute the real-agent study
-protocol using the eight locked scenarios, at least two independent runtimes,
-and two assessors. Revise or remove requirements based on observed
-disagreement, false passes, and missing observables. Add a requirement only
-when it has a portable deterministic rule and a failing test.
+Do not add new normative requirements yet. First repeat the two-run observation
+preflight and verify that incomplete runtime data is preserved as
+`indeterminate` without fabricated run fields. After a successful preflight,
+execute the first 16-run series; the complete study still requires the eight
+locked scenarios, at least two independent runtimes, and two assessors. Revise
+or remove requirements based on observed disagreement, false passes, and
+missing observables. Add a requirement only when it has a portable
+deterministic rule and a failing test.

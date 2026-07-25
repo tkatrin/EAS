@@ -2,16 +2,26 @@
 
 ## 1. Separation of records
 
-EAS distinguishes three artifacts:
+EAS distinguishes four artifacts:
 
-1. **run record** — an adapter's observable representation of one engineering
+1. **incomplete observation** — preserved source events plus an explicit list
+   of target run fields that cannot be established;
+2. **run record** — an adapter's observable representation of one engineering
    run;
-2. **assessment record** — an assessor's versioned result for a run under a
+3. **assessment record** — an assessor's versioned result for a run under a
    requirement set or scenario corpus;
-3. **human report** — a rendering of an assessment record.
+4. **human report** — a rendering of an assessment record.
 
 An assessment does not rewrite the source run record. Multiple assessors can
 independently assess the same immutable run record.
+
+An incomplete observation is not a run record and cannot receive a structural
+or behavioral pass. Its result is always `indeterminate`. It preserves each
+available source event and a non-empty list of missing target paths with
+reasons. Once the adapter can establish every required target field, it must
+produce a run record instead.
+Only externally observable events belong in this envelope; private
+chain-of-thought is outside the EAS record model.
 
 ## 2. Version identifiers
 

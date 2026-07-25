@@ -24,7 +24,10 @@
 
 - [x] Define a prospective real-agent study protocol.
 - [x] Lock the eight current scenarios and their source revisions.
-- [ ] Preserve incomplete runtime observations without fabricating a valid run.
+- [x] Preserve incomplete runtime observations without fabricating a valid run.
+- [ ] Repeat the two-run observation preflight.
+- [ ] Complete the first 16-run single-runtime series after a successful
+  preflight.
 - [ ] Collect consented trajectories from at least two independent runtimes.
 - [ ] Run at least two repetitions per runtime and scenario.
 - [ ] Obtain independent blinded ratings from two assessors.

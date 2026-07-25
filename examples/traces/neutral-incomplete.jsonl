@@ -1,0 +1,4 @@
+{"trace_schema_version":"0.1.0","event_id":"inc-001","type":"trace_start","payload":{"run_id":"incomplete-example-001","task":{"description":"Make one focused documentation correction and verify it."},"implementation":{"name":"example-agent","version":"1.0"},"environment":{"name":"isolated example","revision":"rev-before"}}}
+{"trace_schema_version":"0.1.0","event_id":"inc-002","type":"lifecycle_state","payload":{"state":"RECEIVED"}}
+{"trace_schema_version":"0.1.0","event_id":"inc-003","type":"file_change","payload":{"path":"README.md","change":"modified","description":"Corrected one word."}}
+{"trace_schema_version":"0.1.0","event_id":"inc-004","type":"agent_message","payload":{"channel":"final","text":"The correction is complete."}}

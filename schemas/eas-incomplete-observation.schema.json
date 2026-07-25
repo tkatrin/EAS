@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eas.example/schemas/eas-incomplete-observation/0.1.0",
+  "title": "EAS 0.1 Incomplete Observation",
+  "description": "A loss-preserving envelope for source events that cannot establish a valid EAS run record without inference.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "eas_version",
+    "observation_schema_version",
+    "observation_id",
+    "record_created_at",
+    "target_run_schema_version",
+    "source",
+    "events",
+    "missing_fields",
+    "result"
+  ],
+  "properties": {
+    "eas_version": { "const": "0.1" },
+    "observation_schema_version": { "const": "0.1.0" },
+    "observation_id": { "$ref": "#/$defs/nonEmptyString" },
+    "observed_run_id": { "$ref": "#/$defs/nonEmptyString" },
+    "record_created_at": { "$ref": "#/$defs/timestamp" },
+    "target_run_schema_version": { "const": "0.1.0" },
+    "source": { "$ref": "#/$defs/source" },
+    "events": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sourceEvent" }
+    },
+    "missing_fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/missingField" }
+    },
+    "result": { "const": "indeterminate" },
+    "extensions": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9]+(?:\\.[a-z0-9-]+)+$" },
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "stringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format", "adapter", "adapter_version"],
+      "properties": {
+        "format": { "$ref": "#/$defs/nonEmptyString" },
+        "adapter": { "$ref": "#/$defs/nonEmptyString" },
+        "adapter_version": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "sourceEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index", "content"],
+      "properties": {
+        "index": { "type": "integer", "minimum": 0 },
+        "event_id": { "$ref": "#/$defs/nonEmptyString" },
+        "content": {}
+      }
+    },
+    "missingField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "reason", "source_event_ids"],
+      "properties": {
+        "path": { "type": "string", "pattern": "^\\$\\." },
+        "reason": { "$ref": "#/$defs/nonEmptyString" },
+        "source_event_ids": { "$ref": "#/$defs/stringArray" }
+      }
+    }
+  }
+}

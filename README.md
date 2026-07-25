@@ -45,12 +45,20 @@ PYTHONPATH=src python3 -m eas_validator.coverage \
 
 PYTHONPATH=src python3 -m eas_validator.pilot \
   --check reports/adapter-pilot.json
+
+PYTHONPATH=src python3 -m eas_validator.observation \
+  examples/traces/neutral-incomplete.jsonl \
+  --observation-id incomplete-example-001 \
+  --record-created-at 2026-07-25T20:00:00Z \
+  --output /tmp/incomplete-observation.json
 ```
 
 Scenario checks are deterministic over the supplied run record and artifact
 bundle. Artifact checks establish presence, size, and digest, not semantic
 authenticity. The two included adapters and their pilot use controlled
 repository fixtures; they are not two independent agent implementations.
+The observation command intentionally returns a non-zero status together with
+`INDETERMINATE`; successful serialization is not a conformance pass.
 
 ## Repository guide
 

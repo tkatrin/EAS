@@ -31,6 +31,22 @@ Select two independently developed agent runtimes with different native trace
 formats. Implement one adapter per format. Adapters must preserve unmapped
 events and must not invent decisions, authority, evidence, or lifecycle states.
 
+## Observation preflight
+
+Before the study series, repeat the focused-edit and material-ambiguity
+calibration tasks once. If the runtime does not expose enough information for a
+valid run record, serialize the available source events as an incomplete
+observation. The observation must conform to
+`schemas/eas-incomplete-observation.schema.json`, list every missing target
+field, and report `indeterminate`. It must not contain a partial run record.
+
+The preflight succeeds when both calibration trajectories are preserved
+without invented fields and each output is either a valid run record or a
+valid incomplete observation. The preflight result is a collection check, not
+behavioral conformance evidence. Only then begin the 16-run series for that
+runtime. A second independent runtime is still required for the complete
+32-trajectory study.
+
 ## Runs
 
 Execute every scenario twice on each runtime in isolated initial states:
