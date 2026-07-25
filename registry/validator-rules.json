@@ -1,12 +1,12 @@
 {
-  "registry_version": "0.1.0",
+  "registry_version": "0.1.1",
   "eas_version": "0.1",
   "rules": [
     {
       "id": "VAL-RUN-REQUIRED-FIELDS",
-      "title": "Required run-record fields and report containers",
+      "title": "Required run-record and report fields",
       "assessment_level": "structural",
-      "requirements": ["EAS-002-R01", "EAS-007-R05", "EAS-009-R02"],
+      "requirements": ["EAS-002-R01", "EAS-007-R05"],
       "implementation": ["src/eas_validator/validator.py::validate_record"],
       "tests": ["tests/test_validator.py::ValidatorTests.test_missing_required_field_fails", "tests/test_validator.py::ValidatorTests.test_nested_required_fields_are_checked"],
       "observable_inputs": ["run_record"]
@@ -15,7 +15,7 @@
       "id": "VAL-RUN-SCHEMA",
       "title": "Versioned run-record JSON Schema",
       "assessment_level": "schema",
-      "requirements": ["EAS-002-R01", "EAS-009-R02"],
+      "requirements": ["EAS-002-R01"],
       "implementation": ["src/eas_validator/schema.py::validate_instance"],
       "tests": ["tests/test_schema.py::SchemaValidationTests.test_reference_record_matches_schema", "tests/test_schema.py::SchemaValidationTests.test_missing_required_and_extra_property_fail"],
       "observable_inputs": ["run_record", "run_schema"]
@@ -30,48 +30,57 @@
       "observable_inputs": ["run_record"]
     },
     {
-      "id": "VAL-CONFORMANCE-CLASS",
-      "title": "Versioned assessment level for a conformance report",
+      "id": "VAL-RUN-SCHEMA-VERSION",
+      "title": "Exact machine schema version",
+      "assessment_level": "schema",
+      "requirements": ["EAS-008-R15"],
+      "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/validator.py::validate_record"],
+      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_schema_version_rule"],
+      "observable_inputs": ["run_record", "run_schema"]
+    },
+    {
+      "id": "VAL-RUN-PROVENANCE-METADATA",
+      "title": "Implementation adapter and environment metadata",
       "assessment_level": "structural",
-      "requirements": ["EAS-000-R01", "EAS-009-R01"],
-      "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/assessment.py::validate_assessment_record", "src/eas_validator/report.py::render_report"],
-      "tests": ["tests/test_assessment.py::AssessmentRecordTests.test_assessment_subject_is_explicit_and_validated", "tests/test_report.py::HumanReportTests.test_markdown_and_json_renderers_are_complete"],
-      "observable_inputs": ["assessment_record", "conformance_report"]
+      "requirements": ["EAS-002-R01"],
+      "implementation": ["src/eas_validator/validator.py::validate_record"],
+      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_provenance_metadata_rule"],
+      "observable_inputs": ["run_record"]
+    },
+    {
+      "id": "VAL-RUN-TIMESTAMPS",
+      "title": "RFC 3339 run timestamps",
+      "assessment_level": "structural",
+      "requirements": ["EAS-002-R01"],
+      "implementation": ["src/eas_validator/validator.py::validate_record"],
+      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_timestamp_rule"],
+      "observable_inputs": ["run_record"]
+    },
+    {
+      "id": "VAL-EXTENSION-NAMESPACE",
+      "title": "Namespaced implementation extensions",
+      "assessment_level": "schema",
+      "requirements": ["EAS-002-R01"],
+      "implementation": ["src/eas_validator/schema.py::validate_instance"],
+      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_extension_namespace_rule"],
+      "observable_inputs": ["run_record", "run_schema"]
     },
     {
       "id": "VAL-TASK-CLASS",
       "title": "Recognized primary task class",
       "assessment_level": "structural",
-      "requirements": ["EAS-002-R07", "EAS-010-R01"],
+      "requirements": ["EAS-002-R07"],
       "implementation": ["src/eas_validator/validator.py::validate_record"],
       "tests": ["tests/test_validator.py::ValidatorTests.test_task_class_and_disposition_are_checked"],
       "observable_inputs": ["run_record"]
     },
     {
-      "id": "VAL-LIFECYCLE-START",
-      "title": "Lifecycle begins at RECEIVED",
+      "id": "VAL-TASK-CLASSIFICATION-DETAILS",
+      "title": "Candidate and secondary task-class structure",
       "assessment_level": "structural",
-      "requirements": ["EAS-004-R01", "EAS-009-R02"],
-      "implementation": ["src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_lifecycle_start_rule"],
-      "observable_inputs": ["run_record"]
-    },
-    {
-      "id": "VAL-LIFECYCLE-TRANSITIONS",
-      "title": "Known lifecycle states and permitted transitions",
-      "assessment_level": "structural",
-      "requirements": ["EAS-004-R02", "EAS-009-R02"],
-      "implementation": ["src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_validator.py::ValidatorTests.test_invalid_transition_fails"],
-      "observable_inputs": ["run_record"]
-    },
-    {
-      "id": "VAL-LIFECYCLE-TERMINAL",
-      "title": "Outcome and terminal-state correspondence",
-      "assessment_level": "structural",
-      "requirements": ["EAS-004-R06", "EAS-009-R02"],
-      "implementation": ["src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_validator.py::ValidatorTests.test_outcome_must_match_terminal_state"],
+      "requirements": ["EAS-002-R07"],
+      "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/validator.py::validate_record"],
+      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_task_classification_details_rule"],
       "observable_inputs": ["run_record"]
     },
     {
@@ -84,44 +93,80 @@
       "observable_inputs": ["run_record"]
     },
     {
-      "id": "VAL-IDENTIFIER-UNIQUENESS",
-      "title": "Unique non-empty record identifiers",
+      "id": "VAL-LIFECYCLE-START",
+      "title": "Lifecycle begins at RECEIVED",
       "assessment_level": "structural",
-      "requirements": ["EAS-008-R01", "EAS-009-R02"],
+      "requirements": ["EAS-004-R01"],
+      "implementation": ["src/eas_validator/validator.py::validate_record"],
+      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_lifecycle_start_rule"],
+      "observable_inputs": ["run_record"]
+    },
+    {
+      "id": "VAL-LIFECYCLE-TRANSITIONS",
+      "title": "Known states and permitted transitions",
+      "assessment_level": "structural",
+      "requirements": ["EAS-004-R02"],
+      "implementation": ["src/eas_validator/validator.py::validate_record"],
+      "tests": ["tests/test_validator.py::ValidatorTests.test_invalid_transition_fails"],
+      "observable_inputs": ["run_record"]
+    },
+    {
+      "id": "VAL-LIFECYCLE-TERMINAL",
+      "title": "Outcome and terminal-state correspondence",
+      "assessment_level": "structural",
+      "requirements": ["EAS-004-R06"],
+      "implementation": ["src/eas_validator/validator.py::validate_record"],
+      "tests": ["tests/test_validator.py::ValidatorTests.test_outcome_must_match_terminal_state"],
+      "observable_inputs": ["run_record"]
+    },
+    {
+      "id": "VAL-IDENTIFIER-UNIQUENESS",
+      "title": "Unique non-empty evidence identifiers",
+      "assessment_level": "structural",
+      "requirements": ["EAS-008-R01"],
       "implementation": ["src/eas_validator/validator.py::validate_record"],
       "tests": ["tests/test_validator.py::ValidatorTests.test_duplicate_ids_fail"],
       "observable_inputs": ["run_record"]
     },
     {
       "id": "VAL-DECISION-SHAPE",
-      "title": "Decision disposition and material-action decision link",
+      "title": "Decision disposition and material-action link",
       "assessment_level": "structural",
       "requirements": ["EAS-005-R02"],
       "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_schema.py::SchemaValidationTests.test_reference_record_matches_schema", "tests/test_validator.py::ValidatorTests.test_material_action_requires_authorized_decision", "tests/test_validator.py::ValidatorTests.test_task_class_and_disposition_are_checked"],
+      "tests": ["tests/test_validator.py::ValidatorTests.test_material_action_requires_authorized_decision", "tests/test_validator.py::ValidatorTests.test_task_class_and_disposition_are_checked"],
       "observable_inputs": ["run_record"]
     },
     {
-      "id": "VAL-TASK-CLASSIFICATION-DETAILS",
-      "title": "Candidate and secondary task-class structure",
+      "id": "VAL-MATERIAL-DECISION-FIELDS",
+      "title": "Required fields for a material-action decision",
       "assessment_level": "structural",
-      "requirements": ["EAS-010-R04", "EAS-010-R05"],
+      "requirements": ["EAS-005-R02"],
       "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_task_classification_details_rule"],
+      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_material_decision_fields_rule"],
       "observable_inputs": ["run_record"]
     },
     {
-      "id": "VAL-EVIDENCE-REFERENCE-INTEGRITY",
-      "title": "Resolvable evidence references",
+      "id": "VAL-REVERSIBILITY-SHAPE",
+      "title": "Structured reversibility and rollback evidence",
       "assessment_level": "structural",
-      "requirements": ["EAS-008-R02", "EAS-009-R02"],
+      "requirements": ["EAS-005-R02"],
+      "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/validator.py::validate_record"],
+      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_reversibility_shape_rule", "tests/test_registry.py::RegistryReferenceRuleTests.test_rollback_verified_requires_successful_evidence"],
+      "observable_inputs": ["run_record"]
+    },
+    {
+      "id": "VAL-AUTHORITY-EVIDENCE",
+      "title": "Resolvable scoped authority evidence",
+      "assessment_level": "structural",
+      "requirements": ["EAS-005-R02"],
       "implementation": ["src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_validator.py::ValidatorTests.test_evidence_references_must_resolve"],
+      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_authority_evidence_rule", "tests/test_registry.py::RegistryReferenceRuleTests.test_structured_authority_scope_rule"],
       "observable_inputs": ["run_record"]
     },
     {
       "id": "VAL-MATERIAL-ACTION-AUTHORITY",
-      "title": "Authorized status for performed material actions",
+      "title": "Authorized status and decision for material actions",
       "assessment_level": "structural",
       "requirements": ["EAS-005-R04"],
       "implementation": ["src/eas_validator/validator.py::validate_record"],
@@ -130,7 +175,7 @@
     },
     {
       "id": "VAL-MATERIALITY-CLASSIFICATION",
-      "title": "Action materiality dimensions and derived flag",
+      "title": "Derived material flag from six dimensions",
       "assessment_level": "structural",
       "requirements": ["EAS-005-R14"],
       "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/validator.py::validate_record"],
@@ -138,109 +183,37 @@
       "observable_inputs": ["run_record"]
     },
     {
-      "id": "VAL-MATERIAL-DECISION-FIELDS",
-      "title": "Required factors for a material-action decision",
-      "assessment_level": "structural",
-      "requirements": ["EAS-005-R15"],
-      "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_material_decision_fields_rule"],
-      "observable_inputs": ["run_record"]
-    },
-    {
-      "id": "VAL-REVERSIBILITY-SHAPE",
-      "title": "Structured material-action reversibility and verified rollback evidence",
-      "assessment_level": "structural",
-      "requirements": ["EAS-005-R16"],
-      "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_reversibility_shape_rule", "tests/test_registry.py::RegistryReferenceRuleTests.test_rollback_verified_requires_successful_evidence"],
-      "observable_inputs": ["run_record"]
-    },
-    {
-      "id": "VAL-AUTHORITY-EVIDENCE",
-      "title": "Resolvable authority evidence for authorized material action",
-      "assessment_level": "structural",
-      "requirements": ["EAS-005-R17"],
-      "implementation": ["src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_authority_evidence_rule", "tests/test_registry.py::RegistryReferenceRuleTests.test_structured_authority_scope_rule"],
-      "observable_inputs": ["run_record"]
-    },
-    {
       "id": "VAL-EVIDENCE-SHAPE",
-      "title": "Required evidence identity provenance and result fields",
+      "title": "Required evidence fields and value shapes",
       "assessment_level": "structural",
-      "requirements": ["EAS-008-R01", "EAS-008-R06"],
+      "requirements": ["EAS-008-R01"],
       "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/validator.py::validate_record"],
       "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_evidence_shape_rule", "tests/test_registry.py::RegistryReferenceRuleTests.test_evidence_origin_rule"],
       "observable_inputs": ["run_record"]
     },
     {
-      "id": "VAL-RUN-SCHEMA-VERSION",
-      "title": "Exact machine schema version",
-      "assessment_level": "structural",
-      "requirements": ["EAS-008-R15"],
-      "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_schema_version_rule"],
-      "observable_inputs": ["run_record"]
-    },
-    {
-      "id": "VAL-RUN-PROVENANCE-METADATA",
-      "title": "Implementation adapter and environment metadata",
-      "assessment_level": "structural",
-      "requirements": ["EAS-008-R16"],
-      "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_provenance_metadata_rule"],
-      "observable_inputs": ["run_record"]
-    },
-    {
       "id": "VAL-EVIDENCE-TIMESTAMPS",
-      "title": "Separate RFC 3339 record and evidence timestamps",
+      "title": "RFC 3339 evidence observation and recording times",
       "assessment_level": "structural",
-      "requirements": ["EAS-008-R17", "EAS-008-R18"],
-      "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_timestamp_rule", "tests/test_schema.py::SchemaValidationTests.test_enum_timestamp_and_materiality_shape_fail"],
+      "requirements": ["EAS-008-R01"],
+      "implementation": ["src/eas_validator/validator.py::validate_record"],
+      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_timestamp_rule"],
       "observable_inputs": ["run_record"]
     },
     {
-      "id": "VAL-EXTENSION-NAMESPACE",
-      "title": "Namespaced implementation extension keys",
-      "assessment_level": "schema",
-      "requirements": ["EAS-008-R20"],
-      "implementation": ["src/eas_validator/schema.py::validate_instance"],
-      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_extension_namespace_rule"],
-      "observable_inputs": ["run_record", "run_schema"]
-    },
-    {
-      "id": "VAL-ADAPTER-UNCERTAINTY",
-      "title": "Adapter preservation of unmapped and indeterminate properties",
+      "id": "VAL-EVIDENCE-REFERENCE-INTEGRITY",
+      "title": "Resolvable evidence references",
       "assessment_level": "structural",
-      "requirements": ["EAS-005-R19", "EAS-008-R21"],
-      "implementation": ["src/eas_validator/adapters/neutral_jsonl.py::NeutralJSONLAdapter"],
-      "tests": ["tests/test_adapters.py::NeutralJSONLAdapterTests.test_action_does_not_fabricate_decision_or_authority", "tests/test_adapters.py::NeutralJSONLAdapterTests.test_incomplete_collection_remains_indeterminate_with_mapped_entries", "tests/test_adapters.py::NeutralJSONLAdapterTests.test_extension_and_invalid_json_are_preserved_unmapped"],
-      "observable_inputs": ["source_trace", "adapter_output"]
-    },
-    {
-      "id": "VAL-ADAPTER-NO-FABRICATION",
-      "title": "Adapter source-fidelity checks",
-      "assessment_level": "structural",
-      "requirements": ["EAS-008-R22"],
-      "implementation": ["src/eas_validator/adapters/neutral_jsonl.py::NeutralJSONLAdapter", "src/eas_validator/adapters/scripted_events.py::ScriptedEventAdapter"],
-      "tests": ["tests/test_adapters.py::NeutralJSONLAdapterTests.test_transport_success_is_not_promoted_to_passed_evidence", "tests/test_adapters.py::NeutralJSONLAdapterTests.test_action_does_not_fabricate_decision_or_authority", "tests/test_adapters.py::ScriptedEventAdapterTests.test_scripted_example_maps_without_semantic_inference"],
-      "observable_inputs": ["source_trace", "supplied_context", "adapter_output"]
-    },
-    {
-      "id": "VAL-SELF-REPORTED-EVIDENCE",
-      "title": "Self-reported evidence cannot establish a passed check",
-      "assessment_level": "structural",
-      "requirements": ["EAS-008-R23"],
+      "requirements": ["EAS-008-R02"],
       "implementation": ["src/eas_validator/validator.py::validate_record"],
-      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_self_reported_evidence_rule"],
+      "tests": ["tests/test_validator.py::ValidatorTests.test_evidence_references_must_resolve"],
       "observable_inputs": ["run_record"]
     },
     {
       "id": "VAL-VERIFICATION-SHAPE",
       "title": "Verification report container and claim shape",
       "assessment_level": "structural",
-      "requirements": ["EAS-006-R02", "EAS-007-R05"],
+      "requirements": ["EAS-007-R05"],
       "implementation": ["src/eas_validator/validator.py::validate_record"],
       "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_verification_shape_rule"],
       "observable_inputs": ["run_record"]
@@ -255,9 +228,18 @@
       "observable_inputs": ["run_record"]
     },
     {
-      "id": "VAL-SCENARIO-MANIFEST",
-      "title": "Required executable scenario manifest fields",
+      "id": "VAL-SELF-REPORTED-EVIDENCE",
+      "title": "Self-reported evidence cannot establish a passed check",
       "assessment_level": "structural",
+      "requirements": ["EAS-006-R03"],
+      "implementation": ["src/eas_validator/validator.py::validate_record"],
+      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_self_reported_evidence_rule"],
+      "observable_inputs": ["run_record"]
+    },
+    {
+      "id": "VAL-SCENARIO-MANIFEST",
+      "title": "Required executable scenario fields",
+      "assessment_level": "behavioral",
       "requirements": ["EAS-009-R08"],
       "implementation": ["src/eas_validator/scenario.py::_validate_scenario"],
       "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_scenario_manifest_rule"],
@@ -274,7 +256,7 @@
     },
     {
       "id": "VAL-SCENARIO-STRUCTURAL-FIRST",
-      "title": "Structural validation precedes behavioral expectations",
+      "title": "Structural validation precedes expectations",
       "assessment_level": "behavioral",
       "requirements": ["EAS-009-R09"],
       "implementation": ["src/eas_validator/scenario.py::assess_scenario"],
@@ -285,19 +267,19 @@
       "id": "VAL-SCENARIO-EXPECTATIONS",
       "title": "Declared portable behavioral expectations",
       "assessment_level": "behavioral",
-      "requirements": ["EAS-002-R02", "EAS-002-R09", "EAS-003-R01", "EAS-003-R02", "EAS-003-R05", "EAS-004-R05", "EAS-005-R01", "EAS-005-R03", "EAS-005-R10", "EAS-006-R01", "EAS-006-R02", "EAS-006-R03", "EAS-006-R05", "EAS-006-R06", "EAS-007-R05", "EAS-008-R10", "EAS-008-R11", "EAS-008-R12", "EAS-008-R13", "EAS-009-R09"],
+      "requirements": ["EAS-009-R09"],
       "implementation": ["src/eas_validator/scenario.py::assess_scenario"],
       "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_scenario_expectations_rule", "tests/test_scenario.py::ScenarioAssessmentTests.test_evidence_kind_state_change_and_report_sections_are_checked", "tests/test_scenario.py::ScenarioAssessmentTests.test_wrong_outcome_and_forbidden_action_fail"],
       "observable_inputs": ["scenario_manifest", "run_record"]
     },
     {
       "id": "VAL-ARTIFACT-BUNDLE",
-      "title": "External artifact bundle integrity and scenario kind coverage",
+      "title": "External artifact integrity and kind coverage",
       "assessment_level": "behavioral",
       "requirements": ["EAS-009-R09"],
       "implementation": ["src/eas_validator/artifacts.py::validate_artifact_files", "src/eas_validator/__main__.py::_assess_command"],
       "tests": ["tests/test_artifacts.py::ArtifactBundleTests.test_reference_bundle_matches_schema_files_and_scenario_coverage", "tests/test_cli.py::CommandLineTests.test_missing_required_artifacts_is_indeterminate"],
-      "observable_inputs": ["scenario_manifest", "run_record", "artifact_bundle", "artifact_files"]
+      "observable_inputs": ["scenario_manifest", "artifact_bundle", "artifact_files"]
     },
     {
       "id": "VAL-ASSESSMENT-RECORD-SCHEMA",
@@ -310,7 +292,7 @@
     },
     {
       "id": "VAL-ASSESSMENT-SEMANTICS",
-      "title": "Assessment metadata result reasons and aggregate consistency",
+      "title": "Assessment metadata results and aggregate consistency",
       "assessment_level": "structural",
       "requirements": ["EAS-009-R11", "EAS-009-R12"],
       "implementation": ["src/eas_validator/assessment.py::validate_assessment_record"],
@@ -318,17 +300,8 @@
       "observable_inputs": ["assessment_record"]
     },
     {
-      "id": "VAL-ASSESSMENT-SOURCE-IMMUTABILITY",
-      "title": "Separate assessment with immutable source-content digest",
-      "assessment_level": "structural",
-      "requirements": ["EAS-009-R13"],
-      "implementation": ["src/eas_validator/assessment.py::build_assessment_record", "src/eas_validator/assessment.py::canonical_record_sha256"],
-      "tests": ["tests/test_assessment.py::AssessmentRecordTests.test_builder_does_not_modify_source_record"],
-      "observable_inputs": ["source_run_record", "assessment_record"]
-    },
-    {
       "id": "VAL-ASSESSMENT-SUBJECT-INTEGRITY",
-      "title": "Assessment results belong to one declared and registry-authorized subject",
+      "title": "Assessment results belong to one allowed subject",
       "assessment_level": "structural",
       "requirements": ["EAS-009-R11"],
       "implementation": ["src/eas_validator/registry.py::resolve_requirement_subjects", "src/eas_validator/assessment.py::build_assessment_record", "src/eas_validator/assessment.py::validate_assessment_record"],
@@ -336,22 +309,31 @@
       "observable_inputs": ["assessment_record", "requirement_registry"]
     },
     {
+      "id": "VAL-ASSESSMENT-SOURCE-IMMUTABILITY",
+      "title": "Separate assessment with source-content digest",
+      "assessment_level": "structural",
+      "requirements": ["EAS-009-R11"],
+      "implementation": ["src/eas_validator/assessment.py::build_assessment_record", "src/eas_validator/assessment.py::canonical_record_sha256"],
+      "tests": ["tests/test_assessment.py::AssessmentRecordTests.test_builder_does_not_modify_source_record"],
+      "observable_inputs": ["source_record", "assessment_record"]
+    },
+    {
+      "id": "VAL-HUMAN-REPORT-PRESERVATION",
+      "title": "Human report preserves assessment results",
+      "assessment_level": "structural",
+      "requirements": ["EAS-009-R11"],
+      "implementation": ["src/eas_validator/report.py::render_report"],
+      "tests": ["tests/test_report.py::HumanReportTests.test_terminal_report_preserves_all_non_pass_categories", "tests/test_report.py::HumanReportTests.test_markdown_and_json_renderers_are_complete"],
+      "observable_inputs": ["assessment_record", "rendered_report"]
+    },
+    {
       "id": "VAL-APPLICABILITY-RECORD",
-      "title": "Per-requirement subject and independent applicability dimensions",
+      "title": "Independent applicability dimensions",
       "assessment_level": "structural",
       "requirements": ["EAS-010-R18"],
       "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/assessment.py::validate_assessment_record"],
       "tests": ["tests/test_assessment.py::AssessmentRecordTests.test_applicability_dimensions_are_required"],
-      "observable_inputs": ["assessment_record"]
-    },
-    {
-      "id": "VAL-HUMAN-REPORT-PRESERVATION",
-      "title": "Terminal Markdown and JSON report result preservation",
-      "assessment_level": "structural",
-      "requirements": ["EAS-009-R14"],
-      "implementation": ["src/eas_validator/report.py::render_report"],
-      "tests": ["tests/test_report.py::HumanReportTests.test_terminal_report_preserves_all_non_pass_categories", "tests/test_report.py::HumanReportTests.test_markdown_and_json_renderers_are_complete"],
-      "observable_inputs": ["assessment_record", "human_readable_report"]
+      "observable_inputs": ["assessment_record", "requirement_registry"]
     }
   ]
 }

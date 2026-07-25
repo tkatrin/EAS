@@ -71,6 +71,35 @@ class CommandLineTests(unittest.TestCase):
         self.assertIn("Result: INDETERMINATE", output.getvalue())
         self.assertIn("required bundle missing", output.getvalue())
 
+    def test_failed_scenario_is_attributed_to_bounded_requirement(self) -> None:
+        with RECORD.open(encoding="utf-8") as handle:
+            record = json.load(handle)
+        record["task"]["primary_class"] = "review"
+        record["task"]["candidate_classes"] = ["review"]
+        record["task"]["classification_basis"] = "Deliberately wrong for the scenario."
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "wrong-class.json"
+            path.write_text(json.dumps(record), encoding="utf-8")
+            output = StringIO()
+            with redirect_stdout(output):
+                result = main(
+                    [
+                        "assess",
+                        str(path),
+                        "--scenario",
+                        str(SCENARIO),
+                        "--artifacts",
+                        str(ARTIFACTS),
+                    ]
+                )
+
+        rendered = output.getvalue()
+        self.assertEqual(result, 1)
+        self.assertIn("EAS-009-R09", rendered)
+        self.assertIn("Result: FAIL", rendered)
+        self.assertNotIn("Result: INDETERMINATE", rendered)
+
     def test_report_renders_saved_assessment_as_markdown(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             destination = Path(directory) / "assessment.json"

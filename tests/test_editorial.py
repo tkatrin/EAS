@@ -14,7 +14,7 @@ class EditorialTests(unittest.TestCase):
         requirements = extract_requirements(sorted((ROOT / "spec").glob("EAS-*.md")))
         identifiers = [item.identifier for item in requirements]
 
-        self.assertGreater(len(identifiers), 100)
+        self.assertEqual(len(identifiers), 19)
         self.assertEqual(len(identifiers), len(set(identifiers)))
         self.assertEqual(review_requirements(requirements), [])
 

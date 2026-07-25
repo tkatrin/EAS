@@ -1,13 +1,19 @@
 {
-  "baseline_version": "0.1.0",
-  "registry_version": "0.1.0",
+  "baseline_version": "0.1.1",
+  "registry_version": "0.1.1",
   "minimum": {
-    "with_validator_rules": 56,
-    "structurally_machine_checkable": 39,
-    "behaviorally_assessable": 20,
-    "covered_by_scenarios": 61
+    "with_validator_rules": 19,
+    "structurally_machine_checkable": 18,
+    "behaviorally_assessable": 2,
+    "covered_by_scenarios": 8
   },
   "maximum": {
-    "currently_unobservable": 93
+    "currently_unobservable": 0,
+    "total_requirements": 20
+  },
+  "exact": {
+    "total_requirements": 19,
+    "with_validator_rules": 19,
+    "currently_unobservable": 0
   }
 }

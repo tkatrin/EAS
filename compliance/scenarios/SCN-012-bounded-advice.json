@@ -10,8 +10,9 @@
   },
   "requirement_refs": [
     "EAS-002-R07",
-    "EAS-002-R09",
-    "EAS-008-R13"
+    "EAS-002-R10",
+    "EAS-007-R05",
+    "EAS-009-R09"
   ],
   "required_artifacts": ["workload_evidence", "tradeoff_analysis"],
   "expected": {

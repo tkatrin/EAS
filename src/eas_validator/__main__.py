@@ -122,7 +122,7 @@ def _run_applicability(
     tags = {item for item in metadata.get("applicability", []) if isinstance(item, str)}
     base = applicable and "all_runs" in tags
     class_invoked = applicable and bool(tags & task_classes & TASK_CLASSES)
-    profile = applicable and metadata.get("spec") == "EAS-011"
+    profile = False
     action_or_state = applicable and any(
         fragment in tag
         for tag in tags
@@ -259,45 +259,35 @@ def _build_behavioral_results(
             )
         return sorted(results.values(), key=lambda item: item["requirement_id"])
 
+    bounded_requirement = "EAS-009-R09"
     if behavioral_issues or artifact_issues:
-        reason = _join_issue_reasons([*behavioral_issues, *artifact_issues])
-        dependent_reason = (
-            "The scenario or artifact checks failed, but this scenario does not "
-            f"map each failed expectation to one requirement: {reason}"
+        results[bounded_requirement] = _requirement_result(
+            bounded_requirement,
+            "fail",
+            registry,
+            reason=_join_issue_reasons([*behavioral_issues, *artifact_issues]),
+            scenario_id=scenario_id,
+            task_classes=task_classes,
         )
-        for requirement_id in declared:
-            results.setdefault(
-                requirement_id,
-                _requirement_result(
-                    requirement_id,
-                    "indeterminate",
-                    registry,
-                    reason=dependent_reason,
-                    scenario_id=scenario_id,
-                    task_classes=task_classes,
-                ),
-            )
     elif artifacts_missing:
-        reason = MISSING_ARTIFACT_LIMITATION
-        for requirement_id in declared:
-            results[requirement_id] = _requirement_result(
-                requirement_id,
-                "indeterminate",
-                registry,
-                reason=reason,
-                scenario_id=scenario_id,
-                task_classes=task_classes,
-            )
-    else:
-        for requirement_id in declared:
-            results[requirement_id] = _requirement_result(
-                requirement_id,
-                "pass",
-                registry,
-                reason="Declared observable scenario and artifact expectations passed.",
-                scenario_id=scenario_id,
-                task_classes=task_classes,
-            )
+        results[bounded_requirement] = _requirement_result(
+            bounded_requirement,
+            "indeterminate",
+            registry,
+            reason=MISSING_ARTIFACT_LIMITATION,
+            scenario_id=scenario_id,
+            task_classes=task_classes,
+        )
+
+    for requirement_id in declared - results.keys():
+        results[requirement_id] = _requirement_result(
+            requirement_id,
+            "pass",
+            registry,
+            reason="The executed deterministic checks for this requirement passed.",
+            scenario_id=scenario_id,
+            task_classes=task_classes,
+        )
     return sorted(results.values(), key=lambda item: item["requirement_id"])
 
 

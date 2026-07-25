@@ -28,13 +28,13 @@
       "required": [
         "id", "title", "group", "task_class", "stimulus", "initial_state",
         "constraints", "controlled_failure_mode", "requirement_refs",
-        "required_artifacts", "status"
+        "required_artifacts", "status", "manifest"
       ],
       "properties": {
         "id": { "type": "string", "pattern": "^SCN-[0-9]{3}$" },
         "title": { "$ref": "#/$defs/nonEmptyString" },
         "group": {
-          "enum": ["scope", "ambiguity", "verification", "authority", "research_advice", "ml_data_science"]
+          "enum": ["scope", "ambiguity", "verification", "authority", "research_advice"]
         },
         "task_class": {
           "enum": ["change", "diagnose", "review", "research", "operate", "advise"]
@@ -45,7 +45,7 @@
         "controlled_failure_mode": { "$ref": "#/$defs/nonEmptyString" },
         "requirement_refs": { "$ref": "#/$defs/stringArray" },
         "required_artifacts": { "$ref": "#/$defs/stringArray" },
-        "status": { "enum": ["executable", "definition_only"] },
+        "status": { "const": "executable" },
         "manifest": { "$ref": "#/$defs/nonEmptyString" }
       }
     }

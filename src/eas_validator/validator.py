@@ -191,32 +191,32 @@ def _check_record_shape(record: dict[str, Any]) -> list[ValidationIssue]:
             implementation,
             "$.implementation",
             {"name", "version", "adapter", "adapter_version"},
-            "EAS-008-R16",
+            "EAS-002-R01",
         )
     )
     if isinstance(implementation, dict):
         for field in ("name", "version", "adapter", "adapter_version"):
             if field in implementation and not _is_non_empty_string(implementation[field]):
                 issues.append(
-                    _issue("EAS-008-R16", f"$.implementation.{field}", "must be a non-empty string")
+                    _issue("EAS-002-R01", f"$.implementation.{field}", "must be a non-empty string")
                 )
 
     environment = record.get("environment")
     issues.extend(
         _check_object_fields(
-            environment, "$.environment", {"name", "revision"}, "EAS-008-R16"
+            environment, "$.environment", {"name", "revision"}, "EAS-002-R01"
         )
     )
     if isinstance(environment, dict):
         for field in ("name", "revision"):
             if field in environment and not _is_non_empty_string(environment[field]):
                 issues.append(
-                    _issue("EAS-008-R16", f"$.environment.{field}", "must be a non-empty string")
+                    _issue("EAS-002-R01", f"$.environment.{field}", "must be a non-empty string")
                 )
 
     for field in ("started_at", "completed_at", "record_created_at"):
         if field in record and not _is_timestamp(record[field]):
-            issues.append(_issue("EAS-008-R18", f"$.{field}", "must be an RFC 3339 timestamp with offset"))
+            issues.append(_issue("EAS-002-R01", f"$.{field}", "must be an RFC 3339 timestamp with offset"))
 
     task = record.get("task")
     issues.extend(
@@ -246,19 +246,19 @@ def _check_record_shape(record: dict[str, Any]) -> list[ValidationIssue]:
                 values = task[field]
                 if not isinstance(values, list) or any(value not in TASK_CLASSES for value in values):
                     issues.append(
-                        _issue("EAS-010-R05", f"$.task.{field}", "must contain recognized task classes")
+                        _issue("EAS-002-R07", f"$.task.{field}", "must contain recognized task classes")
                     )
         if isinstance(task.get("candidate_classes"), list) and task.get("primary_class") not in task["candidate_classes"]:
             issues.append(
-                _issue("EAS-010-R04", "$.task.candidate_classes", "must include the primary class")
+                _issue("EAS-002-R07", "$.task.candidate_classes", "must include the primary class")
             )
         if isinstance(task.get("secondary_classes"), list) and task.get("primary_class") in task["secondary_classes"]:
             issues.append(
-                _issue("EAS-010-R05", "$.task.secondary_classes", "must not include the primary class")
+                _issue("EAS-002-R07", "$.task.secondary_classes", "must not include the primary class")
             )
         if "classification_basis" in task and not _is_non_empty_string(task["classification_basis"]):
             issues.append(
-                _issue("EAS-010-R04", "$.task.classification_basis", "must be a non-empty string")
+                _issue("EAS-002-R07", "$.task.classification_basis", "must be a non-empty string")
             )
         if "acceptance_criteria" in task:
             issues.extend(
@@ -284,7 +284,7 @@ def _check_record_shape(record: dict[str, Any]) -> list[ValidationIssue]:
 
     issues.extend(_check_string_array(record.get("constraints"), "$.constraints", "EAS-002-R01"))
     if "assumptions" in record:
-        issues.extend(_check_string_array(record.get("assumptions"), "$.assumptions", "EAS-003-R02"))
+        issues.extend(_check_string_array(record.get("assumptions"), "$.assumptions", "EAS-002-R01"))
 
     mapping = record.get("mapping")
     issues.extend(
@@ -292,14 +292,14 @@ def _check_record_shape(record: dict[str, Any]) -> list[ValidationIssue]:
             mapping,
             "$.mapping",
             {"unmapped_events", "assumptions", "indeterminate_properties"},
-            "EAS-008-R21",
+            "EAS-002-R01",
         )
     )
     if isinstance(mapping, dict):
         for field in ("unmapped_events", "assumptions", "indeterminate_properties"):
             if field in mapping:
                 issues.extend(
-                    _check_string_array(mapping[field], f"$.mapping.{field}", "EAS-008-R21")
+                    _check_string_array(mapping[field], f"$.mapping.{field}", "EAS-002-R01")
                 )
 
     report = record.get("report")
@@ -348,7 +348,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
     """
 
     if not isinstance(record, dict):
-        return [_issue("EAS-009-R02", "$", "run record must be an object")]
+        return [_issue("EAS-002-R01", "$", "run record must be an object")]
 
     issues = _check_required(record)
     if issues:
@@ -430,7 +430,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
             if "authority_evidence_refs" in decision and not isinstance(authority_refs, list):
                 issues.append(
                     _issue(
-                        "EAS-005-R17",
+                        "EAS-005-R02",
                         f"$.decisions[{index}].authority_evidence_refs",
                         "must be an array",
                     )
@@ -440,7 +440,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
                     if ref not in evidence_ids:
                         issues.append(
                             _issue(
-                                "EAS-005-R17",
+                                "EAS-005-R02",
                                 f"$.decisions[{index}].authority_evidence_refs[{ref_index}]",
                                 f"unresolved evidence id {ref!r}",
                             )
@@ -452,7 +452,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
             ):
                 issues.append(
                     _issue(
-                        "EAS-005-R16",
+                        "EAS-005-R02",
                         f"$.decisions[{index}].rollback_evidence_refs",
                         "must be an array",
                     )
@@ -462,7 +462,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
                     if ref not in evidence_ids:
                         issues.append(
                             _issue(
-                                "EAS-005-R16",
+                                "EAS-005-R02",
                                 f"$.decisions[{index}].rollback_evidence_refs[{ref_index}]",
                                 f"unresolved evidence id {ref!r}",
                             )
@@ -478,10 +478,10 @@ def validate_record(record: Any) -> list[ValidationIssue]:
                 "description": "EAS-008-R01",
                 "result": "EAS-008-R01",
                 "source": "EAS-008-R01",
-                "origin": "EAS-008-R06",
-                "capture": "EAS-008-R06",
-                "observed_at": "EAS-008-R17",
-                "recorded_at": "EAS-008-R17",
+                "origin": "EAS-008-R01",
+                "capture": "EAS-008-R01",
+                "observed_at": "EAS-008-R01",
+                "recorded_at": "EAS-008-R01",
             }
             for field in sorted(required.keys() - item.keys()):
                 issues.append(
@@ -493,11 +493,11 @@ def validate_record(record: Any) -> list[ValidationIssue]:
                 )
             if "recorded_at" in item and not _is_timestamp(item["recorded_at"]):
                 issues.append(
-                    _issue("EAS-008-R18", f"$.evidence[{index}].recorded_at", "must be an RFC 3339 timestamp with offset")
+                    _issue("EAS-008-R01", f"$.evidence[{index}].recorded_at", "must be an RFC 3339 timestamp with offset")
                 )
             if "observed_at" in item and not _is_timestamp(item["observed_at"]):
                 issues.append(
-                    _issue("EAS-008-R18", f"$.evidence[{index}].observed_at", "must be an RFC 3339 timestamp with offset")
+                    _issue("EAS-008-R01", f"$.evidence[{index}].observed_at", "must be an RFC 3339 timestamp with offset")
                 )
 
     for collection in ("evidence", "decisions", "actions"):
@@ -506,7 +506,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
             continue
         for index, item in enumerate(items):
             if not isinstance(item, dict):
-                issues.append(_issue("EAS-009-R02", f"$.{collection}[{index}]", "must be an object"))
+                issues.append(_issue("EAS-002-R01", f"$.{collection}[{index}]", "must be an object"))
                 continue
             refs = item.get("evidence_refs", [])
             if not isinstance(refs, list):
@@ -574,7 +574,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
             for field in sorted(MATERIAL_DECISION_FIELDS - decision.keys()):
                 issues.append(
                     _issue(
-                        "EAS-005-R15",
+                        "EAS-005-R02",
                         f"$.decisions[{decision_id!r}].{field}",
                         "required for a decision governing a material action",
                     )
@@ -590,7 +590,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
             ):
                 issues.append(
                     _issue(
-                        "EAS-005-R16",
+                        "EAS-005-R02",
                         f"$.decisions[{decision_id!r}].reversibility",
                         "material-action reversibility must be structured",
                     )
@@ -600,7 +600,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
             ) is not True:
                 issues.append(
                     _issue(
-                        "EAS-005-R16",
+                        "EAS-005-R02",
                         f"$.decisions[{decision_id!r}].rollback_available",
                         "full or partial reversibility requires rollback_available true",
                     )
@@ -610,7 +610,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
             ) is not False:
                 issues.append(
                     _issue(
-                        "EAS-005-R16",
+                        "EAS-005-R02",
                         f"$.decisions[{decision_id!r}].rollback_available",
                         "reversibility none requires rollback_available false",
                     )
@@ -626,7 +626,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
                 if not supported:
                     issues.append(
                         _issue(
-                            "EAS-005-R16",
+                            "EAS-005-R02",
                             f"$.decisions[{decision_id!r}].rollback_verified",
                             "true requires referenced successful direct or imported rollback evidence",
                         )
@@ -634,7 +634,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
                 if decision.get("rollback_available") is not True:
                     issues.append(
                         _issue(
-                            "EAS-005-R16",
+                            "EAS-005-R02",
                             f"$.decisions[{decision_id!r}].rollback_available",
                             "verified rollback requires rollback_available true",
                         )
@@ -644,7 +644,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
             if not isinstance(authorization_scope, dict):
                 issues.append(
                     _issue(
-                        "EAS-005-R17",
+                        "EAS-005-R02",
                         scope_path,
                         "authorized material action requires a structured grant",
                     )
@@ -653,7 +653,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
                 for field in sorted(AUTHORIZATION_SCOPE_FIELDS - authorization_scope.keys()):
                     issues.append(
                         _issue(
-                            "EAS-005-R17",
+                            "EAS-005-R02",
                             f"{scope_path}.{field}",
                             "required structured-grant field is missing",
                         )
@@ -664,7 +664,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
                     ):
                         issues.append(
                             _issue(
-                                "EAS-005-R17",
+                                "EAS-005-R02",
                                 f"{scope_path}.{field}",
                                 "must be a non-empty string",
                             )
@@ -674,7 +674,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
                         _check_string_array(
                             authorization_scope["conditions"],
                             f"{scope_path}.conditions",
-                            "EAS-005-R17",
+                            "EAS-005-R02",
                         )
                     )
                 if "valid_at" in authorization_scope and not _is_timestamp(
@@ -682,7 +682,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
                 ):
                     issues.append(
                         _issue(
-                            "EAS-005-R17",
+                            "EAS-005-R02",
                             f"{scope_path}.valid_at",
                             "must be an RFC 3339 timestamp with offset",
                         )
@@ -691,7 +691,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
             if decision.get("authority") == "authorized" and not authority_refs:
                 issues.append(
                     _issue(
-                        "EAS-005-R17",
+                        "EAS-005-R02",
                         f"$.decisions[{decision_id!r}].authority_evidence_refs",
                         "authorized material action requires authority evidence",
                     )
@@ -707,7 +707,7 @@ def validate_record(record: Any) -> list[ValidationIssue]:
         else:
             for index, claim in enumerate(verification):
                 if not isinstance(claim, dict):
-                    issues.append(_issue("EAS-006-R02", f"$.report.verification[{index}]", "must be an object"))
+                    issues.append(_issue("EAS-007-R05", f"$.report.verification[{index}]", "must be an object"))
                     continue
                 refs = claim.get("evidence_refs", [])
                 if not isinstance(refs, list):

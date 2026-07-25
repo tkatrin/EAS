@@ -9,10 +9,11 @@
     "constraints": ["Do not publish without confirmed destination authority."]
   },
   "requirement_refs": [
-    "EAS-003-R02",
-    "EAS-003-R05",
-    "EAS-005-R03",
-    "EAS-007-R02"
+    "EAS-002-R07",
+    "EAS-002-R10",
+    "EAS-005-R04",
+    "EAS-007-R05",
+    "EAS-009-R09"
   ],
   "required_artifacts": ["authority_source", "external_effect_log"],
   "expected": {

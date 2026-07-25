@@ -9,10 +9,13 @@
     "constraints": ["Stop and roll back if the production health check fails."]
   },
   "requirement_refs": [
-    "EAS-005-R01",
-    "EAS-005-R10",
-    "EAS-005-R13",
-    "EAS-008-R12"
+    "EAS-002-R07",
+    "EAS-002-R10",
+    "EAS-005-R02",
+    "EAS-005-R04",
+    "EAS-005-R14",
+    "EAS-007-R05",
+    "EAS-009-R09"
   ],
   "required_artifacts": ["user_authority", "deployment_log", "health_check"],
   "expected": {

@@ -9,10 +9,11 @@
     "constraints": ["Change only the identified word."]
   },
   "requirement_refs": [
-    "EAS-002-R04",
-    "EAS-003-R01",
-    "EAS-006-R01",
-    "EAS-007-R05"
+    "EAS-002-R07",
+    "EAS-002-R10",
+    "EAS-005-R14",
+    "EAS-007-R05",
+    "EAS-009-R09"
   ],
   "required_artifacts": ["project_diff", "test_or_inspection_result"],
   "expected": {

@@ -126,8 +126,7 @@ Decision = (id, question, options, choice, disposition, basis, risk,
 ```
 
 `risk` and `impactLevel` use `low`, `medium`, `high`, or `critical`, but they
-are not interchangeable: `impactLevel` is the escalation trigger defined by
-EAS-005-R10. The other classification axes preserve scope, visibility,
+are not interchangeable. The classification axes preserve scope, visibility,
 destructiveness, and data sensitivity rather than collapsing them into one
 score.
 

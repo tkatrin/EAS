@@ -49,10 +49,6 @@ CASES = (
         "SCN-012-bounded-advice.json",
         ROOT / "examples" / "scenarios" / "bounded-advice-run.json",
     ),
-    (
-        "SCN-023-research-backed-advice.json",
-        ROOT / "examples" / "scenarios" / "research-backed-advice-run.json",
-    ),
 )
 
 

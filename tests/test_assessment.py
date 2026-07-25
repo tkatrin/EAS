@@ -75,37 +75,37 @@ class AssessmentRecordTests(unittest.TestCase):
             "assessor_version": "0.1.0",
             "source_record": self.source,
             "requirement_results": [
-                result("EAS-006-R03", "MUST", "pass", scenario_refs=("SCN-001",)),
+                result("EAS-006-R03", "MUST", "pass", scenario_refs=("SCN-003",)),
                 result(
-                    "EAS-005-R07",
-                    "SHOULD",
+                    "EAS-005-R04",
+                    "MUST",
                     "fail",
-                    reason="The escalation question was not observable.",
-                    scenario_refs=("SCN-003",),
+                    reason="The material action was not authorized.",
+                    scenario_refs=("SCN-008",),
                 ),
                 result(
-                    "EAS-003-R02",
+                    "EAS-008-R02",
                     "MUST",
                     "indeterminate",
-                    reason="The available trace omits task-understanding events.",
+                    reason="The referenced external evidence was unavailable.",
                 ),
                 result(
-                    "EAS-006-R04",
+                    "EAS-005-R14",
                     "MUST",
                     "not_applicable",
-                    reason="No relevant check was unavailable in this scenario.",
+                    reason="The run contains no performed action.",
                 ),
             ],
             "requirement_subjects": self.requirement_subjects,
-            "requirements_registry_version": "0.1.0",
-            "validator_rules_registry_version": "0.1.0",
+            "requirements_registry_version": "0.1.1",
+            "validator_rules_registry_version": "0.1.1",
             "started_at": "2026-07-11T18:00:00Z",
             "completed_at": "2026-07-11T18:00:02Z",
             "record_created_at": "2026-07-11T18:00:03Z",
             "scenario_set": {
                 "id": "core-0.1",
                 "version": "0.1.0",
-                "scenario_ids": ["SCN-001", "SCN-003"],
+                "scenario_ids": ["SCN-001", "SCN-003", "SCN-008"],
             },
             "source_artifact_ref": "examples/minimal-run.json",
         }
@@ -120,7 +120,7 @@ class AssessmentRecordTests(unittest.TestCase):
         self.assertEqual(
             assessment["summary"],
             {
-                "result": "indeterminate",
+                "result": "fail",
                 "counts": {
                     "pass": 1,
                     "fail": 1,
@@ -168,9 +168,9 @@ class AssessmentRecordTests(unittest.TestCase):
     def test_must_failure_takes_priority_over_indeterminate(self) -> None:
         summary = aggregate_requirement_results(
             [
-                result("EAS-003-R02", "MUST", "indeterminate", reason="Not observable."),
-                result("EAS-006-R04", "MUST", "fail", reason="Contradicted."),
-                result("EAS-005-R07", "SHOULD", "fail", reason="Missing."),
+                result("EAS-008-R02", "MUST", "indeterminate", reason="Not observable."),
+                result("EAS-006-R03", "MUST", "fail", reason="Contradicted."),
+                result("EAS-999-R01", "SHOULD", "fail", reason="Missing."),
             ]
         )
 
@@ -179,7 +179,7 @@ class AssessmentRecordTests(unittest.TestCase):
 
     def test_should_failure_remains_visible_without_forcing_nonconformance(self) -> None:
         summary = aggregate_requirement_results(
-            [result("EAS-005-R07", "SHOULD", "fail", reason="Missing.")]
+            [result("EAS-999-R01", "SHOULD", "fail", reason="Missing.")]
         )
 
         self.assertEqual(summary["result"], "pass")
@@ -251,7 +251,7 @@ class AssessmentRecordTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "does not apply"):
             self.build(
                 requirement_results=[
-                    result("EAS-009-R09", "MUST", "pass")
+                    result("EAS-009-R08", "MUST", "pass")
                 ]
             )
 
@@ -296,14 +296,14 @@ class AssessmentRecordTests(unittest.TestCase):
         assessment = self.build(
             assessment_level="structural",
             assessment_subject_type="specification",
-            source_record={"id": "EAS-010", "content_revision": "draft-0.1"},
-            requirement_results=[result("EAS-001-R01", "MUST", "pass")],
+            source_record={"id": "EAS-009", "content_revision": "draft-0.1"},
+            requirement_results=[result("EAS-009-R08", "MUST", "pass")],
             scenario_set=None,
-            source_artifact_ref="spec/EAS-010-applicability.md",
+            source_artifact_ref="spec/EAS-009-compliance.md",
         )
 
         self.assertEqual(assessment["source_record"]["type"], "specification")
-        self.assertEqual(assessment["source_record"]["id"], "EAS-010")
+        self.assertEqual(assessment["source_record"]["id"], "EAS-009")
         self.assertNotIn("run_id", assessment["source_record"])
         self.assertEqual(validate_instance(assessment, self.schema), [])
         self.assertEqual(

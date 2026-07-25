@@ -2,202 +2,35 @@
 
 Generated from `registry/requirements.json` and `registry/validator-rules.json`. Counts describe declared, tested reference-tool coverage; they do not establish empirical validity.
 
-- Registry version: `0.1.0`
-- Total requirements: **149**
-- Mandatory (`MUST`): **136**
-- Advisory (`SHOULD`): **10**
-- Permissions (`MAY`): **3**
-- Fully machine-checkable: **20**
-- Partially machine-checkable: **36**
-- Currently unobservable: **93**
-- With validator rules: **56**
-- Structurally machine-checkable: **39**
-- Behaviorally assessable: **20**
-- Covered by scenarios: **61**
+- Registry version: `0.1.1`
+- Total requirements: **19**
+- Mandatory (`MUST`): **19**
+- Advisory (`SHOULD`): **0**
+- Permissions (`MAY`): **0**
+- Fully machine-checkable: **19**
+- Partially machine-checkable: **0**
+- Currently unobservable: **0**
+- With validator rules: **19**
+- Structurally machine-checkable: **18**
+- Behaviorally assessable: **2**
+- Covered by scenarios: **8**
 
 ## Requirements without validator rules
 
-- `EAS-000-R02`
-- `EAS-000-R03`
-- `EAS-000-R04`
-- `EAS-000-R05`
-- `EAS-001-R01`
-- `EAS-001-R02`
-- `EAS-002-R03`
-- `EAS-002-R04`
-- `EAS-002-R05`
-- `EAS-002-R06`
-- `EAS-002-R08`
-- `EAS-003-R03`
-- `EAS-003-R04`
-- `EAS-003-R06`
-- `EAS-003-R07`
-- `EAS-003-R08`
-- `EAS-004-R03`
-- `EAS-004-R04`
-- `EAS-004-R07`
-- `EAS-004-R08`
-- `EAS-004-R09`
-- `EAS-005-R05`
-- `EAS-005-R06`
-- `EAS-005-R07`
-- `EAS-005-R08`
-- `EAS-005-R09`
-- `EAS-005-R11`
-- `EAS-005-R12`
-- `EAS-005-R13`
-- `EAS-005-R18`
-- `EAS-005-R20`
-- `EAS-006-R04`
-- `EAS-006-R07`
-- `EAS-006-R08`
-- `EAS-007-R01`
-- `EAS-007-R02`
-- `EAS-007-R03`
-- `EAS-007-R04`
-- `EAS-007-R06`
-- `EAS-007-R07`
-- `EAS-008-R03`
-- `EAS-008-R04`
-- `EAS-008-R05`
-- `EAS-008-R07`
-- `EAS-008-R08`
-- `EAS-008-R09`
-- `EAS-008-R14`
-- `EAS-008-R19`
-- `EAS-009-R03`
-- `EAS-009-R04`
-- `EAS-009-R05`
-- `EAS-009-R06`
-- `EAS-009-R07`
-- `EAS-009-R10`
-- `EAS-010-R02`
-- `EAS-010-R03`
-- `EAS-010-R06`
-- `EAS-010-R07`
-- `EAS-010-R08`
-- `EAS-010-R09`
-- `EAS-010-R10`
-- `EAS-010-R11`
-- `EAS-010-R12`
-- `EAS-010-R13`
-- `EAS-010-R14`
-- `EAS-010-R15`
-- `EAS-010-R16`
-- `EAS-010-R17`
-- `EAS-010-R19`
-- `EAS-010-R20`
-- `EAS-010-R21`
-- `EAS-010-R22`
-- `EAS-010-R23`
-- `EAS-010-R24`
-- `EAS-010-R25`
-- `EAS-010-R26`
-- `EAS-011-R01`
-- `EAS-011-R02`
-- `EAS-011-R03`
-- `EAS-011-R04`
-- `EAS-011-R05`
-- `EAS-011-R06`
-- `EAS-011-R07`
-- `EAS-011-R08`
-- `EAS-011-R09`
-- `EAS-011-R10`
-- `EAS-011-R11`
-- `EAS-011-R12`
-- `EAS-011-R13`
-- `EAS-011-R14`
-- `EAS-011-R15`
-- `EAS-011-R16`
-- `EAS-011-R17`
+- None.
 
-## Requirements without scenarios
+## Requirements without executable scenario links
 
-- `EAS-000-R01`
-- `EAS-000-R02`
-- `EAS-000-R03`
-- `EAS-000-R04`
-- `EAS-000-R05`
-- `EAS-001-R01`
-- `EAS-001-R02`
+Schema- and structural-only requirements can appear here while remaining fully tested.
+
 - `EAS-002-R01`
-- `EAS-002-R03`
-- `EAS-002-R06`
-- `EAS-002-R08`
-- `EAS-002-R10`
-- `EAS-003-R03`
-- `EAS-003-R06`
-- `EAS-003-R07`
-- `EAS-003-R08`
 - `EAS-004-R01`
 - `EAS-004-R02`
-- `EAS-004-R03`
-- `EAS-004-R04`
 - `EAS-004-R06`
-- `EAS-004-R07`
-- `EAS-004-R08`
-- `EAS-005-R02`
-- `EAS-005-R04`
-- `EAS-005-R05`
-- `EAS-005-R07`
-- `EAS-005-R08`
-- `EAS-005-R11`
-- `EAS-005-R12`
-- `EAS-005-R15`
-- `EAS-005-R17`
-- `EAS-005-R19`
-- `EAS-005-R20`
-- `EAS-006-R07`
-- `EAS-007-R01`
-- `EAS-007-R04`
-- `EAS-007-R07`
 - `EAS-008-R01`
 - `EAS-008-R02`
-- `EAS-008-R04`
-- `EAS-008-R05`
-- `EAS-008-R06`
-- `EAS-008-R07`
-- `EAS-008-R08`
-- `EAS-008-R09`
 - `EAS-008-R15`
-- `EAS-008-R16`
-- `EAS-008-R17`
-- `EAS-008-R18`
-- `EAS-008-R19`
-- `EAS-008-R20`
-- `EAS-008-R21`
-- `EAS-008-R22`
-- `EAS-008-R23`
-- `EAS-009-R01`
-- `EAS-009-R02`
-- `EAS-009-R03`
-- `EAS-009-R04`
-- `EAS-009-R05`
-- `EAS-009-R06`
-- `EAS-009-R07`
 - `EAS-009-R08`
-- `EAS-009-R09`
-- `EAS-009-R10`
 - `EAS-009-R11`
 - `EAS-009-R12`
-- `EAS-009-R13`
-- `EAS-009-R14`
-- `EAS-010-R01`
-- `EAS-010-R02`
-- `EAS-010-R03`
-- `EAS-010-R07`
-- `EAS-010-R08`
-- `EAS-010-R10`
-- `EAS-010-R11`
-- `EAS-010-R12`
-- `EAS-010-R13`
-- `EAS-010-R14`
-- `EAS-010-R17`
 - `EAS-010-R18`
-- `EAS-010-R19`
-- `EAS-010-R20`
-- `EAS-010-R21`
-- `EAS-010-R22`
-- `EAS-010-R24`
-- `EAS-011-R12`
-- `EAS-011-R14`

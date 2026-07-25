@@ -16,7 +16,12 @@ MINIMUM_METRICS = {
     "behaviorally_assessable",
     "covered_by_scenarios",
 }
-MAXIMUM_METRICS = {"currently_unobservable"}
+MAXIMUM_METRICS = {"currently_unobservable", "total_requirements"}
+EXACT_METRICS = {
+    "total_requirements",
+    "with_validator_rules",
+    "currently_unobservable",
+}
 
 
 def render_coverage_markdown(coverage: dict[str, Any]) -> str:
@@ -49,8 +54,20 @@ def render_coverage_markdown(coverage: dict[str, Any]) -> str:
         "",
     ]
     uncovered_rules = coverage["uncovered"]["validator_rules"]
-    lines.extend(f"- `{item}`" for item in uncovered_rules)
-    lines.extend(("", "## Requirements without scenarios", ""))
+    if uncovered_rules:
+        lines.extend(f"- `{item}`" for item in uncovered_rules)
+    else:
+        lines.append("- None.")
+    lines.extend(
+        (
+            "",
+            "## Requirements without executable scenario links",
+            "",
+            "Schema- and structural-only requirements can appear here while "
+            "remaining fully tested.",
+            "",
+        )
+    )
     uncovered_scenarios = coverage["uncovered"]["scenarios"]
     lines.extend(f"- `{item}`" for item in uncovered_scenarios)
     return "\n".join(lines) + "\n"
@@ -65,6 +82,7 @@ def check_coverage_baseline(
     summary = coverage["summary"]
     minimum = baseline.get("minimum", {})
     maximum = baseline.get("maximum", {})
+    exact = baseline.get("exact", {})
     for metric in sorted(MINIMUM_METRICS):
         expected = minimum.get(metric)
         if not isinstance(expected, int):
@@ -80,6 +98,14 @@ def check_coverage_baseline(
         elif summary[metric] > expected:
             issues.append(
                 f"{metric} regressed: observed {summary[metric]}, maximum {expected}"
+            )
+    for metric in sorted(EXACT_METRICS):
+        expected = exact.get(metric)
+        if not isinstance(expected, int):
+            issues.append(f"baseline exact.{metric} must be an integer")
+        elif summary[metric] != expected:
+            issues.append(
+                f"{metric} changed: observed {summary[metric]}, expected {expected}"
             )
     return issues
 

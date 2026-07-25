@@ -811,13 +811,13 @@ def validate_assessment_record(
 
     limitations = record.get("limitations")
     if not isinstance(limitations, list):
-        issues.append(_issue("EAS-009-R10", "$.limitations", "must be an array"))
+        issues.append(_issue("EAS-009-R11", "$.limitations", "must be an array"))
     else:
         for index, limitation in enumerate(limitations):
             if not _is_non_empty_string(limitation):
                 issues.append(
                     _issue(
-                        "EAS-009-R10",
+                        "EAS-009-R11",
                         f"$.limitations[{index}]",
                         "must be a non-empty string",
                     )
@@ -825,7 +825,7 @@ def validate_assessment_record(
         if scenario_set is not None and SCENARIO_SCOPE_LIMITATION not in limitations:
             issues.append(
                 _issue(
-                    "EAS-009-R10",
+                    "EAS-009-R11",
                     "$.limitations",
                     "must state that scenario-set results are bounded",
                 )
@@ -833,13 +833,13 @@ def validate_assessment_record(
 
     summary = record.get("summary")
     if not isinstance(summary, dict):
-        issues.append(_issue("EAS-009-R06", "$.summary", "must be an object"))
+        issues.append(_issue("EAS-009-R11", "$.summary", "must be an object"))
     elif isinstance(results, list) and len(aggregate_input) == len(results):
         expected = aggregate_requirement_results(aggregate_input)
         if summary.get("result") != expected["result"]:
             issues.append(
                 _issue(
-                    "EAS-009-R04",
+                    "EAS-009-R11",
                     "$.summary.result",
                     f"must equal derived result {expected['result']!r}",
                 )
@@ -848,7 +848,7 @@ def validate_assessment_record(
         if counts != expected["counts"]:
             issues.append(
                 _issue(
-                    "EAS-009-R06",
+                    "EAS-009-R11",
                     "$.summary.counts",
                     "must equal counts derived from requirement_results",
                 )

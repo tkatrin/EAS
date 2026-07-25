@@ -48,8 +48,8 @@ Every decision governing a material action records:
 
 These fields describe different axes. For example, a public announcement may
 be non-destructive but externally visible and only partially reversible.
-`impact_level` is the trigger used by EAS-005-R10; `impact_scope` does not
-substitute for it.
+`impact_level` and `impact_scope` are informative risk descriptors and do not
+substitute for the deterministic materiality predicate.
 
 ## 3. Reversibility
 

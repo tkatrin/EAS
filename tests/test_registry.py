@@ -37,7 +37,17 @@ class RegistryConsistencyTests(unittest.TestCase):
         registry_ids = {item["id"] for item in self.requirements["requirements"]}
 
         self.assertEqual(registry_ids, specification_ids)
-        self.assertEqual(len(registry_ids), 149)
+        self.assertEqual(len(registry_ids), 19)
+        self.assertLessEqual(
+            len(registry_ids),
+            self.requirements["scope_policy"]["maximum_active_requirements"],
+        )
+        self.assertTrue(
+            all(
+                item["machine_checkable"] == "full"
+                for item in self.requirements["requirements"]
+            )
+        )
 
     def test_manifest_and_corpus_scenario_links_are_reciprocal(self) -> None:
         scenario_references = discover_all_scenario_requirements(ROOT)
@@ -49,7 +59,7 @@ class RegistryConsistencyTests(unittest.TestCase):
         for scenario_id, requirement_ids in scenario_references.items():
             for requirement_id in requirement_ids:
                 self.assertIn(scenario_id, requirement_scenarios[requirement_id])
-        self.assertIn("SCN-030", requirement_scenarios["EAS-011-R01"])
+        self.assertIn("SCN-001", requirement_scenarios["EAS-009-R09"])
 
     def test_machine_checkable_requirement_requires_a_rule(self) -> None:
         mutated = copy.deepcopy(self.requirements)
@@ -62,10 +72,43 @@ class RegistryConsistencyTests(unittest.TestCase):
 
         self.assertTrue(any(issue.code == "REG-CHECKABILITY" for issue in issues))
 
+    def test_scope_policy_rejects_expansion_and_partial_requirements(self) -> None:
+        expanded = copy.deepcopy(self.requirements)
+        template = copy.deepcopy(expanded["requirements"][0])
+        template["id"] = "EAS-099-R01"
+        template["spec"] = "EAS-099"
+        expanded["requirements"].append(template)
+        template = copy.deepcopy(template)
+        template["id"] = "EAS-099-R02"
+        expanded["requirements"].append(template)
+
+        issues = validate_registries(expanded, self.rules, ROOT)
+
+        self.assertTrue(
+            any(
+                issue.code == "REG-SCOPE"
+                and "maximum is 20" in issue.message
+                for issue in issues
+            )
+        )
+
+        partial = copy.deepcopy(self.requirements)
+        partial["requirements"][0]["machine_checkable"] = "partial"
+
+        issues = validate_registries(partial, self.rules, ROOT)
+
+        self.assertTrue(
+            any(
+                issue.code == "REG-SCOPE"
+                and issue.path.endswith(".machine_checkable")
+                for issue in issues
+            )
+        )
+
     def test_unknown_scenario_reference_is_rejected(self) -> None:
         mutated = copy.deepcopy(self.requirements)
         target = next(
-            item for item in mutated["requirements"] if item["id"] == "EAS-000-R01"
+            item for item in mutated["requirements"] if item["id"] == "EAS-002-R01"
         )
         target["scenarios"] = ["SCN-999"]
 
@@ -78,7 +121,7 @@ class RegistryConsistencyTests(unittest.TestCase):
         target = next(
             item for item in mutated["rules"] if item["id"] == "VAL-RUN-VERSION"
         )
-        target["requirements"] = ["EAS-000-R01", "EAS-000-R02"]
+        target["requirements"] = ["EAS-002-R01", "EAS-008-R15"]
 
         issues = validate_registries(self.requirements, mutated, ROOT)
 
@@ -87,9 +130,9 @@ class RegistryConsistencyTests(unittest.TestCase):
     def test_registry_level_matches_normative_text(self) -> None:
         mutated = copy.deepcopy(self.requirements)
         target = next(
-            item for item in mutated["requirements"] if item["id"] == "EAS-000-R04"
+            item for item in mutated["requirements"] if item["id"] == "EAS-005-R14"
         )
-        target["level"] = "MUST"
+        target["level"] = "SHOULD"
 
         issues = validate_registries(mutated, self.rules, ROOT)
 
@@ -107,13 +150,13 @@ class RegistryConsistencyTests(unittest.TestCase):
         coverage = build_coverage(self.requirements, self.rules)
         summary = coverage["summary"]
 
-        self.assertEqual(summary["total_requirements"], 149)
-        self.assertEqual(summary["by_level"], {"MAY": 3, "MUST": 136, "SHOULD": 10})
-        self.assertEqual(sum(summary["machine_checkable"].values()), 149)
-        self.assertGreater(summary["currently_unobservable"], 0)
+        self.assertEqual(summary["total_requirements"], 19)
+        self.assertEqual(summary["by_level"], {"MAY": 0, "MUST": 19, "SHOULD": 0})
+        self.assertEqual(summary["machine_checkable"], {"full": 19, "none": 0, "partial": 0})
+        self.assertEqual(summary["currently_unobservable"], 0)
         self.assertGreater(summary["structurally_machine_checkable"], 0)
         self.assertGreater(summary["behaviorally_assessable"], 0)
-        self.assertIn("EAS-011-R14", coverage["uncovered"]["validator_rules"])
+        self.assertEqual(coverage["uncovered"]["validator_rules"], [])
 
 
 class RegistryReferenceRuleTests(unittest.TestCase):
@@ -166,7 +209,7 @@ class RegistryReferenceRuleTests(unittest.TestCase):
 
         self.assertTrue(
             any(
-                issue.requirement == "EAS-008-R06"
+                issue.requirement == "EAS-008-R01"
                 and issue.path == "$.evidence[0].origin"
                 for issue in issues
             )
@@ -186,7 +229,7 @@ class RegistryReferenceRuleTests(unittest.TestCase):
 
         issues = validate_record(record)
 
-        self.assertTrue(any(issue.requirement == "EAS-008-R16" for issue in issues))
+        self.assertTrue(any(issue.requirement == "EAS-002-R01" for issue in issues))
 
     def test_timestamp_rule(self) -> None:
         record = copy.deepcopy(self.record)
@@ -194,7 +237,7 @@ class RegistryReferenceRuleTests(unittest.TestCase):
 
         issues = validate_record(record)
 
-        self.assertTrue(any(issue.requirement == "EAS-008-R18" for issue in issues))
+        self.assertTrue(any(issue.requirement == "EAS-002-R01" for issue in issues))
 
         record = copy.deepcopy(self.record)
         del record["evidence"][0]["observed_at"]
@@ -203,7 +246,7 @@ class RegistryReferenceRuleTests(unittest.TestCase):
 
         self.assertTrue(
             any(
-                issue.requirement == "EAS-008-R17"
+                issue.requirement == "EAS-008-R01"
                 and issue.path.endswith(".observed_at")
                 for issue in issues
             )
@@ -223,7 +266,7 @@ class RegistryReferenceRuleTests(unittest.TestCase):
 
         issues = validate_record(record)
 
-        self.assertTrue(any(issue.requirement == "EAS-005-R15" for issue in issues))
+        self.assertTrue(any(issue.requirement == "EAS-005-R02" for issue in issues))
 
     def test_reversibility_shape_rule(self) -> None:
         record = copy.deepcopy(self.record)
@@ -231,7 +274,7 @@ class RegistryReferenceRuleTests(unittest.TestCase):
 
         issues = validate_record(record)
 
-        self.assertTrue(any(issue.requirement == "EAS-005-R16" for issue in issues))
+        self.assertTrue(any(issue.requirement == "EAS-005-R02" for issue in issues))
 
     def test_rollback_verified_requires_successful_evidence(self) -> None:
         record = copy.deepcopy(self.record)
@@ -242,7 +285,7 @@ class RegistryReferenceRuleTests(unittest.TestCase):
 
         self.assertTrue(
             any(
-                issue.requirement == "EAS-005-R16"
+                issue.requirement == "EAS-005-R02"
                 and issue.path.endswith(".rollback_verified")
                 for issue in issues
             )
@@ -255,7 +298,7 @@ class RegistryReferenceRuleTests(unittest.TestCase):
 
         self.assertTrue(
             any(
-                issue.requirement == "EAS-005-R16"
+                issue.requirement == "EAS-005-R02"
                 and issue.path.endswith(".rollback_available")
                 for issue in issues
             )
@@ -267,7 +310,7 @@ class RegistryReferenceRuleTests(unittest.TestCase):
 
         issues = validate_record(record)
 
-        self.assertTrue(any(issue.requirement == "EAS-005-R17" for issue in issues))
+        self.assertTrue(any(issue.requirement == "EAS-005-R02" for issue in issues))
 
     def test_structured_authority_scope_rule(self) -> None:
         record = copy.deepcopy(self.record)
@@ -277,7 +320,7 @@ class RegistryReferenceRuleTests(unittest.TestCase):
 
         self.assertTrue(
             any(
-                issue.requirement == "EAS-005-R17"
+                issue.requirement == "EAS-005-R02"
                 and issue.path.endswith("authorization_scope.target")
                 for issue in issues
             )
@@ -300,8 +343,7 @@ class RegistryReferenceRuleTests(unittest.TestCase):
         issues = validate_record(record)
         requirements = {issue.requirement for issue in issues}
 
-        self.assertIn("EAS-010-R04", requirements)
-        self.assertIn("EAS-010-R05", requirements)
+        self.assertEqual(requirements, {"EAS-002-R07"})
 
     def test_extension_namespace_rule(self) -> None:
         record = copy.deepcopy(self.record)

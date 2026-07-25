@@ -149,7 +149,7 @@ def discover_corpus_requirements(corpus_dir: Path) -> dict[str, set[str]]:
 
 
 def discover_all_scenario_requirements(repository_root: Path) -> dict[str, set[str]]:
-    """Combine executable manifests and definition-only corpus entries."""
+    """Combine executable manifests and executable corpus entries."""
 
     root = Path(repository_root)
     scenarios = discover_corpus_requirements(root / "compliance" / "corpus")
@@ -304,6 +304,50 @@ def validate_registries(
             if document.get("eas_version") != "0.1":
                 issues.append(
                     _issue("REG-VALUE", "$.eas_version", f"{name} registry must target EAS 0.1")
+                )
+
+    scope_policy = (
+        requirement_registry.get("scope_policy")
+        if isinstance(requirement_registry, dict)
+        else None
+    )
+    if not isinstance(scope_policy, dict):
+        issues.append(_issue("REG-SCOPE", "$.scope_policy", "must be an object"))
+    else:
+        maximum = scope_policy.get("maximum_active_requirements")
+        required_checkability = scope_policy.get("required_machine_checkability")
+        if not isinstance(maximum, int) or maximum < 1:
+            issues.append(
+                _issue(
+                    "REG-SCOPE",
+                    "$.scope_policy.maximum_active_requirements",
+                    "must be a positive integer",
+                )
+            )
+        elif len(requirements) > maximum:
+            issues.append(
+                _issue(
+                    "REG-SCOPE",
+                    "$.requirements",
+                    f"contains {len(requirements)} active requirements; maximum is {maximum}",
+                )
+            )
+        if required_checkability != "full":
+            issues.append(
+                _issue(
+                    "REG-SCOPE",
+                    "$.scope_policy.required_machine_checkability",
+                    "EAS 0.1 must require full machine checkability",
+                )
+            )
+        for requirement_id, entry in requirements.items():
+            if entry.get("machine_checkable") != required_checkability:
+                issues.append(
+                    _issue(
+                        "REG-SCOPE",
+                        f"$.requirements[{requirement_id}].machine_checkable",
+                        f"must equal {required_checkability!r}",
+                    )
                 )
 
     for requirement_id, locations in sorted(spec_occurrences.items()):

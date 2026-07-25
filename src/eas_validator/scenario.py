@@ -14,6 +14,10 @@ def _issue(path: str, message: str) -> ValidationIssue:
     return ValidationIssue("EAS-009-R09", path, message)
 
 
+def _manifest_issue(path: str, message: str) -> ValidationIssue:
+    return ValidationIssue("EAS-009-R08", path, message)
+
+
 def _string_set(value: Any) -> set[str]:
     if not isinstance(value, list):
         return set()
@@ -22,7 +26,7 @@ def _string_set(value: Any) -> set[str]:
 
 def _validate_scenario(scenario: Any) -> list[ValidationIssue]:
     if not isinstance(scenario, dict):
-        return [_issue("$scenario", "scenario must be an object")]
+        return [_manifest_issue("$scenario", "scenario must be an object")]
 
     issues: list[ValidationIssue] = []
     required = {
@@ -36,23 +40,30 @@ def _validate_scenario(scenario: Any) -> list[ValidationIssue]:
         "expected",
     }
     for name in sorted(required - scenario.keys()):
-        issues.append(_issue(f"$scenario.{name}", "required field is missing"))
+        issues.append(_manifest_issue(f"$scenario.{name}", "required field is missing"))
     if issues:
         return issues
 
     if scenario.get("eas_version") != "0.1":
-        issues.append(_issue("$scenario.eas_version", "must equal '0.1'"))
+        issues.append(_manifest_issue("$scenario.eas_version", "must equal '0.1'"))
     if not isinstance(scenario.get("requirement_refs"), list) or not scenario["requirement_refs"]:
-        issues.append(_issue("$scenario.requirement_refs", "must be a non-empty array"))
+        issues.append(_manifest_issue("$scenario.requirement_refs", "must be a non-empty array"))
+    elif "EAS-009-R09" not in scenario["requirement_refs"]:
+        issues.append(
+            _manifest_issue(
+                "$scenario.requirement_refs",
+                "must include EAS-009-R09 for bounded expectation assessment",
+            )
+        )
     if not isinstance(scenario.get("required_artifacts"), list):
-        issues.append(_issue("$scenario.required_artifacts", "must be an array"))
+        issues.append(_manifest_issue("$scenario.required_artifacts", "must be an array"))
 
     expected = scenario.get("expected")
     if not isinstance(expected, dict):
-        issues.append(_issue("$scenario.expected", "must be an object"))
+        issues.append(_manifest_issue("$scenario.expected", "must be an object"))
         return issues
     if expected.get("outcome") not in OUTCOMES:
-        issues.append(_issue("$scenario.expected.outcome", "must be a recognized outcome"))
+        issues.append(_manifest_issue("$scenario.expected.outcome", "must be a recognized outcome"))
     if expected.get("task_result") not in {
         "satisfied",
         "partially_satisfied",
@@ -60,10 +71,10 @@ def _validate_scenario(scenario: Any) -> list[ValidationIssue]:
         "indeterminate",
     }:
         issues.append(
-            _issue("$scenario.expected.task_result", "must be a recognized task result")
+            _manifest_issue("$scenario.expected.task_result", "must be a recognized task result")
         )
     if expected.get("task_class") not in TASK_CLASSES:
-        issues.append(_issue("$scenario.expected.task_class", "must be a recognized task class"))
+        issues.append(_manifest_issue("$scenario.expected.task_class", "must be a recognized task class"))
     return issues
 
 

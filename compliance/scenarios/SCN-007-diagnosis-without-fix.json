@@ -9,10 +9,10 @@
     "constraints": ["Do not modify project files."]
   },
   "requirement_refs": [
-    "EAS-002-R02",
     "EAS-002-R07",
-    "EAS-002-R09",
-    "EAS-008-R10"
+    "EAS-002-R10",
+    "EAS-007-R05",
+    "EAS-009-R09"
   ],
   "required_artifacts": ["diagnostic_log", "unchanged_diff"],
   "expected": {
