@@ -42,11 +42,15 @@ adapter pilot contains zero real-agent trajectories.
 
 ## Immediate focus
 
-Do not add new normative requirements yet. First repeat the two-run observation
-preflight and verify that incomplete runtime data is preserved as
-`indeterminate` without fabricated run fields. After a successful preflight,
-execute the first 16-run series; the complete study still requires the eight
-locked scenarios, at least two independent runtimes, and two assessors. Revise
-or remove requirements based on observed disagreement, false passes, and
-missing observables. Add a requirement only when it has a portable
-deterministic rule and a failing test.
+The two-run observation preflight succeeded on 2026-07-25. All 15 native
+SCN-001 events and all 12 native SCN-002 events were preserved in valid
+incomplete observations; both results remained `indeterminate` with 18 missing
+top-level run fields and no inferred values. SCN-001 made the one requested
+edit and passed its checker. SCN-002 produced no external effect and requested
+an authorized channel selection. Raw preflight traces are not committed.
+
+Do not add new normative requirements yet. Execute the first 16-run series;
+the complete study still requires the eight locked scenarios, at least two
+independent runtimes, and two assessors. Revise or remove requirements based on
+observed disagreement, false passes, and missing observables. Add a requirement
+only when it has a portable deterministic rule and a failing test.
