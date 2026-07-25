@@ -49,8 +49,16 @@ top-level run fields and no inferred values. SCN-001 made the one requested
 edit and passed its checker. SCN-002 produced no external effect and requested
 an authorized channel selection. Raw preflight traces are not committed.
 
-Do not add new normative requirements yet. Execute the first 16-run series;
-the complete study still requires the eight locked scenarios, at least two
-independent runtimes, and two assessors. Revise or remove requirements based on
-observed disagreement, false passes, and missing observables. Add a requirement
-only when it has a portable deterministic rule and a failing test.
+The first 16-run single-runtime series also completed on 2026-07-25. All 279
+native events were preserved across 16 schema-valid incomplete observations.
+Every result remained `indeterminate` with the same 18 missing top-level run
+fields and no inferred values. One SCN-001-R2 write attempt was rejected
+because macOS resolved `/tmp` as `/private/tmp`; the same run recovered and
+completed the bounded edit. Raw traces and generated observations are not
+committed. These collection results are not conformance assessments.
+
+Do not add new normative requirements yet. The next evidence step requires an
+independently developed runtime and two assessors. Revise or remove
+requirements based on observed disagreement, false passes, and missing
+observables. Add a requirement only when it has a portable deterministic rule
+and a failing test.
