@@ -47,9 +47,3 @@ protocol using the eight locked scenarios, at least two independent runtimes,
 and two assessors. Revise or remove requirements based on observed
 disagreement, false passes, and missing observables. Add a requirement only
 when it has a portable deterministic rule and a failing test.
-
-A separate 16-slot Codex collection pilot is prepared but has collected zero
-analysis trajectories. Two excluded calibration runs showed that prompt-level
-tool logging cannot produce a schema-valid EAS run record without inventing
-missing process fields. Resolve this observation boundary before continuing;
-the pilot still cannot replace a second runtime or independent assessors.

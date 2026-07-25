@@ -1,5 +1,0 @@
-operation,requests_per_second,p95_ms,allowed_staleness_seconds
-catalog_read,1800,120,60
-account_balance_read,90,85,0
-catalog_write,12,210,0
-account_balance_write,8,190,0
