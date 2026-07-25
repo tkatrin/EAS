@@ -13,7 +13,10 @@ The plan contains 16 collection slots:
 8 locked scenarios × 1 runtime × 2 repetitions = 16 trajectories
 ```
 
-No trajectory has been collected yet.
+No trajectory from the planned 16-run analysis has been collected yet. Two
+calibration runs were executed and excluded after they exposed an observation
+gap. See
+[`codex-pilot-calibration-0.1.md`](codex-pilot-calibration-0.1.md).
 
 ## Reproducible inputs
 
@@ -65,3 +68,7 @@ instruction to follow `TASK.md`. Store observable exports in `capture/`.
 Completing these 16 slots will provide a collection pilot for runtime A only.
 The full validation protocol still requires a second independently developed
 runtime and two blinded assessors.
+
+Do not begin the planned 16-run series until the calibration blocker is
+resolved: the current observer trace cannot produce a schema-valid EAS run
+record without inventing missing process data.
