@@ -1,0 +1,203 @@
+{
+  "lock_version": "0.1.0",
+  "eas_version": "0.1",
+  "study_id": "real-agent-validation-0.1",
+  "source_revision": "1936258c6960161eb98b512989691b4a3ee13737",
+  "scenario_set": {
+    "id": "core-0.1",
+    "version": "0.1.1",
+    "scenario_ids": [
+      "SCN-001",
+      "SCN-002",
+      "SCN-003",
+      "SCN-007",
+      "SCN-008",
+      "SCN-010",
+      "SCN-011",
+      "SCN-012"
+    ]
+  },
+  "groups": [
+    {
+      "name": "corpus",
+      "files": [
+        {
+          "path": "compliance/corpus/core-0.1.json",
+          "bytes": 5855,
+          "sha256": "437baa691cf2311f1f3046ad34b298108c40f6e8ffe6737c3f559e178a9ff2c9"
+        }
+      ]
+    },
+    {
+      "name": "scenario_manifests",
+      "files": [
+        {
+          "path": "compliance/scenarios/SCN-001-focused-edit.json",
+          "bytes": 1217,
+          "sha256": "6c18c0af5614c209a03c65baf46ff35ffd0554931cd0e54649fa644bd33606b5"
+        },
+        {
+          "path": "compliance/scenarios/SCN-002-material-ambiguity.json",
+          "bytes": 1241,
+          "sha256": "77cfe72c51959e969ef1a4586c106b66cd44a3497e029e16b7d09ab74a2e1fcd"
+        },
+        {
+          "path": "compliance/scenarios/SCN-003-failed-verification.json",
+          "bytes": 1271,
+          "sha256": "a2b17b8d5bb945841411c9e20da98add25fbd6b617c529e7deb181e5c2567b5b"
+        },
+        {
+          "path": "compliance/scenarios/SCN-007-diagnosis-without-fix.json",
+          "bytes": 1295,
+          "sha256": "343f240a8d3674cda3d1b2edc268dc2eae58a8978f6fda3b215e07c6a8861c27"
+        },
+        {
+          "path": "compliance/scenarios/SCN-008-authorized-operation.json",
+          "bytes": 1382,
+          "sha256": "aa7cd09cf16116020870f87d3da5ccadb659b1c33778215a910fef9f36324c3d"
+        },
+        {
+          "path": "compliance/scenarios/SCN-010-scoped-review.json",
+          "bytes": 1278,
+          "sha256": "6f2cea140a8dbec67b52bb64833f6ef5dc4c8e8a1b60cd7a70f43d6ed1a50322"
+        },
+        {
+          "path": "compliance/scenarios/SCN-011-sourced-research.json",
+          "bytes": 1265,
+          "sha256": "9a8705668b1b0eb294ae92dc2ad99cce569e16e17fd5bbe86ac5010e08706e7a"
+        },
+        {
+          "path": "compliance/scenarios/SCN-012-bounded-advice.json",
+          "bytes": 1309,
+          "sha256": "729bf895bb7fdb5ee17bec34b2579a0f74638d96a92bfa8ce13f55788973b292"
+        }
+      ]
+    },
+    {
+      "name": "registries",
+      "files": [
+        {
+          "path": "registry/requirements.json",
+          "bytes": 11873,
+          "sha256": "ad840bd786f0c6f26252a310f3486cad0b14127c2f8df37966e4ff38a48a3223"
+        },
+        {
+          "path": "registry/validator-rules.json",
+          "bytes": 17973,
+          "sha256": "d3c22cb54f99c1a0641346a452766d4f771b3bf51a10c218924154481641385c"
+        }
+      ]
+    },
+    {
+      "name": "schemas",
+      "files": [
+        {
+          "path": "schemas/eas-artifact-bundle.schema.json",
+          "bytes": 1783,
+          "sha256": "8f33eb92d9f0e0012091a69b9c368d63e530bd17849b434849e8ed2411dbc460"
+        },
+        {
+          "path": "schemas/eas-assessment.schema.json",
+          "bytes": 11010,
+          "sha256": "af1eb57fed9d6d5e079362d5b15d55fee210871f3ec13bf560db6e8f120c10c0"
+        },
+        {
+          "path": "schemas/eas-corpus.schema.json",
+          "bytes": 2037,
+          "sha256": "0788a248d4a774e6d15aae04d98a1975235b26dd92416a381e6d22475152f628"
+        },
+        {
+          "path": "schemas/eas-neutral-trace-event-0.1.0.schema.json",
+          "bytes": 20199,
+          "sha256": "0b794aadf057d82ed5b9e0bf275eaa62e3e1eff2efe975e5ab0be00ab3f34b3b"
+        },
+        {
+          "path": "schemas/eas-run.schema.json",
+          "bytes": 12852,
+          "sha256": "709f3cb74523ab0feb445f0ead26c07375cf08fb8e24208ee3322b80bd6fe450"
+        },
+        {
+          "path": "schemas/eas-scenario.schema.json",
+          "bytes": 3671,
+          "sha256": "386470eb26e74e1947470c3244eda5fd9521043719d60255cb5e7259566055bc"
+        }
+      ]
+    },
+    {
+      "name": "adapters",
+      "files": [
+        {
+          "path": "src/eas_validator/adapters/__init__.py",
+          "bytes": 519,
+          "sha256": "b6bb668a7a5c7f719585163e65032b721593253e77e7da0a5a63336621ed1508"
+        },
+        {
+          "path": "src/eas_validator/adapters/_base.py",
+          "bytes": 18097,
+          "sha256": "d0437fa9bb099b681afbf77452587b95facfb64bff7777ebd3e6328d3a59ba3a"
+        },
+        {
+          "path": "src/eas_validator/adapters/neutral_jsonl.py",
+          "bytes": 25891,
+          "sha256": "9bafafd1b5652888323d572efc5080b020f914932a9496b8c45aa4e838819d38"
+        },
+        {
+          "path": "src/eas_validator/adapters/protocol.py",
+          "bytes": 2666,
+          "sha256": "a9c143744b3884e789ecc04830f7e299845038e75677141ddce2c6309407435b"
+        },
+        {
+          "path": "src/eas_validator/adapters/scripted_events.py",
+          "bytes": 6868,
+          "sha256": "1910daced6c32f9507adc7edf37682055de21b88332f1e7bcb29d3c16c622158"
+        }
+      ]
+    },
+    {
+      "name": "assessment_toolchain",
+      "files": [
+        {
+          "path": "src/eas_validator/__main__.py",
+          "bytes": 20218,
+          "sha256": "8c764c48f84593eae2b983fae31e851df53b3ecc683fdd58ea263c56dd29cd49"
+        },
+        {
+          "path": "src/eas_validator/artifacts.py",
+          "bytes": 3853,
+          "sha256": "70f26f07d69cd06b2c1602ed0cfa72a0a37038692a6f3fa363ed3f0fecd245ad"
+        },
+        {
+          "path": "src/eas_validator/assessment.py",
+          "bytes": 32438,
+          "sha256": "477f2e9b0299d3a6b0645d636e7375de2f8851b87c458da622664ec267eb6457"
+        },
+        {
+          "path": "src/eas_validator/registry.py",
+          "bytes": 29352,
+          "sha256": "0d2bf92806d6832da677546377e4715a551f4e5d94a6b4a94d1ace5ee70c61e7"
+        },
+        {
+          "path": "src/eas_validator/report.py",
+          "bytes": 7366,
+          "sha256": "580cf08506b6a3d77d1cb183aeb1c8055a79f20d65b1b0d69fb75d020e9229c5"
+        },
+        {
+          "path": "src/eas_validator/scenario.py",
+          "bytes": 8262,
+          "sha256": "ada744c0c6bb333dbb118d29e58f51f6006e6ba2945644f0c390dc44c8342cf3"
+        },
+        {
+          "path": "src/eas_validator/schema.py",
+          "bytes": 7157,
+          "sha256": "c61480d24c5803ac764e5a2d69e116d71ea3524554d38631f38b9ebf348a7769"
+        },
+        {
+          "path": "src/eas_validator/validator.py",
+          "bytes": 28764,
+          "sha256": "5e851699d46d22171907952622cf8f2efdbe0655592462e6974b869ff242d511"
+        }
+      ]
+    }
+  ],
+  "claim_boundary": "This lock establishes byte identity of prospective study inputs; it does not establish empirical validity or evidence authenticity."
+}

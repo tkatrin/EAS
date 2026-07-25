@@ -12,6 +12,21 @@ Use the eight executable EAS 0.1 scenarios without changing requirements,
 manifests, adapters, or assessment logic after evaluation starts. Record the
 exact repository revision.
 
+The prospective study inputs are byte-locked in
+[`study-lock-0.1.json`](study-lock-0.1.json). The lock records the source
+revision, scenario-set identity, byte length, and SHA-256 digest of every
+scenario manifest, registry, schema, adapter, and assessment-toolchain file.
+Verify it before collection and again before assessment:
+
+```bash
+PYTHONPATH=src python3 -m eas_validator.study_lock \
+  --check research/study-lock-0.1.json
+```
+
+Any lock failure means the study input changed. Stop the affected study run,
+record the deviation, and either restore the locked bytes or create a new
+prospective study version before collecting more trajectories.
+
 Select two independently developed agent runtimes with different native trace
 formats. Implement one adapter per format. Adapters must preserve unmapped
 events and must not invent decisions, authority, evidence, or lifecycle states.

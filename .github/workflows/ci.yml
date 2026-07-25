@@ -41,6 +41,11 @@ jobs:
           python -m eas_validator.pilot
           --check reports/adapter-pilot.json
 
+      - name: Verify prospective study input lock
+        run: >-
+          python -m eas_validator.study_lock
+          --check research/study-lock-0.1.json
+
       - name: Execute documented structural validation
         run: eas validate examples/minimal-run.json
 

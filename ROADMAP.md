@@ -23,7 +23,7 @@
 ## Empirical validation — next
 
 - [x] Define a prospective real-agent study protocol.
-- [ ] Lock the eight current scenarios and their source revisions.
+- [x] Lock the eight current scenarios and their source revisions.
 - [ ] Collect consented trajectories from at least two independent runtimes.
 - [ ] Run at least two repetitions per runtime and scenario.
 - [ ] Obtain independent blinded ratings from two assessors.
