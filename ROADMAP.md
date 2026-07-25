@@ -28,6 +28,9 @@
 - [x] Repeat the two-run observation preflight.
 - [x] Complete the first 16-run single-runtime series after a successful
   preflight.
+- [x] Complete the two-run observation preflight on a second independently
+  developed runtime.
+- [ ] Complete the 16-run series for the second runtime.
 - [ ] Collect consented trajectories from at least two independent runtimes.
 - [ ] Run at least two repetitions per runtime and scenario.
 - [ ] Obtain independent blinded ratings from two assessors.

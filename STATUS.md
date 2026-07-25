@@ -57,8 +57,20 @@ because macOS resolved `/tmp` as `/private/tmp`; the same run recovered and
 completed the bounded edit. Raw traces and generated observations are not
 committed. These collection results are not conformance assessments.
 
+The second-runtime observation preflight completed with Goose 1.44.0 on
+2026-07-25. SCN-001 preserved all 31 non-empty native output lines (28 JSON
+events and three native banner lines), made only the requested one-word edit,
+and verified it. SCN-002 preserved all 81 non-empty native output lines (78
+JSON events and three native banner lines), used only read operations, made no
+publication or file change, and requested both a channel choice and confirmed
+publication authority. Both schema-valid incomplete observations remained
+`indeterminate` with 18 missing top-level run fields and no inferred values.
+Raw traces and observations are not committed. Goose is independently
+developed from the first runtime, but both collections used ChatGPT-backed
+Codex models; this establishes runtime-format diversity, not model-provider
+independence.
+
 Do not add new normative requirements yet. The next evidence step requires an
-independently developed runtime and two assessors. Revise or remove
-requirements based on observed disagreement, false passes, and missing
-observables. Add a requirement only when it has a portable deterministic rule
-and a failing test.
+16 isolated Goose runs followed by two assessors. Revise or remove requirements
+based on observed disagreement, false passes, and missing observables. Add a
+requirement only when it has a portable deterministic rule and a failing test.
