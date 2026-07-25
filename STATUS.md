@@ -1,5 +1,18 @@
 # EAS Project Status
 
+## Milestone
+
+The **EAS 0.1 Observation Boundary Milestone** completed on 2026-07-26.
+The 19 active requirements, eight scenarios, current run-record schema,
+first-study results, and ADR-0002 are frozen as the calibration baseline until
+the prospective instrumented-run pilot is complete. The conclusion is recorded
+in
+[`research/observation-boundary-conclusion.md`](research/observation-boundary-conclusion.md).
+
+The eight existing scenarios are now a calibration set, not an independent
+evaluation set. They have already informed revisions and cannot support an
+uncontaminated holdout claim.
+
 ## Current result
 
 EAS 0.1 is now a minimal reproducible core:

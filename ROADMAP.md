@@ -1,5 +1,24 @@
 # Roadmap
 
+## Observation boundary milestone
+
+- [x] Freeze the 19 active requirements, eight calibration scenarios, current
+  run schema, first-study results, and ADR-0002.
+- [x] Record that native observations and instrumented runs are independent
+  assessment subjects.
+- [x] Reclassify the existing scenario set as calibration rather than holdout
+  evaluation.
+
+## Instrumented-run validation — next
+
+- [ ] Define a non-normative reference instrumentation event contract.
+- [ ] Implement a recorder and deterministic run compiler.
+- [ ] Run an 8-trajectory instrumentation pilot: two runtimes, two tasks, two
+  repetitions.
+- [ ] Assess run/observation consistency separately from run conformance.
+- [ ] Revisit the 19 requirements only after pilot data exist.
+- [ ] Prepare a new locked eight-task holdout set for a 32-trajectory study.
+
 ## EAS 0.1 minimal core
 
 - [x] Reduce the normative set to 19 active requirements.
@@ -50,7 +69,7 @@
 - [x] Separate observable and run-semantic expectations in every scenario.
 - [x] Assign every active requirement to explicit assessment subjects.
 - [x] Recheck the two preserved SCN-001 trajectories with that projection.
-- [ ] Lock and repeat the study only after that record-boundary decision.
+- [x] Close the native-observation study at the observation-boundary milestone.
 - [ ] Revise, merge, or remove criteria based on observed results.
 
 ## Deferred
