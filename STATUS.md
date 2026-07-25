@@ -13,6 +13,20 @@ The eight existing scenarios are now a calibration set, not an independent
 evaluation set. They have already informed revisions and cannot support an
 uncontaminated holdout claim.
 
+## Instrumented-run reference tooling
+
+The non-normative reference toolchain now includes an append-only JSONL
+recorder and a deterministic, fail-closed run compiler. The compiler preserves
+event order and field provenance, rejects incomplete or conflicting streams,
+and emits a run only after both the core run schema and structural validator
+pass. The runnable stream in
+[`examples/instrumentation/minimal-run-events.jsonl`](examples/instrumentation/minimal-run-events.jsonl)
+is a deterministic fixture, not a real-agent result.
+
+This completes the tooling prerequisite for the prospective eight-trajectory
+instrumentation pilot. It does not add normative requirements or establish
+that self-reported agent semantics are authentic.
+
 ## Current result
 
 EAS 0.1 is now a minimal reproducible core:

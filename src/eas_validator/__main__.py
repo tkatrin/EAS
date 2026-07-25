@@ -12,6 +12,12 @@ from typing import Any, Iterable, Sequence
 
 from .artifacts import ArtifactIssue, validate_artifact_files
 from .assessment import build_assessment_record, validate_assessment_record
+from .instrumentation import (
+    append_event,
+    compile_events,
+    read_event_stream,
+    render_run,
+)
 from .report import render_report
 from .registry import resolve_requirement_subjects
 from .scenario import assess_scenario
@@ -19,7 +25,7 @@ from .schema import SchemaIssue, validate_instance
 from .validator import ValidationIssue, validate_record
 
 
-COMMANDS = {"validate", "assess", "report"}
+COMMANDS = {"validate", "assess", "report", "record", "compile-run"}
 TASK_CLASSES = {"change", "diagnose", "review", "research", "operate", "advise"}
 ARTIFACT_LIMITATION = (
     "Artifact integrity checks establish presence and digest only; they do not "
@@ -529,6 +535,51 @@ def _report_command(args: argparse.Namespace) -> int:
     return 0
 
 
+def _record_command(args: argparse.Namespace) -> int:
+    if str(args.event) == "-":
+        try:
+            event = json.load(sys.stdin)
+        except (OSError, json.JSONDecodeError) as error:
+            print(f"INVALID INPUT: cannot read event from stdin: {error}")
+            return 2
+    else:
+        event, error = _read_json(args.event, "run event")
+        if error:
+            print(f"INVALID INPUT: {error}")
+            return 2
+
+    root = _repository_root()
+    event_schema = _load_json(root / "schemas" / "eas-run-event.schema.json")
+    issues = append_event(args.stream, event, event_schema)
+    if issues:
+        print("EVENT NOT RECORDED")
+        print("\n".join(_render_issues(issues)))
+        return 1
+    print(f"RECORDED: {event['event_id']} -> {args.stream}")
+    return 0
+
+
+def _compile_run_command(args: argparse.Namespace) -> int:
+    events, read_issues = read_event_stream(args.stream)
+    if read_issues:
+        print("COMPILATION FAILED")
+        print("\n".join(_render_issues(read_issues)))
+        return 2
+
+    root = _repository_root()
+    event_schema = _load_json(root / "schemas" / "eas-run-event.schema.json")
+    run_schema = _load_json(root / "schemas" / "eas-run.schema.json")
+    record, issues = compile_events(events, event_schema, run_schema)
+    if issues:
+        print("COMPILATION FAILED")
+        print("\n".join(_render_issues(issues)))
+        return 1
+
+    assert record is not None
+    _write_or_print(render_run(record), args.output)
+    return 0
+
+
 def _legacy_main(argv: Sequence[str]) -> int:
     parser = argparse.ArgumentParser(
         description="Legacy EAS source-checkout invocation; prefer explicit subcommands."
@@ -602,6 +653,26 @@ def _parser() -> argparse.ArgumentParser:
     )
     report_parser.add_argument("--output", type=Path)
     report_parser.set_defaults(handler=_report_command)
+
+    record_parser = subparsers.add_parser(
+        "record",
+        help="validate and append one instrumented-run event to a JSONL stream",
+    )
+    record_parser.add_argument(
+        "event",
+        type=Path,
+        help="event JSON file, or - to read one JSON object from stdin",
+    )
+    record_parser.add_argument("--stream", type=Path, required=True)
+    record_parser.set_defaults(handler=_record_command)
+
+    compile_parser = subparsers.add_parser(
+        "compile-run",
+        help="compile one complete instrumented event stream into a run record",
+    )
+    compile_parser.add_argument("stream", type=Path)
+    compile_parser.add_argument("--output", type=Path)
+    compile_parser.set_defaults(handler=_compile_run_command)
     return parser
 
 
