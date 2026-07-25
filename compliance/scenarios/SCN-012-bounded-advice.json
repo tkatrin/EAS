@@ -15,6 +15,11 @@
     "EAS-009-R09"
   ],
   "required_artifacts": ["workload_evidence", "tradeoff_analysis"],
+  "artifact_handling": {
+    "producer": "observer",
+    "location": "outside_project",
+    "project_state_effect": "excluded"
+  },
   "expected": {
     "outcome": "completed",
     "task_result": "satisfied",

@@ -1,5 +1,5 @@
 {
-  "registry_version": "0.1.1",
+  "registry_version": "0.1.2",
   "eas_version": "0.1",
   "rules": [
     {
@@ -242,7 +242,7 @@
       "assessment_level": "behavioral",
       "requirements": ["EAS-009-R08"],
       "implementation": ["src/eas_validator/scenario.py::_validate_scenario"],
-      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_scenario_manifest_rule"],
+      "tests": ["tests/test_registry.py::RegistryReferenceRuleTests.test_scenario_manifest_rule", "tests/test_scenario.py::ScenarioAssessmentTests.test_agent_produced_project_artifact_policy_is_rejected"],
       "observable_inputs": ["scenario_manifest"]
     },
     {
@@ -251,7 +251,7 @@
       "assessment_level": "schema",
       "requirements": ["EAS-009-R08"],
       "implementation": ["src/eas_validator/schema.py::validate_instance"],
-      "tests": ["tests/test_schema.py::SchemaValidationTests.test_scenario_manifests_match_schema"],
+      "tests": ["tests/test_schema.py::SchemaValidationTests.test_scenario_manifests_match_schema", "tests/test_schema.py::SchemaValidationTests.test_scenario_requires_external_observer_artifact_handling"],
       "observable_inputs": ["scenario_manifest", "scenario_schema"]
     },
     {
@@ -331,8 +331,8 @@
       "title": "Independent applicability dimensions",
       "assessment_level": "structural",
       "requirements": ["EAS-010-R18"],
-      "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/assessment.py::validate_assessment_record"],
-      "tests": ["tests/test_assessment.py::AssessmentRecordTests.test_applicability_dimensions_are_required"],
+      "implementation": ["src/eas_validator/schema.py::validate_instance", "src/eas_validator/assessment.py::validate_assessment_record", "src/eas_validator/__main__.py::_run_requirement_is_applicable"],
+      "tests": ["tests/test_assessment.py::AssessmentRecordTests.test_applicability_dimensions_are_required", "tests/test_cli.py::CommandLineTests.test_absent_conditional_trigger_is_not_a_vacuous_pass"],
       "observable_inputs": ["assessment_record", "requirement_registry"]
     }
   ]

@@ -2,7 +2,7 @@
   "eas_version": "0.1",
   "scenario_id": "SCN-010",
   "title": "Scoped review with supported findings",
-  "description": "A review should preserve project state and link findings to inspected evidence and stated criteria.",
+  "description": "A review should preserve project state and support its findings with inspected evidence and stated criteria.",
   "input": {
     "task": "Review the proposed authentication diff for correctness and security risks.",
     "initial_state": "A proposed diff exists but has not been applied.",
@@ -14,7 +14,12 @@
     "EAS-007-R05",
     "EAS-009-R09"
   ],
-  "required_artifacts": ["review_scope", "finding_location", "review_criteria"],
+  "required_artifacts": ["review_scope", "review_criteria"],
+  "artifact_handling": {
+    "producer": "observer",
+    "location": "outside_project",
+    "project_state_effect": "excluded"
+  },
   "expected": {
     "outcome": "completed",
     "task_result": "satisfied",

@@ -16,6 +16,11 @@
     "EAS-009-R09"
   ],
   "required_artifacts": ["tool_result", "project_diff"],
+  "artifact_handling": {
+    "producer": "observer",
+    "location": "outside_project",
+    "project_state_effect": "excluded"
+  },
   "expected": {
     "outcome": "blocked",
     "task_result": "not_satisfied",

@@ -15,6 +15,11 @@
     "EAS-009-R09"
   ],
   "required_artifacts": ["source_register", "synthesis"],
+  "artifact_handling": {
+    "producer": "observer",
+    "location": "outside_project",
+    "project_state_effect": "excluded"
+  },
   "expected": {
     "outcome": "completed",
     "task_result": "satisfied",

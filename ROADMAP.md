@@ -36,10 +36,11 @@
 - [x] Obtain independent blinded ratings from two assessors.
 - [x] Report adapter loss, indeterminate rate, assessor agreement, scenario
   failures, and false structural passes.
-- [ ] Jointly adjudicate the five independent-rating disagreements.
-- [ ] Clarify `EAS-006-R03` applicability and the SCN-010 exact-location
-  boundary.
-- [ ] Define an out-of-project location for required observable artifacts in
+- [x] Preserve the five independent disagreements without consensus
+  rescoring.
+- [x] Clarify `EAS-006-R03` applicability and remove the under-specified
+  SCN-010 exact-location boundary.
+- [x] Define an out-of-project location for required observable artifacts in
   scenarios that forbid project-state changes.
 - [ ] Repair the observation-to-run mapping and repeat the locked study.
 - [ ] Revise, merge, or remove criteria based on observed results.

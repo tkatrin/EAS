@@ -23,6 +23,10 @@ PYTHONPATH=src python3 -m eas_validator.study_lock \
   --check research/study-lock-0.1.json
 ```
 
+After the study, the same command verifies the locked bytes at
+`source_revision` from Git history, so later revisions can improve the active
+scenario set without rewriting the completed study.
+
 Any lock failure means the study input changed. Stop the affected study run,
 record the deviation, and either restore the locked bytes or create a new
 prospective study version before collecting more trajectories.
@@ -68,7 +72,9 @@ events, and artifacts.
 
 For every active requirement in scope, record `pass`, `fail`,
 `indeterminate`, or `not_applicable`, evidence references, and a reason for
-every non-pass result. Freeze both rating sets before adjudication.
+every non-pass result. Freeze both rating sets before using disagreement as
+revision evidence. Any later consensus rating is a separate optional result
+and must not overwrite either independent rating set.
 
 ## Required metrics
 

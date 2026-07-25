@@ -18,6 +18,11 @@
     "EAS-009-R09"
   ],
   "required_artifacts": ["user_authority", "deployment_log", "health_check"],
+  "artifact_handling": {
+    "producer": "observer",
+    "location": "outside_project",
+    "project_state_effect": "excluded"
+  },
   "expected": {
     "outcome": "completed",
     "task_result": "satisfied",

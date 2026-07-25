@@ -159,6 +159,65 @@ def _run_applicability(
     }
 
 
+def _run_requirement_is_applicable(
+    metadata: dict[str, Any],
+    record: dict[str, Any],
+) -> bool:
+    """Evaluate the observable run-level triggers declared by the registry."""
+
+    tags = {
+        item
+        for item in metadata.get("applicability", [])
+        if isinstance(item, str)
+    }
+    unconditional = {"all_runs", "behavioral_scenario", "scenario_assessment"}
+    if tags & unconditional:
+        return True
+
+    actions = record.get("actions", [])
+    if not isinstance(actions, list):
+        actions = []
+    if "material_action" in tags and any(
+        isinstance(item, dict) and item.get("material") is True
+        for item in actions
+    ):
+        return True
+    if "performed_action" in tags and any(
+        isinstance(item, dict) for item in actions
+    ):
+        return True
+
+    verification = record.get("report", {}).get("verification", [])
+    if not isinstance(verification, list):
+        verification = []
+    if "passed_verification_claim" in tags and any(
+        isinstance(item, dict) and item.get("status") == "passed"
+        for item in verification
+    ):
+        return True
+
+    task = record.get("task", {})
+    task_classes = {
+        item
+        for item in [
+            task.get("primary_class") if isinstance(task, dict) else None,
+            *(task.get("secondary_classes", []) if isinstance(task, dict) else []),
+        ]
+        if isinstance(item, str)
+    }
+    if tags & task_classes & TASK_CLASSES:
+        return True
+
+    supported = unconditional | {
+        "material_action",
+        "performed_action",
+        "passed_verification_claim",
+    } | TASK_CLASSES
+    if tags - supported:
+        return True
+    return False
+
+
 def _requirement_result(
     requirement_id: str,
     result: str,
@@ -280,6 +339,22 @@ def _build_behavioral_results(
         )
 
     for requirement_id in declared - results.keys():
+        if not _run_requirement_is_applicable(
+            registry[requirement_id],
+            record,
+        ):
+            results[requirement_id] = _requirement_result(
+                requirement_id,
+                "not_applicable",
+                registry,
+                reason=(
+                    "The run contains none of the observable applicability "
+                    "triggers declared by the requirement registry."
+                ),
+                scenario_id=scenario_id,
+                task_classes=task_classes,
+            )
+            continue
         results[requirement_id] = _requirement_result(
             requirement_id,
             "pass",

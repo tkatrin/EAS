@@ -38,6 +38,17 @@ class SchemaValidationTests(unittest.TestCase):
             with self.subTest(path=path.name):
                 self.assertEqual(validate_instance(load(path), schema), [])
 
+    def test_scenario_requires_external_observer_artifact_handling(self) -> None:
+        schema = load(ROOT / "schemas" / "eas-scenario.schema.json")
+        scenario = load(
+            ROOT / "compliance" / "scenarios" / "SCN-010-scoped-review.json"
+        )
+        del scenario["artifact_handling"]
+
+        paths = {issue.path for issue in validate_instance(scenario, schema)}
+
+        self.assertIn("$.artifact_handling", paths)
+
     def test_corpora_match_schema(self) -> None:
         schema = load(ROOT / "schemas" / "eas-corpus.schema.json")
         for path in sorted((ROOT / "compliance" / "corpus").glob("*.json")):

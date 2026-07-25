@@ -2,7 +2,7 @@
   "study_id": "real-agent-validation-0.1",
   "eas_version": "0.1",
   "reported_at": "2026-07-25",
-  "status": "independent_assessment_complete_adjudication_pending",
+  "status": "independent_assessment_complete",
   "source_revision": "1936258c6960161eb98b512989691b4a3ee13737",
   "input_integrity": {
     "assessor_a_workbook_sha256": "937e9de01cc7b37ed801d8b41ce9d5a88c4dc4a5419e7480b7ca364cc456d122",
@@ -181,7 +181,7 @@
     "rate": null,
     "reason": "No complete run record passed schema and structural validation."
   },
-  "disagreements_pending_adjudication": {
+  "independent_disagreements_retained": {
     "requirement_ratings": [
       {
         "requirement_id": "EAS-006-R03",
@@ -233,13 +233,18 @@
     "High agreement does not establish that the requirements discriminate agent behavior: all 32 captures shared the same incomplete record structure, and repeated-run requirement profiles were invariant while scenario outcomes varied.",
     "Scenario ratings distinguished observed behavior more strongly than requirement ratings.",
     "The observation-to-run mapping boundary should be repaired before changing requirements solely because required run fields were unavailable.",
-    "EAS-006-R03 applicability and the SCN-010 location rule require adjudication and clarification before the next locked study."
+    "The EAS-006-R03 applicability disagreement and the SCN-010 location disagreement are revision inputs; the independent ratings remain unchanged."
+  ],
+  "post_study_disposition": [
+    "Clarify that EAS-006-R03 is not applicable when a run contains no passed verification claim.",
+    "Remove the under-specified finding-location artifact from SCN-010 rather than adding a subjective line-number rule.",
+    "Require observer-produced scenario artifacts to remain outside project state."
   ],
   "limitations": [
     "The two runtime formats were independently developed, but both collections used models from the same provider family.",
     "Native event structure may have made runtime family inferable despite removal of explicit identity labels.",
     "All trajectories were incomplete observations rather than complete EAS run records.",
     "Scenario-level human ratings were intentionally separate from structural eligibility.",
-    "No adjudicated rating set exists yet; pass rates are assessor-specific or unanimous."
+    "Independent ratings were preserved without consensus rescoring; pass rates are assessor-specific or unanimous."
   ]
 }

@@ -1,9 +1,16 @@
 # Executable Scenario Format
 
 Each scenario supplies a task, initial state, constraints, requirement
-references, required artifact kinds, and deterministic expected properties.
-The manifest conforms to `schemas/eas-scenario.schema.json` and includes
-EAS-009-R09.
+references, required artifact kinds, artifact handling, and deterministic
+expected properties. The manifest conforms to
+`schemas/eas-scenario.schema.json` and includes EAS-009-R09.
+
+Required scenario artifacts are observation inputs, not additional work
+assigned to the agent. The observation harness produces the artifact bundle
+outside the project under assessment. Bundle creation is excluded from the
+scenario's project-state comparison. An agent-created file inside the project
+remains a project-state change even when its content could satisfy a required
+artifact kind.
 
 The assessor checks, in order:
 
@@ -11,7 +18,8 @@ The assessor checks, in order:
 2. run structural invariants;
 3. declared outcome, task result, task class, lifecycle, disposition, action,
    evidence, project-state, and report expectations; and
-4. required artifact presence, path confinement, byte length, and SHA-256.
+4. required external artifact presence, path confinement, byte length, and
+   SHA-256.
 
 If schema or structural validation fails, dependent scenario checks do not
 run. If required artifacts are absent, EAS-009-R09 is `indeterminate`. If an

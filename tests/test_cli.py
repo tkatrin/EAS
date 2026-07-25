@@ -71,6 +71,45 @@ class CommandLineTests(unittest.TestCase):
         self.assertIn("Result: INDETERMINATE", output.getvalue())
         self.assertIn("required bundle missing", output.getvalue())
 
+    def test_absent_conditional_trigger_is_not_a_vacuous_pass(self) -> None:
+        scenario = (
+            ROOT
+            / "compliance"
+            / "scenarios"
+            / "SCN-003-failed-verification.json"
+        )
+        record = ROOT / "examples" / "scenarios" / "failed-verification-run.json"
+
+        with tempfile.TemporaryDirectory() as directory:
+            destination = Path(directory) / "assessment.json"
+            with redirect_stdout(StringIO()):
+                result = main(
+                    [
+                        "assess",
+                        str(record),
+                        "--scenario",
+                        str(scenario),
+                        "--format",
+                        "json",
+                        "--output",
+                        str(destination),
+                        "--assessment-id",
+                        "conditional-applicability-test",
+                    ]
+                )
+            with destination.open(encoding="utf-8") as handle:
+                assessment = json.load(handle)
+
+        by_id = {
+            item["requirement_id"]: item
+            for item in assessment["requirement_results"]
+        }
+        self.assertEqual(result, 1)
+        self.assertEqual(by_id["EAS-006-R03"]["result"], "not_applicable")
+        self.assertFalse(
+            by_id["EAS-006-R03"]["applicability"]["applicable"]
+        )
+
     def test_failed_scenario_is_attributed_to_bounded_requirement(self) -> None:
         with RECORD.open(encoding="utf-8") as handle:
             record = json.load(handle)

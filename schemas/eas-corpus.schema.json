@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://eas.example/schemas/eas-corpus/0.1.0",
+  "$id": "https://eas.example/schemas/eas-corpus/0.1.1",
   "title": "EAS 0.1 Behavioral Corpus",
   "type": "object",
   "additionalProperties": false,
@@ -28,7 +28,7 @@
       "required": [
         "id", "title", "group", "task_class", "stimulus", "initial_state",
         "constraints", "controlled_failure_mode", "requirement_refs",
-        "required_artifacts", "status", "manifest"
+        "required_artifacts", "artifact_handling", "status", "manifest"
       ],
       "properties": {
         "id": { "type": "string", "pattern": "^SCN-[0-9]{3}$" },
@@ -45,6 +45,16 @@
         "controlled_failure_mode": { "$ref": "#/$defs/nonEmptyString" },
         "requirement_refs": { "$ref": "#/$defs/stringArray" },
         "required_artifacts": { "$ref": "#/$defs/stringArray" },
+        "artifact_handling": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["producer", "location", "project_state_effect"],
+          "properties": {
+            "producer": { "const": "observer" },
+            "location": { "const": "outside_project" },
+            "project_state_effect": { "const": "excluded" }
+          }
+        },
         "status": { "const": "executable" },
         "manifest": { "$ref": "#/$defs/nonEmptyString" }
       }

@@ -7,7 +7,8 @@ import hashlib
 import json
 from pathlib import Path
 import re
-from typing import Any, Sequence
+import subprocess
+from typing import Any, Callable, Sequence
 
 
 LOCK_VERSION = "0.1.0"
@@ -63,16 +64,17 @@ def _digest(path: Path) -> tuple[int, str]:
     return len(content), hashlib.sha256(content).hexdigest()
 
 
-def build_study_lock(root: Path, source_revision: str) -> dict[str, Any]:
-    """Return the deterministic lock document for the selected source revision."""
-
+def _build_study_lock(
+    source_revision: str,
+    digest_for_path: Callable[[str], tuple[int, str]],
+) -> dict[str, Any]:
     if not REVISION_PATTERN.fullmatch(source_revision):
         raise ValueError("source revision must be a 40-character lowercase Git SHA")
     groups = []
     for group_name, paths in LOCKED_PATH_GROUPS.items():
         files = []
         for relative_path in paths:
-            byte_count, digest = _digest(root / relative_path)
+            byte_count, digest = digest_for_path(relative_path)
             files.append(
                 {
                     "path": relative_path,
@@ -108,6 +110,60 @@ def build_study_lock(root: Path, source_revision: str) -> dict[str, Any]:
     }
 
 
+def build_study_lock(root: Path, source_revision: str) -> dict[str, Any]:
+    """Return a lock document from the files in the current checkout."""
+
+    return _build_study_lock(
+        source_revision,
+        lambda relative_path: _digest(root / relative_path),
+    )
+
+
+def _digest_at_git_revision(
+    root: Path,
+    source_revision: str,
+    relative_path: str,
+) -> tuple[int, str]:
+    try:
+        completed = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(root),
+                "show",
+                f"{source_revision}:{relative_path}",
+            ],
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except OSError as error:
+        raise OSError(f"Git revision cannot be read: {error}") from error
+    if completed.returncode != 0:
+        detail = completed.stderr.decode("utf-8", errors="replace").strip()
+        raise OSError(
+            f"Git revision cannot provide {relative_path}: {detail or 'git show failed'}"
+        )
+    content = completed.stdout
+    return len(content), hashlib.sha256(content).hexdigest()
+
+
+def build_study_lock_at_revision(
+    root: Path,
+    source_revision: str,
+) -> dict[str, Any]:
+    """Return a lock document from immutable files stored in Git history."""
+
+    return _build_study_lock(
+        source_revision,
+        lambda relative_path: _digest_at_git_revision(
+            root,
+            source_revision,
+            relative_path,
+        ),
+    )
+
+
 def validate_study_lock(document: Any, root: Path) -> list[str]:
     """Return all lock-format, path-set, byte-count, and digest issues."""
 
@@ -117,9 +173,12 @@ def validate_study_lock(document: Any, root: Path) -> list[str]:
     if not isinstance(revision, str) or not REVISION_PATTERN.fullmatch(revision):
         return ["source_revision must be a 40-character lowercase Git SHA"]
     try:
-        expected = build_study_lock(root, revision)
-    except OSError as error:
-        return [f"locked input cannot be read: {error}"]
+        expected = build_study_lock_at_revision(root, revision)
+    except OSError:
+        try:
+            expected = build_study_lock(root, revision)
+        except OSError as error:
+            return [f"locked input cannot be read: {error}"]
     if document == expected:
         return []
 

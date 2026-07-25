@@ -2,7 +2,7 @@
 
 Generated from `registry/requirements.json` and `registry/validator-rules.json`. Counts describe declared, tested reference-tool coverage; they do not establish empirical validity.
 
-- Registry version: `0.1.1`
+- Registry version: `0.1.2`
 - Total requirements: **19**
 - Mandatory (`MUST`): **19**
 - Advisory (`SHOULD`): **0**

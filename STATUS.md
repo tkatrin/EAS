@@ -65,9 +65,14 @@ Four requirement disagreements all concern `EAS-006-R03`: one assessor used
 `not_applicable` when no passed verification claim existed, while the other
 used `pass`. The independent results are recorded in
 [`reports/real-agent-validation-0.1.json`](reports/real-agent-validation-0.1.json).
-The five disagreements still require joint adjudication.
+The independent ratings remain unchanged and are not consensus-rescored.
 
-Do not add normative requirements yet. First adjudicate the five disagreements,
-clarify the two observed scenario boundaries, and repair the
-observation-to-run mapping. Then repeat a locked study before deciding which
-requirements to revise, merge, or remove.
+The active post-study revision now makes `EAS-006-R03` `not_applicable` when
+no passed verification claim exists. It removes the under-specified
+`finding_location` artifact from SCN-010. All scenario manifests now declare
+that the observation harness produces required artifacts outside the project,
+so those files cannot silently violate a no-change task.
+
+Do not add normative requirements yet. Repair the observation-to-run mapping,
+then repeat a newly locked study before deciding which requirements to revise,
+merge, or remove.

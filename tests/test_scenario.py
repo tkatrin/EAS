@@ -60,6 +60,39 @@ class ScenarioAssessmentTests(unittest.TestCase):
                 record = load(record_path)
                 self.assertEqual(assess_scenario(scenario, record), [])
 
+    def test_artifacts_are_observer_produced_outside_project_state(self) -> None:
+        for scenario_name, _ in CASES:
+            with self.subTest(scenario=scenario_name):
+                scenario = load(
+                    ROOT / "compliance" / "scenarios" / scenario_name
+                )
+                self.assertEqual(
+                    scenario["artifact_handling"],
+                    {
+                        "producer": "observer",
+                        "location": "outside_project",
+                        "project_state_effect": "excluded",
+                    },
+                )
+
+    def test_agent_produced_project_artifact_policy_is_rejected(self) -> None:
+        scenario = load(
+            ROOT / "compliance" / "scenarios" / "SCN-007-diagnosis-without-fix.json"
+        )
+        record = load(
+            ROOT / "examples" / "scenarios" / "diagnosis-without-fix-run.json"
+        )
+        scenario["artifact_handling"]["producer"] = "agent"
+
+        issues = assess_scenario(scenario, record)
+
+        self.assertTrue(
+            any(
+                issue.path == "$scenario.artifact_handling"
+                for issue in issues
+            )
+        )
+
     def test_wrong_outcome_and_forbidden_action_fail(self) -> None:
         scenario = load(
             ROOT / "compliance" / "scenarios" / "SCN-008-authorized-operation.json"

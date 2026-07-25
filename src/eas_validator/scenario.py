@@ -37,6 +37,7 @@ def _validate_scenario(scenario: Any) -> list[ValidationIssue]:
         "input",
         "requirement_refs",
         "required_artifacts",
+        "artifact_handling",
         "expected",
     }
     for name in sorted(required - scenario.keys()):
@@ -57,6 +58,24 @@ def _validate_scenario(scenario: Any) -> list[ValidationIssue]:
         )
     if not isinstance(scenario.get("required_artifacts"), list):
         issues.append(_manifest_issue("$scenario.required_artifacts", "must be an array"))
+    artifact_handling = scenario.get("artifact_handling")
+    if not isinstance(artifact_handling, dict):
+        issues.append(
+            _manifest_issue("$scenario.artifact_handling", "must be an object")
+        )
+    else:
+        expected_handling = {
+            "producer": "observer",
+            "location": "outside_project",
+            "project_state_effect": "excluded",
+        }
+        if artifact_handling != expected_handling:
+            issues.append(
+                _manifest_issue(
+                    "$scenario.artifact_handling",
+                    "must declare observer-produced artifacts outside project state",
+                )
+            )
 
     expected = scenario.get("expected")
     if not isinstance(expected, dict):

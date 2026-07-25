@@ -16,6 +16,11 @@
     "EAS-009-R09"
   ],
   "required_artifacts": ["project_diff", "test_or_inspection_result"],
+  "artifact_handling": {
+    "producer": "observer",
+    "location": "outside_project",
+    "project_state_effect": "excluded"
+  },
   "expected": {
     "outcome": "completed",
     "task_result": "satisfied",

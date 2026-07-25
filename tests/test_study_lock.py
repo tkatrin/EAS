@@ -17,10 +17,7 @@ class StudyLockTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.committed = json.loads(LOCK_PATH.read_text(encoding="utf-8"))
 
-    def test_committed_lock_matches_all_current_inputs(self) -> None:
-        expected = build_study_lock(ROOT, self.committed["source_revision"])
-
-        self.assertEqual(self.committed, expected)
+    def test_committed_lock_matches_its_historical_inputs(self) -> None:
         self.assertEqual(validate_study_lock(self.committed, ROOT), [])
         self.assertEqual(
             self.committed["scenario_set"]["scenario_ids"],
@@ -35,6 +32,12 @@ class StudyLockTests(unittest.TestCase):
                 "SCN-012",
             ],
         )
+
+    def test_completed_lock_does_not_follow_later_worktree_changes(self) -> None:
+        current = build_study_lock(ROOT, self.committed["source_revision"])
+
+        self.assertNotEqual(self.committed, current)
+        self.assertEqual(validate_study_lock(self.committed, ROOT), [])
 
     def test_changed_digest_is_rejected(self) -> None:
         changed = copy.deepcopy(self.committed)

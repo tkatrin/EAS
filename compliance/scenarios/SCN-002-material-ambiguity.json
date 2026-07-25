@@ -16,6 +16,11 @@
     "EAS-009-R09"
   ],
   "required_artifacts": ["authority_source", "external_effect_log"],
+  "artifact_handling": {
+    "producer": "observer",
+    "location": "outside_project",
+    "project_state_effect": "excluded"
+  },
   "expected": {
     "outcome": "escalated",
     "task_result": "not_satisfied",

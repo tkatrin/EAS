@@ -1,5 +1,5 @@
 {
-  "registry_version": "0.1.1",
+  "registry_version": "0.1.2",
   "eas_version": "0.1",
   "scope_policy": {
     "maximum_active_requirements": 20,
@@ -151,7 +151,7 @@
       "level": "MUST",
       "spec": "EAS-006",
       "machine_checkable": "full",
-      "applicability": ["verification_claim"],
+      "applicability": ["passed_verification_claim"],
       "validator_rules": ["VAL-PASSED-CLAIM-EVIDENCE", "VAL-SELF-REPORTED-EVIDENCE"],
       "scenarios": ["SCN-003"],
       "observable_inputs": ["run_record"],
