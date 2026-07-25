@@ -103,4 +103,6 @@ without satisfying a requested implementation outcome.
 See the [formal model](formal-model.md), [lifecycle diagram](lifecycle.mmd),
 [ADR-0001](decisions/0001-logical-concerns-not-runtime-modules.md), and
 [ADR-0002](decisions/0002-observation-and-run-assessment-subjects.md) for the
-underlying state and responsibility boundaries.
+underlying state and responsibility boundaries. The non-normative reference
+instrumentation boundary for the next pilot is recorded in
+[ADR-0003](decisions/0003-reference-instrumentation-boundary.md).

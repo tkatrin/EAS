@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eas.example/schemas/eas-run-event/0.1.0",
+  "title": "EAS 0.1 Reference Instrumented-Run Event",
+  "description": "Non-normative append-only event contract for the EAS 0.1 instrumented-run calibration pilot.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_schema_version",
+    "event_id",
+    "event_type",
+    "run_id",
+    "recorded_at",
+    "source",
+    "payload",
+    "native_event_refs",
+    "observer_evidence_refs"
+  ],
+  "properties": {
+    "event_schema_version": { "const": "0.1.0" },
+    "event_id": { "$ref": "#/$defs/nonEmptyString" },
+    "event_type": {
+      "enum": [
+        "run_started",
+        "task_model_recorded",
+        "state_entered",
+        "decision_recorded",
+        "action_recorded",
+        "evidence_recorded",
+        "report_finalized",
+        "run_finished"
+      ]
+    },
+    "run_id": { "$ref": "#/$defs/nonEmptyString" },
+    "recorded_at": { "$ref": "#/$defs/timestamp" },
+    "source": { "$ref": "#/$defs/source" },
+    "payload": { "type": "object" },
+    "native_event_refs": { "$ref": "#/$defs/stringArray" },
+    "observer_evidence_refs": { "$ref": "#/$defs/stringArray" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "event_type": { "const": "run_started" } },
+        "required": ["event_type"]
+      },
+      "then": {
+        "properties": {
+          "payload": { "$ref": "#/$defs/runStartedPayload" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "event_type": { "const": "task_model_recorded" } },
+        "required": ["event_type"]
+      },
+      "then": {
+        "properties": {
+          "payload": { "$ref": "#/$defs/taskModelPayload" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "event_type": { "const": "state_entered" } },
+        "required": ["event_type"]
+      },
+      "then": {
+        "properties": {
+          "payload": { "$ref": "#/$defs/stateEnteredPayload" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "event_type": { "const": "decision_recorded" } },
+        "required": ["event_type"]
+      },
+      "then": {
+        "properties": {
+          "payload": { "$ref": "#/$defs/decisionRecordedPayload" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "event_type": { "const": "action_recorded" } },
+        "required": ["event_type"]
+      },
+      "then": {
+        "properties": {
+          "payload": { "$ref": "#/$defs/actionRecordedPayload" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "event_type": { "const": "evidence_recorded" } },
+        "required": ["event_type"]
+      },
+      "then": {
+        "properties": {
+          "payload": { "$ref": "#/$defs/evidenceRecordedPayload" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "event_type": { "const": "report_finalized" } },
+        "required": ["event_type"]
+      },
+      "then": {
+        "properties": {
+          "payload": { "$ref": "#/$defs/reportFinalizedPayload" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "event_type": { "const": "run_finished" } },
+        "required": ["event_type"]
+      },
+      "then": {
+        "properties": {
+          "payload": { "$ref": "#/$defs/runFinishedPayload" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "stringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "name", "version"],
+      "properties": {
+        "kind": { "enum": ["agent", "runtime"] },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "adapter": { "$ref": "#/$defs/nonEmptyString" },
+        "adapter_version": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "required": ["name", "revision"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "revision": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "projectState": {
+      "type": "object",
+      "required": ["summary", "revision"],
+      "properties": {
+        "summary": { "$ref": "#/$defs/nonEmptyString" },
+        "revision": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "runStartedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementation",
+        "environment",
+        "started_at",
+        "initial_state",
+        "constraints"
+      ],
+      "properties": {
+        "implementation": { "$ref": "#/$defs/implementation" },
+        "environment": { "$ref": "#/$defs/environment" },
+        "started_at": { "$ref": "#/$defs/timestamp" },
+        "initial_state": { "$ref": "#/$defs/projectState" },
+        "constraints": { "$ref": "#/$defs/stringArray" },
+        "assumptions": { "$ref": "#/$defs/stringArray" },
+        "predecessor_run_id": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "taskModelPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task"],
+      "properties": {
+        "task": { "type": "object" }
+      }
+    },
+    "stateEnteredPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state"],
+      "properties": {
+        "state": {
+          "enum": [
+            "RECEIVED",
+            "UNDERSTANDING",
+            "PLANNING",
+            "EXECUTING",
+            "VERIFYING",
+            "REVIEWING",
+            "REPORTING",
+            "ESCALATED",
+            "BLOCKED",
+            "COMPLETED"
+          ]
+        }
+      }
+    },
+    "decisionRecordedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision"],
+      "properties": {
+        "decision": { "type": "object" }
+      }
+    },
+    "actionRecordedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action"],
+      "properties": {
+        "action": { "type": "object" }
+      }
+    },
+    "evidenceRecordedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence"],
+      "properties": {
+        "evidence": { "type": "object" }
+      }
+    },
+    "reportFinalizedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_result", "report"],
+      "properties": {
+        "task_result": {
+          "enum": [
+            "satisfied",
+            "partially_satisfied",
+            "not_satisfied",
+            "indeterminate"
+          ]
+        },
+        "report": { "type": "object" }
+      }
+    },
+    "runFinishedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["completed_at", "final_state", "outcome"],
+      "properties": {
+        "completed_at": { "$ref": "#/$defs/timestamp" },
+        "final_state": { "$ref": "#/$defs/projectState" },
+        "outcome": { "enum": ["completed", "escalated", "blocked"] }
+      }
+    }
+  }
+}

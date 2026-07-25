@@ -101,5 +101,8 @@ behavioral, or universal EAS run-conformance pass.
 - [Executable scenarios](compliance/scenarios.md)
 - [Compliance matrix](compliance/matrix.md)
 - [Real-agent study protocol](research/validation-study-protocol.md)
+- [Observation-boundary conclusion](research/observation-boundary-conclusion.md)
+- [Reference instrumentation contract](instrumentation/README.md)
+- [Instrumented-run pilot protocol](research/instrumented-run-pilot-protocol.md)
 - [Roadmap](ROADMAP.md)
 - [Licensing](LICENSE.md)

@@ -11,7 +11,7 @@
 
 ## Instrumented-run validation — next
 
-- [ ] Define a non-normative reference instrumentation event contract.
+- [x] Define a non-normative reference instrumentation event contract.
 - [ ] Implement a recorder and deterministic run compiler.
 - [ ] Run an 8-trajectory instrumentation pilot: two runtimes, two tasks, two
   repetitions.
