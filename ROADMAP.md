@@ -33,9 +33,15 @@
 - [x] Complete the 16-run series for the second runtime.
 - [x] Collect consented trajectories from at least two independent runtimes.
 - [x] Run at least two repetitions per runtime and scenario.
-- [ ] Obtain independent blinded ratings from two assessors.
-- [ ] Report adapter loss, indeterminate rate, assessor agreement, scenario
+- [x] Obtain independent blinded ratings from two assessors.
+- [x] Report adapter loss, indeterminate rate, assessor agreement, scenario
   failures, and false structural passes.
+- [ ] Jointly adjudicate the five independent-rating disagreements.
+- [ ] Clarify `EAS-006-R03` applicability and the SCN-010 exact-location
+  boundary.
+- [ ] Define an out-of-project location for required observable artifacts in
+  scenarios that forbid project-state changes.
+- [ ] Repair the observation-to-run mapping and repeat the locked study.
 - [ ] Revise, merge, or remove criteria based on observed results.
 
 ## Deferred

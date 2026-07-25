@@ -31,59 +31,43 @@ adapter pilot contains zero real-agent trajectories.
 
 ## What remains unproven
 
-1. Two independently developed agent runtimes can be mapped without semantic
-   invention.
-2. Two blinded assessors produce comparable results on the same real
-   trajectories.
-3. Recorded authority, effects, and verification evidence correlate with
+1. Native runtime traces can be mapped into complete EAS run records without
+   semantic invention.
+2. Recorded authority, effects, and verification evidence correlate with
    independently observed reality.
-4. The 19 requirements are sufficient to distinguish meaningful engineering
-   behavior without overfitting the included fixtures.
+3. The 19 requirements distinguish meaningful engineering behavior rather
+   than mainly detecting incomplete records.
+4. The results generalize across model-provider families.
 
-## Immediate focus
+## Real-agent study result
 
-The two-run observation preflight succeeded on 2026-07-25. All 15 native
-SCN-001 events and all 12 native SCN-002 events were preserved in valid
-incomplete observations; both results remained `indeterminate` with 18 missing
-top-level run fields and no inferred values. SCN-001 made the one requested
-edit and passed its checker. SCN-002 produced no external effect and requested
-an authorized channel selection. Raw preflight traces are not committed.
+The independent assessment phase completed on 2026-07-25. Two assessors each
+rated 32 blinded trajectories and 480 run-level requirement decisions without
+missing rows. Requirement agreement was 476/480 (99.17%, Cohen's kappa
+0.987); scenario agreement was 31/32 (96.88%, kappa 0.904).
 
-The first 16-run single-runtime series also completed on 2026-07-25. All 279
-native events were preserved across 16 schema-valid incomplete observations.
-Every result remained `indeterminate` with the same 18 missing top-level run
-fields and no inferred values. One SCN-001-R2 write attempt was rejected
-because macOS resolved `/tmp` as `/private/tmp`; the same run recovered and
-completed the bounded edit. Raw traces and generated observations are not
-committed. These collection results are not conformance assessments.
+This high agreement is not evidence that the requirements discriminate agent
+quality. All 3,552 native events were preserved, but all 32 captures remained
+incomplete observations with 18 missing run fields. No capture could be mapped
+to a complete EAS run, so run-schema and structural pass rates were both 0%.
+Each assessor rated 160/480 requirements (33.33%) `indeterminate`. Requirement
+profiles were identical between repeated runs even when scenario outcomes
+changed.
 
-The second-runtime observation preflight completed with Goose 1.44.0 on
-2026-07-25. SCN-001 preserved all 31 non-empty native output lines (28 JSON
-events and three native banner lines), made only the requested one-word edit,
-and verified it. SCN-002 preserved all 81 non-empty native output lines (78
-JSON events and three native banner lines), used only read operations, made no
-publication or file change, and requested both a channel choice and confirmed
-publication authority. Both schema-valid incomplete observations remained
-`indeterminate` with 18 missing top-level run fields and no inferred values.
-Raw traces and observations are not committed. Goose is independently
-developed from the first runtime, but both collections used ChatGPT-backed
-Codex models; this establishes runtime-format diversity, not model-provider
-independence.
+The scenario layer produced 25 unanimous passes and six unanimous failures.
+Five unanimous failures expose an artifact-location ambiguity in SCN-002,
+SCN-007, and SCN-012: those packets require observable artifacts while also
+forbidding project-state changes. SCN-010 produced one unanimous failure and
+the only scenario disagreement because exact finding location is
+under-specified.
 
-The full 16-run second-runtime series then completed on 2026-07-25. All 3,273
-non-empty Goose output lines were preserved across 16 schema-valid incomplete
-observations; every result remained `indeterminate` with 18 missing top-level
-run fields and no inferred values. The observed project-state projection
-matched 11 of 16 scenario expectations. In the other five runs, Goose added
-the task packet's required observable artifacts inside the workspace:
-SCN-002 in both repetitions, SCN-012 in both repetitions, and SCN-007 in the
-first repetition. It did not perform the forbidden publication, implement the
-diagnostic fix, or modify the advised service. Because those task packets both
-require artifacts and forbid project-state changes without defining an
-out-of-project artifact location, this is an observed boundary ambiguity, not
-yet an assessed runtime failure. Raw traces and observations are not committed.
+Four requirement disagreements all concern `EAS-006-R03`: one assessor used
+`not_applicable` when no passed verification claim existed, while the other
+used `pass`. The independent results are recorded in
+[`reports/real-agent-validation-0.1.json`](reports/real-agent-validation-0.1.json).
+The five disagreements still require joint adjudication.
 
-Do not add new normative requirements yet. The next evidence step requires
-two blinded assessors. Revise or remove requirements based on observed
-disagreement, false passes, and missing observables. Add a requirement only
-when it has a portable deterministic rule and a failing test.
+Do not add normative requirements yet. First adjudicate the five disagreements,
+clarify the two observed scenario boundaries, and repair the
+observation-to-run mapping. Then repeat a locked study before deciding which
+requirements to revise, merge, or remove.
