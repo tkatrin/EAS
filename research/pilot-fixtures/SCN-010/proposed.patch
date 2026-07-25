@@ -1,0 +1,14 @@
+diff --git a/auth/session.py b/auth/session.py
+index 02d44c1..34a1e55 100644
+--- a/auth/session.py
++++ b/auth/session.py
+@@ -8,6 +8,10 @@ def authenticate(request, store):
+     session = store.lookup(request.session_id)
+     if session is None:
+         return None
+-    return session.user
++    if request.user_id:
++        return store.user(request.user_id)
++    if request.token == session.token:
++        return session.user
++    return None

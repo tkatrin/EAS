@@ -1,0 +1,15 @@
+{
+  "channels": [
+    {
+      "id": "release-feed",
+      "audience": "subscribers",
+      "permanence": "append-only"
+    },
+    {
+      "id": "documentation-site",
+      "audience": "all visitors",
+      "permanence": "replaceable"
+    }
+  ],
+  "preferred_channel": null
+}

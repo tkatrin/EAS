@@ -1,0 +1,514 @@
+{
+  "plan_version": "0.1.0",
+  "pilot_id": "codex-one-runtime-pilot-0.1",
+  "eas_version": "0.1",
+  "study_lock": {
+    "path": "research/study-lock-0.1.json",
+    "bytes": 6761,
+    "sha256": "15875e49a302296b764a8a0996bc9a0a842afe462f9fdbfaf47f680f8f638f36",
+    "source_revision": "1936258c6960161eb98b512989691b4a3ee13737"
+  },
+  "generator": {
+    "path": "src/eas_validator/codex_pilot.py",
+    "bytes": 14376,
+    "sha256": "562a8309b47594db3970354941c12f75b0fa9dd0c28d4ec782d006dce0323327"
+  },
+  "design": {
+    "runtime_count": 1,
+    "runtime_slot": "runtime-A",
+    "runtime_family": "Codex",
+    "runtime_version_policy": "record exact model and runtime at execution",
+    "scenario_count": 8,
+    "repetitions_per_scenario": 2,
+    "planned_trajectory_count": 16,
+    "run_order_policy": "first repetition in scenario order; second repetition in reverse order",
+    "workspace_policy": "fresh materialized workspace for every slot"
+  },
+  "collection_policy": {
+    "operator_consent_required_at_execution": true,
+    "collect": [
+      "task and constraints",
+      "observable tool calls and results",
+      "before and after project bytes",
+      "runtime, model, adapter, and environment versions",
+      "final response",
+      "required scenario artifacts"
+    ],
+    "must_not_collect": [
+      "private chain-of-thought",
+      "credentials or authentication tokens",
+      "unrelated personal or repository data"
+    ],
+    "raw_event_rule": "If the runtime does not expose an event, record it as unmapped; do not reconstruct or invent it."
+  },
+  "scenario_packets": [
+    {
+      "scenario_id": "SCN-001",
+      "manifest": {
+        "path": "compliance/scenarios/SCN-001-focused-edit.json",
+        "bytes": 1217,
+        "sha256": "6c18c0af5614c209a03c65baf46ff35ffd0554931cd0e54649fa644bd33606b5"
+      },
+      "fixture_root": "research/pilot-fixtures/SCN-001",
+      "fixture_files": [
+        {
+          "path": "README.md",
+          "bytes": 92,
+          "sha256": "6f2efbccceec103b42e383a7f677faeb5f3733df7098f4bd20b2f1112dc72bd6"
+        },
+        {
+          "path": "verify.py",
+          "bytes": 344,
+          "sha256": "96a038de952d5bc8ec490218f4a9528376c1d293bc724c6f5d239679c1b790f5"
+        }
+      ],
+      "fixture_tree_sha256": "9c5587c92b5a9e0e60a2859da71eb0010e9473b4a56156d55c5046932c79df95",
+      "required_artifacts": [
+        "project_diff",
+        "test_or_inspection_result"
+      ]
+    },
+    {
+      "scenario_id": "SCN-002",
+      "manifest": {
+        "path": "compliance/scenarios/SCN-002-material-ambiguity.json",
+        "bytes": 1241,
+        "sha256": "77cfe72c51959e969ef1a4586c106b66cd44a3497e029e16b7d09ab74a2e1fcd"
+      },
+      "fixture_root": "research/pilot-fixtures/SCN-002",
+      "fixture_files": [
+        {
+          "path": "channels.json",
+          "bytes": 275,
+          "sha256": "b90e720ff2dc65cd67c50bc4f78f04ef1e10f19f5229da0407bca6553376b46b"
+        },
+        {
+          "path": "publish.py",
+          "bytes": 745,
+          "sha256": "b8dd7041cfb6898e8f451d6e6016aa49de1a6a2b6871320bf1da079cb6765654"
+        }
+      ],
+      "fixture_tree_sha256": "45182072e1c941afccb89e543c34ed8ab0910f5feab6c57d3b4834a836fe3469",
+      "required_artifacts": [
+        "authority_source",
+        "external_effect_log"
+      ]
+    },
+    {
+      "scenario_id": "SCN-003",
+      "manifest": {
+        "path": "compliance/scenarios/SCN-003-failed-verification.json",
+        "bytes": 1271,
+        "sha256": "a2b17b8d5bb945841411c9e20da98add25fbd6b617c529e7deb181e5c2567b5b"
+      },
+      "fixture_root": "research/pilot-fixtures/SCN-003",
+      "fixture_files": [
+        {
+          "path": "UPGRADE.md",
+          "bytes": 206,
+          "sha256": "e00203fe0ebcb9f8df8e5c82df067164150c735648663d4eee89d891c808bc32"
+        },
+        {
+          "path": "build.py",
+          "bytes": 405,
+          "sha256": "4aec4d567b5ef97cc998db80e743dba78651c5537508a8b24fcfcb9201271d11"
+        },
+        {
+          "path": "service.cfg",
+          "bytes": 31,
+          "sha256": "670c8efc81db8ba3b9c9da0be98b4ef05b1e23afa370c8ef46b94f5b058c0801"
+        }
+      ],
+      "fixture_tree_sha256": "df2ae9e9372e86701160b80f10d86ea04696eb1c375587bbe63cfa4312007eff",
+      "required_artifacts": [
+        "tool_result",
+        "project_diff"
+      ]
+    },
+    {
+      "scenario_id": "SCN-007",
+      "manifest": {
+        "path": "compliance/scenarios/SCN-007-diagnosis-without-fix.json",
+        "bytes": 1295,
+        "sha256": "343f240a8d3674cda3d1b2edc268dc2eae58a8978f6fda3b215e07c6a8861c27"
+      },
+      "fixture_root": "research/pilot-fixtures/SCN-007",
+      "fixture_files": [
+        {
+          "path": "README.md",
+          "bytes": 148,
+          "sha256": "106694be93c420d10bbd38c0be04862573a4ae2ab6c9ac82382dc4398046bcf0"
+        },
+        {
+          "path": "build.py",
+          "bytes": 288,
+          "sha256": "d287a9efc6115dce1a337be9388ff2e2c33f2fd6748eecbb57a94a006c170c4c"
+        },
+        {
+          "path": "project.json",
+          "bytes": 36,
+          "sha256": "15cfbb28110f3a28d84133f75482679c9a696c7bcbb15eeb378a88febe9c7da1"
+        }
+      ],
+      "fixture_tree_sha256": "8914234c8c514f0ef8afeb728ec8106c6cd0e6f8ea16e52b5cba2e28782edb16",
+      "required_artifacts": [
+        "diagnostic_log",
+        "unchanged_diff"
+      ]
+    },
+    {
+      "scenario_id": "SCN-008",
+      "manifest": {
+        "path": "compliance/scenarios/SCN-008-authorized-operation.json",
+        "bytes": 1382,
+        "sha256": "aa7cd09cf16116020870f87d3da5ccadb659b1c33778215a910fef9f36324c3d"
+      },
+      "fixture_root": "research/pilot-fixtures/SCN-008",
+      "fixture_files": [
+        {
+          "path": "deploy.py",
+          "bytes": 2084,
+          "sha256": "ad1f02de3a43d4a4f8b8ccb107c9e6e6591bdf21a8b255556bf5dd944683fdad"
+        },
+        {
+          "path": "release-1.9.json",
+          "bytes": 92,
+          "sha256": "9e6920b6dad705a03862b658c37b7866c5f0ac7b8bf30887c8a85c198168c9c6"
+        },
+        {
+          "path": "release-2.0.json",
+          "bytes": 92,
+          "sha256": "3b88369c7820e2d00075ef16118e391c0ab3d82fc4bd919362968ed3e49a6b76"
+        },
+        {
+          "path": "state.json",
+          "bytes": 58,
+          "sha256": "f9f6dd5f980b435d04b9d80b21632115c6d1021a7a8fab3239cf87e592e4b026"
+        }
+      ],
+      "fixture_tree_sha256": "2218ae58a211d5cade28e01a57839f03ff22c5988525b6fa2c437e7be80d16d4",
+      "required_artifacts": [
+        "user_authority",
+        "deployment_log",
+        "health_check"
+      ]
+    },
+    {
+      "scenario_id": "SCN-010",
+      "manifest": {
+        "path": "compliance/scenarios/SCN-010-scoped-review.json",
+        "bytes": 1278,
+        "sha256": "6f2cea140a8dbec67b52bb64833f6ef5dc4c8e8a1b60cd7a70f43d6ed1a50322"
+      },
+      "fixture_root": "research/pilot-fixtures/SCN-010",
+      "fixture_files": [
+        {
+          "path": "proposed.patch",
+          "bytes": 446,
+          "sha256": "d823fff91ae35d479d0c5ac445027bd48a0b616936746e8f808ac4e3e7c3f3e1"
+        },
+        {
+          "path": "review-criteria.md",
+          "bytes": 320,
+          "sha256": "60af1629e14c3c5e5d5d680cffe4e587dbd0544b6509cf714ad8caac18d929d9"
+        }
+      ],
+      "fixture_tree_sha256": "6ec42020a8e1b3468a1b5a2079309781ff0a7ad47fa4984a7ccf213ffb65de99",
+      "required_artifacts": [
+        "review_scope",
+        "finding_location",
+        "review_criteria"
+      ]
+    },
+    {
+      "scenario_id": "SCN-011",
+      "manifest": {
+        "path": "compliance/scenarios/SCN-011-sourced-research.json",
+        "bytes": 1265,
+        "sha256": "9a8705668b1b0eb294ae92dc2ad99cce569e16e17fd5bbe86ac5010e08706e7a"
+      },
+      "fixture_root": "research/pilot-fixtures/SCN-011",
+      "fixture_files": [
+        {
+          "path": "source-seeds.md",
+          "bytes": 538,
+          "sha256": "1126f1c92a8bcf34cb568e66908e928f93c999b4f85e1f1721935d7122dcd323"
+        }
+      ],
+      "fixture_tree_sha256": "49de38dd55ca5452608c2d57337e9af5e2063e3d60b9049a0ce1cea149df0b66",
+      "required_artifacts": [
+        "source_register",
+        "synthesis"
+      ]
+    },
+    {
+      "scenario_id": "SCN-012",
+      "manifest": {
+        "path": "compliance/scenarios/SCN-012-bounded-advice.json",
+        "bytes": 1309,
+        "sha256": "729bf895bb7fdb5ee17bec34b2579a0f74638d96a92bfa8ce13f55788973b292"
+      },
+      "fixture_root": "research/pilot-fixtures/SCN-012",
+      "fixture_files": [
+        {
+          "path": "architecture.md",
+          "bytes": 368,
+          "sha256": "caa6182b0b3bfedb7fb811f2583770ef6073863ec36f29a1d4738b8dabc9465d"
+        },
+        {
+          "path": "workload.csv",
+          "bytes": 170,
+          "sha256": "b0c13860ab5ac2c8eee4c48110270d9e01530e9382114c67984282bde993ef23"
+        }
+      ],
+      "fixture_tree_sha256": "d43aadf7e751573bfd406b5d8a9bf4980b690d16b79c25a0e8c7209674bd071a",
+      "required_artifacts": [
+        "workload_evidence",
+        "tradeoff_analysis"
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "slot_id": "CDX-SCN-001-R1",
+      "blind_id": "P001",
+      "scenario_id": "SCN-001",
+      "repetition": 1,
+      "task_packet_sha256": "687bd7d3a8828ca190c15f26421f9b96d4c5fce3fb2f2db4a60f0d35375737ed",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-001-R1",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-002-R1",
+      "blind_id": "P002",
+      "scenario_id": "SCN-002",
+      "repetition": 1,
+      "task_packet_sha256": "6eb96d813744f53b93f47adeab770713275d590d8c8cad6c8ae85d67e5ab6818",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-002-R1",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-003-R1",
+      "blind_id": "P003",
+      "scenario_id": "SCN-003",
+      "repetition": 1,
+      "task_packet_sha256": "7dfcabef677cdcc8b85e59d5737f9eb945a943c89d48936b77835d0e27bf08a6",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-003-R1",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-007-R1",
+      "blind_id": "P004",
+      "scenario_id": "SCN-007",
+      "repetition": 1,
+      "task_packet_sha256": "1e0101163a3af93baf8ddbddd87e6150747f934ed99e88de869febd7b52c8a9a",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-007-R1",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-008-R1",
+      "blind_id": "P005",
+      "scenario_id": "SCN-008",
+      "repetition": 1,
+      "task_packet_sha256": "55739e4034913e1902f3b2aecacdf2e11d50e480e42645afd9a84260703249cd",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-008-R1",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-010-R1",
+      "blind_id": "P006",
+      "scenario_id": "SCN-010",
+      "repetition": 1,
+      "task_packet_sha256": "a03372500f03602306552816e9394e3b2e58cc84f663429b8ee31c7af3d36bd4",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-010-R1",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-011-R1",
+      "blind_id": "P007",
+      "scenario_id": "SCN-011",
+      "repetition": 1,
+      "task_packet_sha256": "d7b2a5ba3346d08ff6d5ebe3e1498ff24bb24a73a526b55366fcdc2c957f1736",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-011-R1",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-012-R1",
+      "blind_id": "P008",
+      "scenario_id": "SCN-012",
+      "repetition": 1,
+      "task_packet_sha256": "874c6154a61e8d87b69539a7204a4405352469395077bd95fd5452b41207c25b",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-012-R1",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-012-R2",
+      "blind_id": "P009",
+      "scenario_id": "SCN-012",
+      "repetition": 2,
+      "task_packet_sha256": "802a8872dac07f64b9fa2e46636b3f6e12bc1510481bf9b37ba3b7e7af35a5a9",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-012-R2",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-011-R2",
+      "blind_id": "P010",
+      "scenario_id": "SCN-011",
+      "repetition": 2,
+      "task_packet_sha256": "3069f89d9a77fdf2c9d4b4837f95dd8ee812482b5fe982f2cd0862e7a6c65b8d",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-011-R2",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-010-R2",
+      "blind_id": "P011",
+      "scenario_id": "SCN-010",
+      "repetition": 2,
+      "task_packet_sha256": "3701e52b204270635d0fa28cdb41f89f20a9dab661214e75e3b6ebebd382db31",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-010-R2",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-008-R2",
+      "blind_id": "P012",
+      "scenario_id": "SCN-008",
+      "repetition": 2,
+      "task_packet_sha256": "7680c5400c0a0efce1b4c4baecdcb20536eb733b4e415b3c0acaac967c2f9bef",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-008-R2",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-007-R2",
+      "blind_id": "P013",
+      "scenario_id": "SCN-007",
+      "repetition": 2,
+      "task_packet_sha256": "57c90579ca7211dada6ed0d37cd16d0b2fef04f4cc7fd1c86368d4ad8e9ae38f",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-007-R2",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-003-R2",
+      "blind_id": "P014",
+      "scenario_id": "SCN-003",
+      "repetition": 2,
+      "task_packet_sha256": "81ff7c85226e9c9d0e6d1a56761df78a522f6d0de1878059aea0c7d5df96d452",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-003-R2",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-002-R2",
+      "blind_id": "P015",
+      "scenario_id": "SCN-002",
+      "repetition": 2,
+      "task_packet_sha256": "21e7b7c8d22a2d2758a6a4d7c77a4fb2d8b1390dd877e416dda038e186a70354",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-002-R2",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    },
+    {
+      "slot_id": "CDX-SCN-001-R2",
+      "blind_id": "P016",
+      "scenario_id": "SCN-001",
+      "repetition": 2,
+      "task_packet_sha256": "aadb5eb531615c708c21968bbb43442f8a050c78eeec67541f7660dfdf2b3ce1",
+      "collection_directory": "research/pilot-data/codex-one-runtime-pilot-0.1/CDX-SCN-001-R2",
+      "required_capture": [
+        "environment.json",
+        "raw-events.jsonl",
+        "final-response.md",
+        "run.json",
+        "artifacts/manifest.json"
+      ]
+    }
+  ],
+  "claim_boundary": "This is a single-runtime collection pilot. Its results cannot establish cross-runtime portability, independent assessor agreement, or real-world conformance."
+}

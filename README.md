@@ -59,5 +59,6 @@ repository fixtures; they are not two independent agent implementations.
 - [Executable scenarios](compliance/scenarios.md)
 - [Compliance matrix](compliance/matrix.md)
 - [Real-agent study protocol](research/validation-study-protocol.md)
+- [Codex single-runtime collection pilot](research/codex-pilot.md)
 - [Roadmap](ROADMAP.md)
 - [Licensing](LICENSE.md)

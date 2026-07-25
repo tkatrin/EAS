@@ -1,0 +1,4 @@
+.Rhistory
+__pycache__/
+*.py[cod]
+research/pilot-data/

@@ -46,6 +46,18 @@ jobs:
           python -m eas_validator.study_lock
           --check research/study-lock-0.1.json
 
+      - name: Verify single-runtime Codex pilot plan
+        run: >-
+          python -m eas_validator.codex_pilot
+          check research/codex-pilot-plan-0.1.json
+
+      - name: Materialize a Codex pilot slot
+        run: >-
+          python -m eas_validator.codex_pilot
+          prepare CDX-SCN-001-R1
+          --plan research/codex-pilot-plan-0.1.json
+          --output ${{ runner.temp }}/eas-codex-pilot-slot
+
       - name: Execute documented structural validation
         run: eas validate examples/minimal-run.json
 

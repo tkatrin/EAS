@@ -47,3 +47,7 @@ protocol using the eight locked scenarios, at least two independent runtimes,
 and two assessors. Revise or remove requirements based on observed
 disagreement, false passes, and missing observables. Add a requirement only
 when it has a portable deterministic rule and a failing test.
+
+A separate 16-slot Codex collection pilot is prepared but has collected zero
+trajectories. It may validate collection mechanics for one runtime; it cannot
+replace the required second runtime or independent assessors.

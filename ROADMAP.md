@@ -24,6 +24,7 @@
 
 - [x] Define a prospective real-agent study protocol.
 - [x] Lock the eight current scenarios and their source revisions.
+- [x] Prepare a 16-slot single-runtime Codex collection pilot.
 - [ ] Collect consented trajectories from at least two independent runtimes.
 - [ ] Run at least two repetitions per runtime and scenario.
 - [ ] Obtain independent blinded ratings from two assessors.
