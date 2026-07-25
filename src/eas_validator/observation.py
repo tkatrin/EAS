@@ -9,14 +9,25 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+import re
 from typing import Any
 
-from .adapters import EASAdapter, NeutralJSONLAdapter
+from .adapters import EASAdapter, NeutralJSONLAdapter, TRACE_SCHEMA_VERSION
 from .schema import validate_instance
 
 
 OBSERVATION_SCHEMA_VERSION = "0.1.0"
 TARGET_RUN_SCHEMA_VERSION = "0.1.0"
+NATIVE_EXTENSION_PATTERN = re.compile(r"^x-[a-z0-9][a-z0-9._-]*$")
+OBSERVER_EVENT_TYPES = frozenset(
+    {
+        "trace_start",
+        "tool_result",
+        "file_change",
+        "evidence",
+        "project_state",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -219,13 +230,84 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
 
 
+def _read_jsonl(path: Path) -> list[Any]:
+    lines = [
+        line
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    events: list[Any] = []
+    for line in lines:
+        try:
+            events.append(json.loads(line))
+        except json.JSONDecodeError:
+            events.append(line)
+    return events
+
+
+def _wrap_native_events(
+    source_events: Sequence[Any],
+    *,
+    extension_type: str,
+    source_format: str,
+) -> list[dict[str, Any]]:
+    return [
+        {
+            "trace_schema_version": TRACE_SCHEMA_VERSION,
+            "event_id": f"native-{index:06d}",
+            "type": extension_type,
+            "source": {"name": source_format},
+            "payload": {"native_event": deepcopy(event)},
+        }
+        for index, event in enumerate(source_events)
+    ]
+
+
+def _validate_observer_events(
+    events: Sequence[Any],
+    trace_schema: dict[str, Any],
+) -> list[str]:
+    issues: list[str] = []
+    trace_start_positions: list[int] = []
+    for index, event in enumerate(events):
+        if not isinstance(event, Mapping):
+            issues.append(f"observer event[{index}] must be a JSON object")
+            continue
+        for issue in validate_instance(event, trace_schema):
+            issues.append(f"observer event[{index}] {issue}")
+        event_type = event.get("type")
+        if event_type not in OBSERVER_EVENT_TYPES:
+            issues.append(
+                f"observer event[{index}] type {event_type!r} is not an "
+                "externally observable overlay type"
+            )
+        if event_type == "trace_start":
+            trace_start_positions.append(index)
+            payload = event.get("payload")
+            if isinstance(payload, Mapping) and "observability" in payload:
+                issues.append(
+                    f"observer event[{index}] must not declare agent-stream "
+                    "observability completeness"
+                )
+        source = event.get("source")
+        if not isinstance(source, Mapping) or not _non_empty(source.get("name")):
+            issues.append(
+                f"observer event[{index}] must identify its observation source"
+            )
+    if len(trace_start_positions) > 1:
+        issues.append("observer events may contain at most one trace_start")
+    elif trace_start_positions and trace_start_positions[0] != 0:
+        issues.append("observer trace_start must be the first observer event")
+    return issues
+
+
 def main(argv: Sequence[str] | None = None) -> int:
-    """Preserve one incomplete neutral JSONL trace as an observation envelope."""
+    """Preserve one incomplete neutral or wrapped-native trace."""
 
     parser = argparse.ArgumentParser(
         description=(
-            "Preserve an incomplete neutral JSONL trace without creating an "
-            "EAS run record."
+            "Preserve an incomplete neutral or wrapped-native JSONL trace "
+            "without creating an EAS run record."
         )
     )
     parser.add_argument("trace", type=Path)
@@ -234,25 +316,88 @@ def main(argv: Sequence[str] | None = None) -> int:
         "--record-created-at",
         help="RFC 3339 serialization time; defaults to the current UTC time",
     )
+    parser.add_argument(
+        "--source-format",
+        default="eas-neutral-jsonl/0.1.0",
+        help="name and version of the preserved native source format",
+    )
+    parser.add_argument(
+        "--native-extension-type",
+        help=(
+            "wrap every native line losslessly in this x-* neutral extension "
+            "event type before mapping"
+        ),
+    )
+    parser.add_argument(
+        "--observer-events",
+        type=Path,
+        help=(
+            "neutral JSONL facts recorded by the observation harness; a first "
+            "trace_start is placed before native events and remaining facts after"
+        ),
+    )
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
 
     try:
-        lines = [
-            line
-            for line in args.trace.read_text(encoding="utf-8").splitlines()
-            if line.strip()
-        ]
+        native_events = _read_jsonl(args.trace)
     except OSError as error:
         print(f"INVALID INPUT: cannot read source trace {args.trace}: {error}")
         return 2
 
-    events: list[Any] = []
-    for line in lines:
+    if (
+        args.native_extension_type is not None
+        and not NATIVE_EXTENSION_PATTERN.fullmatch(args.native_extension_type)
+    ):
+        print(
+            "INVALID INPUT: --native-extension-type must match "
+            "^x-[a-z0-9][a-z0-9._-]*$"
+        )
+        return 2
+
+    root = _repository_root()
+    trace_schema = json.loads(
+        (root / "schemas" / "eas-neutral-trace-event-0.1.0.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    observer_events: list[Any] = []
+    if args.observer_events is not None:
         try:
-            events.append(json.loads(line))
-        except json.JSONDecodeError:
-            events.append(line)
+            observer_events = _read_jsonl(args.observer_events)
+        except OSError as error:
+            print(
+                "INVALID INPUT: cannot read observer events "
+                f"{args.observer_events}: {error}"
+            )
+            return 2
+        observer_issues = _validate_observer_events(
+            observer_events,
+            trace_schema,
+        )
+        if observer_issues:
+            print("INVALID OBSERVER EVENTS")
+            for issue in observer_issues:
+                print(f"- {issue}")
+            return 2
+
+    if args.native_extension_type is None:
+        mapped_native_events = native_events
+    else:
+        mapped_native_events = _wrap_native_events(
+            native_events,
+            extension_type=args.native_extension_type,
+            source_format=args.source_format,
+        )
+
+    if observer_events and observer_events[0].get("type") == "trace_start":
+        events = [
+            observer_events[0],
+            *mapped_native_events,
+            *observer_events[1:],
+        ]
+    else:
+        events = [*mapped_native_events, *observer_events]
 
     adapter = NeutralJSONLAdapter()
     adapter.ingest(events)
@@ -260,7 +405,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         observation = build_incomplete_observation(
             observation_id=args.observation_id,
             record_created_at=args.record_created_at or _now(),
-            source_format="eas-neutral-jsonl/0.1.0",
+            source_format=args.source_format,
             source_events=events,
             adapter=adapter,
         )
@@ -268,7 +413,6 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"INVALID INCOMPLETE OBSERVATION: {error}")
         return 2
 
-    root = _repository_root()
     schema = json.loads(
         (root / "schemas" / "eas-incomplete-observation.schema.json").read_text(
             encoding="utf-8"
@@ -284,11 +428,22 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"- {issue}")
         return 2
 
+    if args.native_extension_type is not None or observer_events:
+        observation["extensions"] = {
+            "org.eas.observer-overlay": {
+                "native_event_count": len(native_events),
+                "observer_event_count": len(observer_events),
+                "native_extension_type": args.native_extension_type,
+            }
+        }
     rendered = json.dumps(observation, indent=2, sort_keys=True) + "\n"
     args.output.write_text(rendered, encoding="utf-8")
     print(f"WROTE: {args.output}")
     print("Result: INDETERMINATE")
     print(f"Preserved source events: {len(observation['events'])}")
+    if args.native_extension_type is not None or observer_events:
+        print(f"Native events preserved: {len(native_events)}")
+        print(f"Observer events preserved: {len(observer_events)}")
     print(f"Missing target fields: {len(observation['missing_fields'])}")
     return 1
 

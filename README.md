@@ -53,6 +53,22 @@ PYTHONPATH=src python3 -m eas_validator.observation \
   --output /tmp/incomplete-observation.json
 ```
 
+For a native trace, the same command can preserve every native line inside a
+neutral extension event and merge separately recorded observer facts:
+
+```bash
+PYTHONPATH=src python3 -m eas_validator.observation native.jsonl \
+  --observation-id native-observation-001 \
+  --source-format example-runtime-jsonl/1.0 \
+  --native-extension-type x-example.runtime-event \
+  --observer-events observer-events.jsonl \
+  --output /tmp/native-observation.json
+```
+
+Observer events may add only externally recorded start metadata, tool results,
+file changes, evidence, and project states. They cannot supply agent decisions,
+claims, reports, outcomes, or lifecycle completeness.
+
 Scenario checks are deterministic over the supplied run record and artifact
 bundle. Artifact checks establish presence, size, and digest, not semantic
 authenticity. The two included adapters and their pilot use controlled

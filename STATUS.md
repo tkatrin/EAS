@@ -73,6 +73,16 @@ no passed verification claim exists. It removes the under-specified
 that the observation harness produces required artifacts outside the project,
 so those files cannot silently violate a no-change task.
 
-Do not add normative requirements yet. Repair the observation-to-run mapping,
-then repeat a newly locked study before deciding which requirements to revise,
-merge, or remove.
+The observer-overlay calibration then reprocessed one preserved SCN-001
+trajectory from each runtime. Observer-known task, implementation,
+environment, and before/after state reduced missing target fields from 18 to
+9 for runtime-1 and from 18 to 7 for runtime-2. All 93 native events were
+preserved exactly. The seven common missing fields are agent-owned semantics:
+`outcome`, `task_result`, `report`, `state_history`, `actions`, `decisions`,
+and `evidence`. Runtime-1 also lacks observed start and completion timestamps.
+
+The overlay therefore improves collection but cannot create a complete EAS
+run without inventing agent semantics. Do not add requirements or fill these
+fields from assessor judgment. The next design decision is whether complete
+run conformance remains an instrumented-runtime profile while native
+observations receive a smaller externally observable assessment subject.

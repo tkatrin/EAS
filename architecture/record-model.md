@@ -128,3 +128,15 @@ Adapters preserve:
 An absent source signal is not converted into a negative fact. Required but
 unreconstructable properties result in `indeterminate`, not fabricated
 evidence.
+
+## 9. Observer overlay
+
+A collection harness may add neutral events for facts it observed directly,
+such as the supplied task, runtime metadata, timestamps, and before/after
+project-state digests. Those events remain in the incomplete observation
+beside every native event and identify their source.
+
+An observer overlay does not speak for the agent. It cannot declare an agent
+decision, verification claim, final report, task result, or complete internal
+lifecycle. If those signals are absent from the runtime output, the
+corresponding target fields remain `indeterminate`.
