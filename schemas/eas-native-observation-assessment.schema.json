@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eas.example/schemas/eas-native-observation-assessment/0.1.0",
+  "title": "EAS 0.1 Native Observation Scenario Projection",
+  "description": "A bounded comparison of externally observed facts with a scenario. It is not an EAS run-conformance result.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "eas_version",
+    "projection_schema_version",
+    "projection_id",
+    "created_at",
+    "assessment_subject",
+    "scenario",
+    "dimensions",
+    "result",
+    "conformance_claim",
+    "limitations"
+  ],
+  "properties": {
+    "eas_version": { "const": "0.1" },
+    "projection_schema_version": { "const": "0.1.0" },
+    "projection_id": { "$ref": "#/$defs/nonEmptyString" },
+    "created_at": { "$ref": "#/$defs/timestamp" },
+    "assessment_subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "observation_id", "sha256"],
+      "properties": {
+        "type": { "const": "native_observation" },
+        "observation_id": { "$ref": "#/$defs/nonEmptyString" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "sha256"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "dimensions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/dimension" }
+    },
+    "result": { "enum": ["pass", "fail", "indeterminate"] },
+    "conformance_claim": { "const": false },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "stringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "dimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "expected",
+        "observed",
+        "result",
+        "source_event_ids",
+        "reason"
+      ],
+      "properties": {
+        "name": {
+          "enum": [
+            "project_state_change",
+            "evidence_results",
+            "evidence_kinds"
+          ]
+        },
+        "expected": {},
+        "observed": {},
+        "result": { "enum": ["pass", "fail", "indeterminate"] },
+        "source_event_ids": { "$ref": "#/$defs/stringArray" },
+        "reason": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    }
+  }
+}

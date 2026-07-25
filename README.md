@@ -76,6 +76,22 @@ repository fixtures; they are not two independent agent implementations.
 The observation command intentionally returns a non-zero status together with
 `INDETERMINATE`; successful serialization is not a conformance pass.
 
+An incomplete observation can then receive a smaller, external-only scenario
+projection:
+
+```bash
+PYTHONPATH=src python3 -m eas_validator.native_observation \
+  /tmp/native-observation.json \
+  --scenario compliance/scenarios/SCN-001-focused-edit.json \
+  --projection-id native-scn-001-001 \
+  --output /tmp/native-scn-001-projection.json
+```
+
+This compares only observed before/after project revisions and
+observer-captured evidence result/kind. Its output fixes
+`conformance_claim` to `false`; even a projection pass is not a structural,
+behavioral, or universal EAS conformance pass.
+
 ## Repository guide
 
 - [Current status](STATUS.md)

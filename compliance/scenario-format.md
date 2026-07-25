@@ -26,3 +26,18 @@ run. If required artifacts are absent, EAS-009-R09 is `indeterminate`. If an
 expectation or artifact check fails, EAS-009-R09 is `fail`.
 
 Artifact integrity does not establish authenticity or semantic sufficiency.
+
+## Incomplete native observations
+
+A native observation that cannot form a structurally valid run does not enter
+the assessment sequence above. The reference tool may instead compare the
+externally observable subset already present in the same scenario manifest:
+
+- `project_state_change`;
+- `required_evidence_results`; and
+- `required_evidence_kinds`.
+
+The result is an observed scenario projection, not EAS-009-R09 conformance.
+Missing observer facts are `indeterminate`, not failures or inferred values.
+Native extension payloads remain preserved source material and cannot satisfy
+an observer-fact check.

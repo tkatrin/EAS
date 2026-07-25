@@ -21,3 +21,19 @@ universal conformance.
 
 The deterministic aggregate and report-rendering rules are reference-tool
 protocol checks, not additional EAS requirements.
+
+## Native observation boundary
+
+This non-normative boundary keeps two assessment subjects distinct:
+
+- a complete EAS run may receive schema, structural, and bounded behavioral
+  assessment under EAS-009-R09;
+- an incomplete native observation may receive only an observed scenario
+  projection over project-state revisions and observer-captured evidence.
+
+An observed projection pass is not a pass for EAS-009-R09. It does not supply
+or infer outcome, task result, lifecycle, actions, decisions, report, or
+verification claims. Missing external facts produce `indeterminate`; a direct
+project-state contradiction may produce `fail`. The projection record binds
+the exact observation and scenario bytes by SHA-256 and fixes
+`conformance_claim` to `false`.

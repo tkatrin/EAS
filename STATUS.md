@@ -24,6 +24,9 @@ without validating agent behavior.
 - **Structural pass**: deterministic cross-field invariants hold.
 - **Scenario pass**: the supplied run record and artifact bundle satisfy one
   declared bounded projection.
+- **Observed projection pass**: an incomplete native observation matches only
+  the selected scenario's externally recorded project-state and evidence
+  subset. It is not EAS run conformance.
 
 None of these proves that self-reported events are authentic. Artifact checks
 verify bytes and digests, not authorship or semantic truth. The fixture-based
@@ -77,12 +80,21 @@ The observer-overlay calibration then reprocessed one preserved SCN-001
 trajectory from each runtime. Observer-known task, implementation,
 environment, and before/after state reduced missing target fields from 18 to
 9 for runtime-1 and from 18 to 7 for runtime-2. All 93 native events were
-preserved exactly. The seven common missing fields are agent-owned semantics:
+preserved exactly. The seven common incomplete domains are:
 `outcome`, `task_result`, `report`, `state_history`, `actions`, `decisions`,
-and `evidence`. Runtime-1 also lacks observed start and completion timestamps.
+and the complete `evidence` collection. Runtime-1 also lacks observed start
+and completion timestamps.
 
 The overlay therefore improves collection but cannot create a complete EAS
-run without inventing agent semantics. Do not add requirements or fill these
-fields from assessor judgment. The next design decision is whether complete
-run conformance remains an instrumented-runtime profile while native
-observations receive a smaller externally observable assessment subject.
+run without inventing agent semantics. Complete run conformance therefore
+remains an instrumented-runtime subject.
+
+Incomplete native observations now have a separate observed scenario
+projection. It evaluates only project-state change plus observer-captured
+evidence result and kind, binds the exact observation and scenario by SHA-256,
+and always records `conformance_claim: false`. A fixture verifier supplied one
+external `passed`/`inspection` observation for each preserved SCN-001
+trajectory. Both three-dimension projections passed while their underlying
+records remained incomplete with the same 9 and 7 missing domains. No native
+events were discarded or promoted to observer facts. This two-run calibration
+tests the record boundary; it is not evidence of general agent quality.
