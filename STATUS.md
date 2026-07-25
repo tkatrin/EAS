@@ -98,3 +98,11 @@ trajectory. Both three-dimension projections passed while their underlying
 records remained incomplete with the same 9 and 7 missing domains. No native
 events were discarded or promoted to observer facts. This two-run calibration
 tests the record boundary; it is not evidence of general agent quality.
+
+ADR-0002 now fixes `observation` and `run` as independent assessment subjects,
+alongside `adapter`, `assessor`, and `report`. Every active requirement carries
+an explicit subject list; none of the current 19 requirements is transferred
+to `observation`. Scenario manifests keep externally observable expectations
+separate from run-semantic expectations. Observation output begins with an
+explicit claim boundary and records agent-decision properties as
+`indeterminate`.

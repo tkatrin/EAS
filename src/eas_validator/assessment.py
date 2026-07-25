@@ -20,14 +20,20 @@ from typing import Any
 ASSESSMENT_LEVELS = frozenset({"schema", "structural", "behavioral"})
 ASSESSMENT_SUBJECTS = frozenset(
     {
+        "observation",
         "run",
-        "adapter_mapping",
-        "assessment_process",
-        "conformance_report",
-        "implementation_claim",
-        "specification",
+        "adapter",
+        "assessor",
+        "report",
     }
 )
+SUBJECT_LEVELS = {
+    "observation": frozenset({"schema", "behavioral"}),
+    "run": ASSESSMENT_LEVELS,
+    "adapter": ASSESSMENT_LEVELS,
+    "assessor": frozenset({"schema", "behavioral"}),
+    "report": frozenset({"schema", "structural"}),
+}
 REQUIREMENT_LEVELS = frozenset({"MUST", "SHOULD", "MAY"})
 REQUIREMENT_RESULTS = (
     "pass",
@@ -198,6 +204,11 @@ def build_assessment_record(
     if assessment_subject_type not in ASSESSMENT_SUBJECTS:
         raise ValueError(
             f"assessment_subject_type is not recognized: {assessment_subject_type!r}"
+        )
+    if assessment_level not in SUBJECT_LEVELS[assessment_subject_type]:
+        raise ValueError(
+            f"assessment level {assessment_level!r} is not valid for "
+            f"subject {assessment_subject_type!r}"
         )
 
     copied_results: list[dict[str, Any]] = []
@@ -431,6 +442,19 @@ def validate_assessment_record(
                 f"must be one of {sorted(ASSESSMENT_LEVELS)!r}",
             )
         )
+    elif isinstance(subject, dict):
+        subject_type = subject.get("type")
+        if (
+            subject_type in SUBJECT_LEVELS
+            and level not in SUBJECT_LEVELS[subject_type]
+        ):
+            issues.append(
+                _issue(
+                    "EAS-009-R11",
+                    "$.assessment_level",
+                    f"is not valid for assessment subject {subject_type!r}",
+                )
+            )
 
     assessor = record.get("assessor")
     if not isinstance(assessor, dict):

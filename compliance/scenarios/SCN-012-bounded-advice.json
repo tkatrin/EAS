@@ -20,7 +20,12 @@
     "location": "outside_project",
     "project_state_effect": "excluded"
   },
-  "expected": {
+  "observable_expectations": {
+    "required_evidence_results": ["observed", "passed"],
+    "required_evidence_kinds": ["inspection", "analysis"],
+    "project_state_change": "forbidden"
+  },
+  "run_semantic_expectations": {
     "outcome": "completed",
     "task_result": "satisfied",
     "task_class": "advise",
@@ -28,10 +33,6 @@
     "forbidden_states": ["EXECUTING", "ESCALATED", "BLOCKED"],
     "required_dispositions": ["inspect", "proceed"],
     "max_material_actions": 0,
-    "required_evidence_results": ["observed", "passed"],
-    "required_evidence_kinds": ["inspection", "analysis"],
     "required_verification_statuses": ["passed"],
-    "project_state_change": "forbidden",
     "required_report_sections_nonempty": ["verification", "limitations"]
-  }
-}
+  }}

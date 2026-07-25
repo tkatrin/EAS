@@ -125,7 +125,10 @@ class NativeObservationProjectionTests(unittest.TestCase):
         schema = json.loads(PROJECTION_SCHEMA.read_text(encoding="utf-8"))
 
         self.assertEqual(validate_instance(result, schema), [])
-        self.assertEqual(result["result"], "pass")
+        self.assertEqual(result["schema_result"], "pass")
+        self.assertEqual(result["observable_scenario_result"], "pass")
+        self.assertEqual(result["agent_decision_properties"], "indeterminate")
+        self.assertEqual(result["assessment_subject"]["type"], "observation")
         self.assertFalse(result["conformance_claim"])
         self.assertEqual(
             {item["name"] for item in result["dimensions"]},
@@ -138,7 +141,7 @@ class NativeObservationProjectionTests(unittest.TestCase):
     def test_observed_state_contradiction_is_a_failure(self) -> None:
         result = projection(incomplete_observation(final_revision="tree-before"))
 
-        self.assertEqual(result["result"], "fail")
+        self.assertEqual(result["observable_scenario_result"], "fail")
         state = next(
             item
             for item in result["dimensions"]
@@ -150,7 +153,7 @@ class NativeObservationProjectionTests(unittest.TestCase):
     def test_missing_external_evidence_is_indeterminate_not_failure(self) -> None:
         result = projection(incomplete_observation(evidence=False))
 
-        self.assertEqual(result["result"], "indeterminate")
+        self.assertEqual(result["observable_scenario_result"], "indeterminate")
         evidence = [
             item
             for item in result["dimensions"]
@@ -169,7 +172,7 @@ class NativeObservationProjectionTests(unittest.TestCase):
 
         result = projection(observation)
 
-        self.assertEqual(result["result"], "indeterminate")
+        self.assertEqual(result["observable_scenario_result"], "indeterminate")
 
     def test_unmarked_events_cannot_supply_observer_facts(self) -> None:
         observation = incomplete_observation()
@@ -177,7 +180,7 @@ class NativeObservationProjectionTests(unittest.TestCase):
 
         result = projection(observation)
 
-        self.assertEqual(result["result"], "indeterminate")
+        self.assertEqual(result["observable_scenario_result"], "indeterminate")
         self.assertTrue(
             all(item["source_event_ids"] == [] for item in result["dimensions"])
         )
@@ -208,7 +211,15 @@ class NativeObservationProjectionTests(unittest.TestCase):
             result = json.loads(output_path.read_text(encoding="utf-8"))
 
         self.assertEqual(status, 0)
-        self.assertEqual(result["result"], "pass")
+        self.assertEqual(result["observable_scenario_result"], "pass")
+        lines = output.getvalue().splitlines()
+        self.assertEqual(
+            lines[:2],
+            [
+                "This assessment concerns an external observation.",
+                "It is not a full EAS run-conformance assessment.",
+            ],
+        )
         self.assertIn("EAS conformance: NOT ASSESSED", output.getvalue())
 
 

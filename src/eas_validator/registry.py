@@ -30,6 +30,8 @@ REQUIREMENT_FIELDS = {
     "scenarios",
     "observable_inputs",
     "possible_results",
+    "subjects",
+    "observation_projection",
 }
 RULE_FIELDS = {
     "id",
@@ -45,12 +47,11 @@ MACHINE_CHECKABILITY = {"none", "partial", "full"}
 ASSESSMENT_LEVELS = {"schema", "structural", "behavioral"}
 POSSIBLE_RESULTS = {"pass", "fail", "indeterminate", "not_applicable"}
 ASSESSMENT_SUBJECTS = {
+    "observation",
     "run",
-    "adapter_mapping",
-    "assessment_process",
-    "conformance_report",
-    "implementation_claim",
-    "specification",
+    "adapter",
+    "assessor",
+    "report",
 }
 
 
@@ -165,21 +166,14 @@ def resolve_requirement_subjects(
 ) -> dict[str, frozenset[str]]:
     """Resolve normalized assessment subjects for every registry requirement.
 
-    A compact per-spec default plus explicit requirement overrides keeps the
-    policy reviewable while still producing a requirement-by-requirement map.
-    Invalid or incomplete policy entries resolve to an empty set and are
-    reported by :func:`validate_registries`.
+    Each requirement carries its own explicit subject list. No subject is
+    inherited from another requirement or specification section.
     """
 
     if not isinstance(requirement_registry, dict):
         return {}
     requirements = requirement_registry.get("requirements")
-    policy = requirement_registry.get("assessment_subject_policy")
-    if not isinstance(requirements, list) or not isinstance(policy, dict):
-        return {}
-    defaults = policy.get("defaults_by_spec")
-    overrides = policy.get("overrides")
-    if not isinstance(defaults, dict) or not isinstance(overrides, dict):
+    if not isinstance(requirements, list):
         return {}
 
     resolved: dict[str, frozenset[str]] = {}
@@ -187,10 +181,9 @@ def resolve_requirement_subjects(
         if not isinstance(entry, dict):
             continue
         requirement_id = entry.get("id")
-        spec = entry.get("spec")
-        if not isinstance(requirement_id, str) or not isinstance(spec, str):
+        if not isinstance(requirement_id, str):
             continue
-        raw = overrides.get(requirement_id, defaults.get(spec, []))
+        raw = entry.get("subjects")
         if isinstance(raw, list):
             resolved[requirement_id] = frozenset(
                 item for item in raw if isinstance(item, str)
@@ -373,78 +366,35 @@ def validate_registries(
                     )
                 )
 
-    policy = (
-        requirement_registry.get("assessment_subject_policy")
-        if isinstance(requirement_registry, dict)
-        else None
-    )
-    if not isinstance(policy, dict):
-        issues.append(
-            _issue(
-                "REG-SUBJECT",
-                "$.assessment_subject_policy",
-                "must be an object",
-            )
-        )
-    else:
-        defaults = policy.get("defaults_by_spec")
-        overrides = policy.get("overrides")
-        if not isinstance(defaults, dict):
+    for requirement_id in sorted(requirements):
+        entry = requirements[requirement_id]
+        subjects = requirement_subjects.get(requirement_id, frozenset())
+        if not subjects:
             issues.append(
                 _issue(
                     "REG-SUBJECT",
-                    "$.assessment_subject_policy.defaults_by_spec",
-                    "must be an object",
+                    f"$.requirements[{requirement_id}].subjects",
+                    "must contain at least one assessment subject",
                 )
             )
-            defaults = {}
-        if not isinstance(overrides, dict):
+        unknown = sorted(subjects - ASSESSMENT_SUBJECTS)
+        if unknown:
             issues.append(
                 _issue(
                     "REG-SUBJECT",
-                    "$.assessment_subject_policy.overrides",
-                    "must be an object",
+                    f"$.requirements[{requirement_id}].subjects",
+                    f"unknown assessment subjects: {', '.join(unknown)}",
                 )
             )
-            overrides = {}
-        active_specs = {entry.get("spec") for entry in requirements.values()}
-        for spec in sorted(active_specs):
-            if spec not in defaults:
-                issues.append(
-                    _issue(
-                        "REG-SUBJECT",
-                        "$.assessment_subject_policy.defaults_by_spec",
-                        f"missing default for {spec}",
-                    )
+        projection = entry.get("observation_projection")
+        if "observation" not in subjects and projection is not None:
+            issues.append(
+                _issue(
+                    "REG-SUBJECT",
+                    f"$.requirements[{requirement_id}].observation_projection",
+                    "must be null when observation is not an applicable subject",
                 )
-        for requirement_id in sorted(overrides):
-            if requirement_id not in requirements:
-                issues.append(
-                    _issue(
-                        "REG-SUBJECT",
-                        f"$.assessment_subject_policy.overrides.{requirement_id}",
-                        "override references an unknown requirement",
-                    )
-                )
-        for requirement_id in sorted(requirements):
-            subjects = requirement_subjects.get(requirement_id, frozenset())
-            if not subjects:
-                issues.append(
-                    _issue(
-                        "REG-SUBJECT",
-                        f"$.requirements[{requirement_id}]",
-                        "must resolve to at least one assessment subject",
-                    )
-                )
-            unknown = sorted(subjects - ASSESSMENT_SUBJECTS)
-            if unknown:
-                issues.append(
-                    _issue(
-                        "REG-SUBJECT",
-                        f"$.requirements[{requirement_id}]",
-                        f"unknown assessment subjects: {', '.join(unknown)}",
-                    )
-                )
+            )
 
     missing = sorted(spec_requirements.keys() - requirements.keys())
     extra = sorted(requirements.keys() - spec_requirements.keys())

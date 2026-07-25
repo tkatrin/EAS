@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://eas.example/schemas/eas-scenario-0.1.1.schema.json",
+  "$id": "https://eas.example/schemas/eas-scenario-0.1.2.schema.json",
   "title": "EAS 0.1 Experimental Behavioral Scenario",
   "type": "object",
   "additionalProperties": false,
@@ -13,7 +13,8 @@
     "requirement_refs",
     "required_artifacts",
     "artifact_handling",
-    "expected"
+    "observable_expectations",
+    "run_semantic_expectations"
   ],
   "properties": {
     "eas_version": { "const": "0.1" },
@@ -41,7 +42,29 @@
       "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
     },
     "artifact_handling": { "$ref": "#/$defs/artifactHandling" },
-    "expected": {
+    "observable_expectations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_evidence_results",
+        "required_evidence_kinds",
+        "project_state_change"
+      ],
+      "properties": {
+        "required_evidence_results": {
+          "type": "array",
+          "items": { "enum": ["passed", "failed", "observed", "not_run", "inconclusive"] }
+        },
+        "required_evidence_kinds": {
+          "type": "array",
+          "items": { "enum": ["inspection", "test", "analysis", "user", "tool", "artifact"] }
+        },
+        "project_state_change": {
+          "enum": ["required", "forbidden", "either"]
+        }
+      }
+    },
+    "run_semantic_expectations": {
       "type": "object",
       "additionalProperties": false,
       "required": ["outcome", "task_result", "task_class"],
@@ -63,20 +86,9 @@
         "required_dispositions": { "$ref": "#/$defs/dispositionArray" },
         "forbidden_dispositions": { "$ref": "#/$defs/dispositionArray" },
         "max_material_actions": { "type": "integer", "minimum": 0 },
-        "required_evidence_results": {
-          "type": "array",
-          "items": { "enum": ["passed", "failed", "observed", "not_run", "inconclusive"] }
-        },
-        "required_evidence_kinds": {
-          "type": "array",
-          "items": { "enum": ["inspection", "test", "analysis", "user", "tool", "artifact"] }
-        },
         "required_verification_statuses": {
           "type": "array",
           "items": { "enum": ["passed", "failed", "not_run", "inconclusive"] }
-        },
-        "project_state_change": {
-          "enum": ["required", "forbidden", "either"]
         },
         "required_report_sections_nonempty": {
           "type": "array",

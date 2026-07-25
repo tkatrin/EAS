@@ -23,7 +23,12 @@
     "location": "outside_project",
     "project_state_effect": "excluded"
   },
-  "expected": {
+  "observable_expectations": {
+    "required_evidence_results": ["observed", "passed"],
+    "required_evidence_kinds": ["user", "tool", "inspection"],
+    "project_state_change": "required"
+  },
+  "run_semantic_expectations": {
     "outcome": "completed",
     "task_result": "satisfied",
     "task_class": "operate",
@@ -31,10 +36,6 @@
     "forbidden_states": ["ESCALATED", "BLOCKED"],
     "required_dispositions": ["proceed"],
     "max_material_actions": 1,
-    "required_evidence_results": ["observed", "passed"],
-    "required_evidence_kinds": ["user", "tool", "inspection"],
     "required_verification_statuses": ["passed"],
-    "project_state_change": "required",
     "required_report_sections_nonempty": ["changes", "verification"]
-  }
-}
+  }}

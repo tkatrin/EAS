@@ -1,5 +1,5 @@
 {
-  "registry_version": "0.1.2",
+  "registry_version": "0.1.3",
   "eas_version": "0.1",
   "scope_policy": {
     "maximum_active_requirements": 20,
@@ -20,22 +20,6 @@
     "EAS-010-R01", "EAS-010-R02", "EAS-010-R03", "EAS-010-R04", "EAS-010-R05", "EAS-010-R06", "EAS-010-R07", "EAS-010-R08", "EAS-010-R09", "EAS-010-R10", "EAS-010-R11", "EAS-010-R12", "EAS-010-R13", "EAS-010-R14", "EAS-010-R15", "EAS-010-R16", "EAS-010-R17", "EAS-010-R19", "EAS-010-R20", "EAS-010-R21", "EAS-010-R22", "EAS-010-R23", "EAS-010-R24", "EAS-010-R25", "EAS-010-R26",
     "EAS-011-R01", "EAS-011-R02", "EAS-011-R03", "EAS-011-R04", "EAS-011-R05", "EAS-011-R06", "EAS-011-R07", "EAS-011-R08", "EAS-011-R09", "EAS-011-R10", "EAS-011-R11", "EAS-011-R12", "EAS-011-R13", "EAS-011-R14", "EAS-011-R15", "EAS-011-R16", "EAS-011-R17"
   ],
-  "assessment_subject_policy": {
-    "defaults_by_spec": {
-      "EAS-002": ["run"],
-      "EAS-004": ["run"],
-      "EAS-005": ["run"],
-      "EAS-006": ["run"],
-      "EAS-007": ["run"],
-      "EAS-008": ["run"],
-      "EAS-009": ["assessment_process"],
-      "EAS-010": ["assessment_process"]
-    },
-    "overrides": {
-      "EAS-009-R08": ["specification"],
-      "EAS-009-R09": ["run", "assessment_process"]
-    }
-  },
   "requirements": [
     {
       "id": "EAS-002-R01",
@@ -47,7 +31,9 @@
       "validator_rules": ["VAL-RUN-REQUIRED-FIELDS", "VAL-RUN-SCHEMA", "VAL-RUN-PROVENANCE-METADATA", "VAL-RUN-TIMESTAMPS", "VAL-EXTENSION-NAMESPACE"],
       "scenarios": [],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-002-R07",
@@ -59,7 +45,9 @@
       "validator_rules": ["VAL-TASK-CLASS", "VAL-TASK-CLASSIFICATION-DETAILS"],
       "scenarios": ["SCN-001", "SCN-002", "SCN-003", "SCN-007", "SCN-008", "SCN-010", "SCN-011", "SCN-012"],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-002-R10",
@@ -71,7 +59,9 @@
       "validator_rules": ["VAL-TASK-RESULT-OUTCOME"],
       "scenarios": ["SCN-001", "SCN-002", "SCN-003", "SCN-007", "SCN-008", "SCN-010", "SCN-011", "SCN-012"],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-004-R01",
@@ -83,7 +73,9 @@
       "validator_rules": ["VAL-LIFECYCLE-START"],
       "scenarios": [],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-004-R02",
@@ -95,7 +87,9 @@
       "validator_rules": ["VAL-LIFECYCLE-TRANSITIONS"],
       "scenarios": [],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-004-R06",
@@ -107,7 +101,9 @@
       "validator_rules": ["VAL-LIFECYCLE-TERMINAL"],
       "scenarios": [],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-005-R02",
@@ -119,7 +115,9 @@
       "validator_rules": ["VAL-DECISION-SHAPE", "VAL-MATERIAL-DECISION-FIELDS", "VAL-REVERSIBILITY-SHAPE", "VAL-AUTHORITY-EVIDENCE"],
       "scenarios": ["SCN-008"],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-005-R04",
@@ -131,7 +129,9 @@
       "validator_rules": ["VAL-MATERIAL-ACTION-AUTHORITY"],
       "scenarios": ["SCN-002", "SCN-008"],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-005-R14",
@@ -143,7 +143,9 @@
       "validator_rules": ["VAL-MATERIALITY-CLASSIFICATION"],
       "scenarios": ["SCN-001", "SCN-008"],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-006-R03",
@@ -155,7 +157,9 @@
       "validator_rules": ["VAL-PASSED-CLAIM-EVIDENCE", "VAL-SELF-REPORTED-EVIDENCE"],
       "scenarios": ["SCN-003"],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-007-R05",
@@ -167,7 +171,9 @@
       "validator_rules": ["VAL-RUN-REQUIRED-FIELDS", "VAL-VERIFICATION-SHAPE"],
       "scenarios": ["SCN-001", "SCN-002", "SCN-003", "SCN-007", "SCN-008", "SCN-010", "SCN-011", "SCN-012"],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-008-R01",
@@ -179,7 +185,9 @@
       "validator_rules": ["VAL-IDENTIFIER-UNIQUENESS", "VAL-EVIDENCE-SHAPE", "VAL-EVIDENCE-TIMESTAMPS"],
       "scenarios": [],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-008-R02",
@@ -191,7 +199,9 @@
       "validator_rules": ["VAL-EVIDENCE-REFERENCE-INTEGRITY"],
       "scenarios": [],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-008-R15",
@@ -203,7 +213,9 @@
       "validator_rules": ["VAL-RUN-VERSION", "VAL-RUN-SCHEMA-VERSION"],
       "scenarios": [],
       "observable_inputs": ["run_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-009-R08",
@@ -215,7 +227,9 @@
       "validator_rules": ["VAL-SCENARIO-MANIFEST", "VAL-SCENARIO-SCHEMA"],
       "scenarios": [],
       "observable_inputs": ["scenario_manifest"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["assessor"],
+      "observation_projection": null
     },
     {
       "id": "EAS-009-R09",
@@ -227,7 +241,9 @@
       "validator_rules": ["VAL-SCENARIO-STRUCTURAL-FIRST", "VAL-SCENARIO-EXPECTATIONS", "VAL-ARTIFACT-BUNDLE"],
       "scenarios": ["SCN-001", "SCN-002", "SCN-003", "SCN-007", "SCN-008", "SCN-010", "SCN-011", "SCN-012"],
       "observable_inputs": ["scenario_manifest", "run_record", "artifact_bundle"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["run"],
+      "observation_projection": null
     },
     {
       "id": "EAS-009-R11",
@@ -239,7 +255,9 @@
       "validator_rules": ["VAL-ASSESSMENT-RECORD-SCHEMA", "VAL-ASSESSMENT-SEMANTICS", "VAL-ASSESSMENT-SUBJECT-INTEGRITY", "VAL-ASSESSMENT-SOURCE-IMMUTABILITY", "VAL-HUMAN-REPORT-PRESERVATION"],
       "scenarios": [],
       "observable_inputs": ["assessment_record", "requirement_registry"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["report"],
+      "observation_projection": null
     },
     {
       "id": "EAS-009-R12",
@@ -251,7 +269,9 @@
       "validator_rules": ["VAL-ASSESSMENT-RECORD-SCHEMA", "VAL-ASSESSMENT-SEMANTICS"],
       "scenarios": [],
       "observable_inputs": ["assessment_record"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["report"],
+      "observation_projection": null
     },
     {
       "id": "EAS-010-R18",
@@ -259,11 +279,13 @@
       "level": "MUST",
       "spec": "EAS-010",
       "machine_checkable": "full",
-      "applicability": ["assessment_process"],
+      "applicability": ["assessment_record"],
       "validator_rules": ["VAL-APPLICABILITY-RECORD"],
       "scenarios": [],
       "observable_inputs": ["assessment_record", "requirement_registry"],
-      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"]
+      "possible_results": ["pass", "fail", "indeterminate", "not_applicable"],
+      "subjects": ["assessor", "report"],
+      "observation_projection": null
     }
   ]
 }

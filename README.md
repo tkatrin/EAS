@@ -87,10 +87,12 @@ PYTHONPATH=src python3 -m eas_validator.native_observation \
   --output /tmp/native-scn-001-projection.json
 ```
 
-This compares only observed before/after project revisions and
-observer-captured evidence result/kind. Its output fixes
+This compares only the scenario's `observable_expectations`: observed
+before/after project revisions and observer-captured evidence result/kind.
+The result begins by stating that its subject is an external observation and
+that it is not a full run-conformance assessment. It fixes
 `conformance_claim` to `false`; even a projection pass is not a structural,
-behavioral, or universal EAS conformance pass.
+behavioral, or universal EAS run-conformance pass.
 
 ## Repository guide
 

@@ -54,31 +54,28 @@ force a new autonomy decision from any active state.
 ```text
 agent/runtime trajectory
         |
-        | adapter (unmapped events and uncertainty preserved)
-        v
-versioned EAS run record ---- optional external artifact bundle
-        |                                      |
-        +--------------+-----------------------+
-                       v
-        schema -> structural -> behavioral assessment
-                       |
-                       v
-             versioned assessment record
-                       |
-                       v
-             terminal/JSON/Markdown report
+        +-- observer/adapter --> native observation
+        |                         |
+        |                         +--> observable scenario projection
+        |                              (not run conformance)
+        |
+        +-- EAS instrumentation --> complete run record
+                                  |
+                                  +--> schema -> structural -> scenario
+                                       run assessment
 ```
 
 The neutral JSONL trace format is one portable adapter input, not a normative
-runtime interface. A run record describes observed or explicitly supplied
-facts. An adapter does not infer a decision, authority, or successful check
-from an action or transport-level success alone.
+runtime interface. Native events and unmapped uncertainty remain in the
+observation path. An adapter does not infer a decision, authority, task result,
+lifecycle state, or successful check from an action or transport-level success
+alone.
 
-An assessment subject answers *what* is being assessed: a run, adapter
-mapping, assessment process, conformance report, implementation claim, or the
-specification. The assessment level answers *how deeply* that subject was
-checked: schema, structural, or behavioral. Keeping those axes separate avoids
-attributing an adapter or assessor defect to agent behavior.
+An assessment subject answers *what* is being assessed: an external
+observation, instrumented run, adapter, assessor, or report. The assessment
+level answers *how deeply* that subject was checked. Observation and run are
+independent subjects, not quality grades: missing agent-owned run semantics in
+a native trace are an observability limitation, not an agent failure.
 
 Run completion and task satisfaction are separate. `outcome` records whether
 control terminated as `completed`, `escalated`, or `blocked`; `task_result`
@@ -103,6 +100,7 @@ without satisfying a requested implementation outcome.
    indeterminate rather than becoming invented facts.
 8. **Re-entry:** discovery and failed verification may revisit earlier states.
 
-See the [formal model](formal-model.md), [lifecycle diagram](lifecycle.mmd), and
-the [architecture decision record](decisions/0001-logical-concerns-not-runtime-modules.md)
-for the underlying state and responsibility boundaries.
+See the [formal model](formal-model.md), [lifecycle diagram](lifecycle.mmd),
+[ADR-0001](decisions/0001-logical-concerns-not-runtime-modules.md), and
+[ADR-0002](decisions/0002-observation-and-run-assessment-subjects.md) for the
+underlying state and responsibility boundaries.

@@ -47,6 +47,8 @@
 - [x] Reprocess one preserved trajectory per runtime with the observer overlay.
 - [x] Keep complete run conformance for instrumented runtimes and define a
   smaller native-observation scenario projection over external facts.
+- [x] Separate observable and run-semantic expectations in every scenario.
+- [x] Assign every active requirement to explicit assessment subjects.
 - [x] Recheck the two preserved SCN-001 trajectories with that projection.
 - [ ] Lock and repeat the study only after that record-boundary decision.
 - [ ] Revise, merge, or remove criteria based on observed results.

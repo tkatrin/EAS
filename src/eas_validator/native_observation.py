@@ -16,6 +16,8 @@ from .schema import validate_instance
 
 
 PROJECTION_SCHEMA_VERSION = "0.1.0"
+SUBJECT_STATEMENT = "This assessment concerns an external observation."
+CONFORMANCE_STATEMENT = "It is not a full EAS run-conformance assessment."
 LIMITATIONS = [
     "This result compares only externally observed project state and evidence with the selected scenario.",
     "It does not validate a complete EAS run and cannot be represented as EAS conformance.",
@@ -203,7 +205,7 @@ def build_native_observation_projection(
     """Compare only the scenario fields supportable by external observation."""
 
     states, evidence = _observer_facts(observation)
-    expected = scenario["expected"]
+    expected = scenario["observable_expectations"]
     dimensions = [
         _project_state_dimension(expected.get("project_state_change", "either"), states),
         _evidence_dimension(
@@ -233,7 +235,7 @@ def build_native_observation_projection(
         "projection_id": projection_id,
         "created_at": created_at,
         "assessment_subject": {
-            "type": "native_observation",
+            "type": "observation",
             "observation_id": observation["observation_id"],
             "sha256": observation_sha256,
         },
@@ -242,7 +244,13 @@ def build_native_observation_projection(
             "sha256": scenario_sha256,
         },
         "dimensions": dimensions,
-        "result": result,
+        "schema_result": "pass",
+        "observable_scenario_result": result,
+        "agent_decision_properties": "indeterminate",
+        "claim_boundary": {
+            "subject": SUBJECT_STATEMENT,
+            "conformance": CONFORMANCE_STATEMENT,
+        },
         "conformance_claim": False,
         "limitations": list(LIMITATIONS),
     }
@@ -320,10 +328,18 @@ def main(argv: Sequence[str] | None = None) -> int:
         json.dumps(projection, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
+    print(SUBJECT_STATEMENT)
+    print(CONFORMANCE_STATEMENT)
     print(f"WROTE: {args.output}")
-    print(f"Observed scenario projection: {projection['result'].upper()}")
+    result = projection["observable_scenario_result"]
+    print(f"Schema: {projection['schema_result'].upper()}")
+    print(f"Observable scenario: {result.upper()}")
+    print(
+        "Agent-decision properties: "
+        f"{projection['agent_decision_properties'].upper()}"
+    )
     print("EAS conformance: NOT ASSESSED")
-    return {"pass": 0, "fail": 1, "indeterminate": 1}[projection["result"]]
+    return {"pass": 0, "fail": 1, "indeterminate": 1}[result]
 
 
 if __name__ == "__main__":

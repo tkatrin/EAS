@@ -97,8 +97,7 @@
     },
     "assessmentSubjectType": {
       "enum": [
-        "run", "adapter_mapping", "assessment_process",
-        "conformance_report", "implementation_claim", "specification"
+        "observation", "run", "adapter", "assessor", "report"
       ]
     },
     "sourceRecord": {

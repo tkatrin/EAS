@@ -234,7 +234,7 @@ class AssessmentRecordTests(unittest.TestCase):
 
         assessment = self.build()
         assessment["requirement_results"][0]["assessment_subject"] = (
-            "assessment_process"
+            "assessor"
         )
 
         semantic_issues = validate_assessment_record(
@@ -294,21 +294,44 @@ class AssessmentRecordTests(unittest.TestCase):
 
     def test_non_run_subject_uses_general_source_descriptor(self) -> None:
         assessment = self.build(
-            assessment_level="structural",
-            assessment_subject_type="specification",
+            assessment_level="schema",
+            assessment_subject_type="assessor",
             source_record={"id": "EAS-009", "content_revision": "draft-0.1"},
             requirement_results=[result("EAS-009-R08", "MUST", "pass")],
             scenario_set=None,
             source_artifact_ref="spec/EAS-009-compliance.md",
         )
 
-        self.assertEqual(assessment["source_record"]["type"], "specification")
+        self.assertEqual(assessment["source_record"]["type"], "assessor")
         self.assertEqual(assessment["source_record"]["id"], "EAS-009")
         self.assertNotIn("run_id", assessment["source_record"])
         self.assertEqual(validate_instance(assessment, self.schema), [])
         self.assertEqual(
             validate_assessment_record(assessment, self.requirement_subjects),
             [],
+        )
+
+    def test_subject_limits_assessment_levels(self) -> None:
+        with self.assertRaisesRegex(ValueError, "is not valid for subject"):
+            self.build(
+                assessment_level="structural",
+                assessment_subject_type="observation",
+            )
+
+        assessment = self.build()
+        assessment["assessment_subject"]["type"] = "observation"
+        assessment["source_record"]["type"] = "observation"
+
+        issues = validate_assessment_record(
+            assessment,
+            self.requirement_subjects,
+        )
+
+        self.assertTrue(
+            any(
+                issue.path.endswith(".assessment_subject")
+                for issue in issues
+            )
         )
 
     def test_committed_assessment_examples_are_valid_and_bound_to_source(self) -> None:

@@ -13,7 +13,10 @@
     "assessment_subject",
     "scenario",
     "dimensions",
-    "result",
+    "schema_result",
+    "observable_scenario_result",
+    "agent_decision_properties",
+    "claim_boundary",
     "conformance_claim",
     "limitations"
   ],
@@ -27,7 +30,7 @@
       "additionalProperties": false,
       "required": ["type", "observation_id", "sha256"],
       "properties": {
-        "type": { "const": "native_observation" },
+        "type": { "const": "observation" },
         "observation_id": { "$ref": "#/$defs/nonEmptyString" },
         "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
       }
@@ -46,7 +49,24 @@
       "minItems": 1,
       "items": { "$ref": "#/$defs/dimension" }
     },
-    "result": { "enum": ["pass", "fail", "indeterminate"] },
+    "schema_result": { "const": "pass" },
+    "observable_scenario_result": {
+      "enum": ["pass", "fail", "indeterminate"]
+    },
+    "agent_decision_properties": { "const": "indeterminate" },
+    "claim_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject", "conformance"],
+      "properties": {
+        "subject": {
+          "const": "This assessment concerns an external observation."
+        },
+        "conformance": {
+          "const": "It is not a full EAS run-conformance assessment."
+        }
+      }
+    },
     "conformance_claim": { "const": false },
     "limitations": {
       "type": "array",

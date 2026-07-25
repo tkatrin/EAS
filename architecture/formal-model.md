@@ -191,9 +191,9 @@ Assessment = (id, subject, level, assessor, sourceRun, time,
               aggregate, limitations)
 ```
 
-`subject` is exactly one of `run`, `adapter_mapping`, `assessment_process`,
-`conformance_report`, `implementation_claim`, or `specification`. `level` is
-`schema`, `structural`, or `behavioral`. Subject determines whose obligations
+`subject` is exactly one of `observation`, `run`, `adapter`, `assessor`, or
+`report`. `level` is `schema`, `structural`, or `behavioral`, subject to the
+allowed combinations defined by EAS-009. Subject determines whose obligations
 are aggregated; level determines how those obligations were checked.
 
 Each requirement result is `pass`, `fail`, `indeterminate`, or

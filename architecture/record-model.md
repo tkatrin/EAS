@@ -115,7 +115,7 @@ reason and observable basis when one exists.
 Requirement results in one record belong to its declared subject. For example,
 a run assessment does not mix failures of the adapter or assessor into the
 run's aggregate result; those require assessment records whose subject is
-`adapter_mapping` or `assessment_process`.
+`adapter` or `assessor`.
 
 ## 8. Adapter uncertainty
 
@@ -128,6 +128,11 @@ Adapters preserve:
 An absent source signal is not converted into a negative fact. Required but
 unreconstructable properties result in `indeterminate`, not fabricated
 evidence.
+
+An incomplete observation is not a partial-quality run. It is a different
+assessment subject containing harness-observed facts and preserved native
+events. Only a complete, instrumented run record can support full lifecycle,
+decision, authority, task-result, and reporting assessment.
 
 ## 9. Observer overlay
 

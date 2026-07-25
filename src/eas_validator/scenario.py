@@ -38,7 +38,8 @@ def _validate_scenario(scenario: Any) -> list[ValidationIssue]:
         "requirement_refs",
         "required_artifacts",
         "artifact_handling",
-        "expected",
+        "observable_expectations",
+        "run_semantic_expectations",
     }
     for name in sorted(required - scenario.keys()):
         issues.append(_manifest_issue(f"$scenario.{name}", "required field is missing"))
@@ -77,9 +78,54 @@ def _validate_scenario(scenario: Any) -> list[ValidationIssue]:
                 )
             )
 
-    expected = scenario.get("expected")
+    observable = scenario.get("observable_expectations")
+    if not isinstance(observable, dict):
+        issues.append(
+            _manifest_issue(
+                "$scenario.observable_expectations",
+                "must be an object",
+            )
+        )
+    else:
+        required_observable = {
+            "required_evidence_results",
+            "required_evidence_kinds",
+            "project_state_change",
+        }
+        for name in sorted(required_observable - observable.keys()):
+            issues.append(
+                _manifest_issue(
+                    f"$scenario.observable_expectations.{name}",
+                    "required observable expectation is missing",
+                )
+            )
+        if observable.get("project_state_change") not in {
+            "required",
+            "forbidden",
+            "either",
+        }:
+            issues.append(
+                _manifest_issue(
+                    "$scenario.observable_expectations.project_state_change",
+                    "must be required, forbidden, or either",
+                )
+            )
+        for name in ("required_evidence_results", "required_evidence_kinds"):
+            if not isinstance(observable.get(name), list):
+                issues.append(
+                    _manifest_issue(
+                        f"$scenario.observable_expectations.{name}",
+                        "must be an array",
+                    )
+                )
+    expected = scenario.get("run_semantic_expectations")
     if not isinstance(expected, dict):
-        issues.append(_manifest_issue("$scenario.expected", "must be an object"))
+        issues.append(
+            _manifest_issue(
+                "$scenario.run_semantic_expectations",
+                "must be an object",
+            )
+        )
         return issues
     if expected.get("outcome") not in OUTCOMES:
         issues.append(_manifest_issue("$scenario.expected.outcome", "must be a recognized outcome"))
@@ -112,7 +158,10 @@ def assess_scenario(scenario: Any, record: Any) -> list[ValidationIssue]:
     if structural_issues:
         return structural_issues
 
-    expected = scenario["expected"]
+    expected = {
+        **scenario["observable_expectations"],
+        **scenario["run_semantic_expectations"],
+    }
     issues: list[ValidationIssue] = []
 
     if record.get("outcome") != expected["outcome"]:

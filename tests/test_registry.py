@@ -9,6 +9,7 @@ from eas_validator.registry import (
     build_coverage,
     discover_all_scenario_requirements,
     discover_spec_requirements,
+    resolve_requirement_subjects,
     validate_registries,
 )
 from eas_validator.scenario import assess_scenario
@@ -140,11 +141,35 @@ class RegistryConsistencyTests(unittest.TestCase):
 
     def test_subject_policy_covers_requirements(self) -> None:
         mutated = copy.deepcopy(self.requirements)
-        del mutated["assessment_subject_policy"]["defaults_by_spec"]["EAS-002"]
+        target = next(
+            item
+            for item in mutated["requirements"]
+            if item["id"] == "EAS-002-R01"
+        )
+        target["subjects"] = []
 
         issues = validate_registries(mutated, self.rules, ROOT)
 
         self.assertTrue(any(issue.code == "REG-SUBJECT" for issue in issues))
+
+    def test_subjects_are_explicit_and_observation_is_not_inherited(self) -> None:
+        resolved = resolve_requirement_subjects(self.requirements)
+
+        self.assertEqual(len(resolved), 19)
+        self.assertEqual(resolved["EAS-006-R03"], frozenset({"run"}))
+        self.assertEqual(
+            resolved["EAS-010-R18"],
+            frozenset({"assessor", "report"}),
+        )
+        self.assertTrue(
+            all("observation" not in subjects for subjects in resolved.values())
+        )
+        self.assertTrue(
+            all(
+                item["observation_projection"] is None
+                for item in self.requirements["requirements"]
+            )
+        )
 
     def test_coverage_report_is_deterministic_and_explicit(self) -> None:
         coverage = build_coverage(self.requirements, self.rules)
@@ -377,7 +402,16 @@ class RegistryReferenceRuleTests(unittest.TestCase):
         for field, value, expected_path in mutations:
             with self.subTest(field=field):
                 scenario = copy.deepcopy(self.scenario)
-                scenario["expected"][field] = value
+                target = (
+                    scenario["observable_expectations"]
+                    if field in {
+                        "required_evidence_results",
+                        "required_evidence_kinds",
+                        "project_state_change",
+                    }
+                    else scenario["run_semantic_expectations"]
+                )
+                target[field] = value
                 issues = assess_scenario(scenario, self.record)
                 self.assertTrue(any(issue.path == expected_path for issue in issues))
 
